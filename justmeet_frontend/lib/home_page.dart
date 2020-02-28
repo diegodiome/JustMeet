@@ -3,6 +3,7 @@ import 'package:justmeet_frontend/view/event_info_view.dart';
 import 'package:justmeet_frontend/view/event_list_view.dart';
 import 'package:justmeet_frontend/view/filters_list_view.dart';
 import 'package:justmeet_frontend/view/new_event_view.dart';
+import 'package:justmeet_frontend/widget/filter_bar.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'cloud_storage.dart';
 import 'controller/base_auth.dart';
@@ -93,7 +94,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           pinned: true,
                           floating: true,
                           delegate: ContestTabHeader(
-                            getFilterBarUI(),
+                            FilterBar(
+                              function: () {
+                                FocusScope.of(context).requestFocus(FocusNode());
+                                showFilterDialog(context: context);
+                              }, 
+                              eventCount: eventCount)
                           ),
                         ),
                       ];
@@ -224,98 +230,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       barrierDismissible: true,
       context: context,
       builder: (BuildContext context) => FiltersListView(),
-    );
-  }
-
-  Widget getFilterBarUI() {
-    return Stack(
-      children: <Widget>[
-        Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          child: Container(
-            height: 24,
-            decoration: BoxDecoration(
-              color: ThemeProvider.themeOf(context).data.backgroundColor,
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    offset: const Offset(0, -2),
-                    blurRadius: 8.0),
-              ],
-            ),
-          ),
-        ),
-        Container(
-          color: ThemeProvider.themeOf(context).data.backgroundColor,
-          child: Padding(
-            padding:
-                const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 4),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      '$eventCount events found',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w100,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-                Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    focusColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    splashColor: Colors.grey.withOpacity(0.2),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(4.0),
-                    ),
-                    onTap: () {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      showFilterDialog(context: context);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-                            'Filtra',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w100,
-                              fontSize: 16,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(Icons.sort,
-                                color: ThemeProvider.themeOf(context)
-                                    .data
-                                    .primaryColor),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        const Positioned(
-          top: 0,
-          left: 0,
-          right: 0,
-          child: Divider(
-            height: 1,
-          ),
-        )
-      ],
     );
   }
 
