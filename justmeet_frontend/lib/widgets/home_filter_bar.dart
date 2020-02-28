@@ -3,12 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:theme_provider/theme_provider.dart';
 
-class FilterBar extends StatelessWidget {
+class HomeFilterBar extends StatelessWidget {
 
   final Function function;
   final int eventCount;
 
-  const FilterBar({
+  const HomeFilterBar({
     @required this.function,
     @required this.eventCount
   });
