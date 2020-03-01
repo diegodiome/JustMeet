@@ -29,6 +29,10 @@ dependencies:
   intl:
   theme_provider: ^0.3.2
 
+  # Redux dependencies
+  redux: ^4.0.0
+  flutter_redux: ^0.6.0
+
   # Firebase dependencies
   firebase_auth: ^0.15.4
   firebase_storage: ^3.1.1

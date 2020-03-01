@@ -47,13 +47,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    eventsController = new EventsController();
+    /*eventsController = new EventsController();
     eventList = new List<EventListData>();
     storage = new CloudStorage();
 
     _getEvents = getEvents();
     eventCount = eventList.length;
-
+*/
     animationController = new AnimationController(
         duration: const Duration(milliseconds: 1000), vsync: this);
 
@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         ),
                       ];
                     },
-                    body: getContentUi()),
+                    body: Container()/*getContentUi()*/),
               ),
             ]),
           )
