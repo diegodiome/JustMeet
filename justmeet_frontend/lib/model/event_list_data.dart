@@ -1,3 +1,4 @@
+
 class EventListData {
   EventListData(
       {this.eventId,
@@ -47,4 +48,16 @@ class EventListData {
         isPrivate: json['eventPrivate'] as bool,
         eventDate: DateTime.tryParse(json['eventDate']));
   }
+  
+  Map<String, dynamic> toJson() => 
+  {
+    'eventId': eventId,
+    'eventName': eventName,
+    'eventDescription': eventDescription,
+    'eventAdmin': eventAdmin,
+    'eventCategory': eventCategory,
+    'eventLocation': eventLocation,
+    'eventPrivate': isPrivate,
+    'eventDate': eventDate.toString(),
+  };
 }

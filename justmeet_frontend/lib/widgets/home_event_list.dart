@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:justmeet_frontend/model/event_list_data.dart';
-import 'package:justmeet_frontend/redux/app/app_state.dart';
-import 'package:justmeet_frontend/redux/event/event_state.dart';
 import 'package:justmeet_frontend/view/event_info_view.dart';
 import 'package:justmeet_frontend/view/event_list_view.dart';
 

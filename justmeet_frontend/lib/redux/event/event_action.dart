@@ -1,5 +1,3 @@
-
-
 import 'dart:async';
 import 'package:justmeet_frontend/model/event_list_data.dart';
 
@@ -27,4 +25,25 @@ class OnEventListUpdateSuccess {
     this.eventsList,
     this.eventCount
   });
+}
+
+class OnJoinEvent {
+  Completer completer;
+  String email;
+  String eventId;
+
+  OnJoinEvent({
+    this.email,
+    this.eventId,
+    Completer completer
+  }) : completer = completer ?? Completer();
+}
+
+class OnCreateEvent {
+  Completer completer;
+  EventListData newEvent;
+
+  OnCreateEvent({
+    this.newEvent,
+    Completer completer}) : completer = completer ?? Completer();
 }

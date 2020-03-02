@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:justmeet_frontend/redux/event/event_action.dart';
-import 'package:justmeet_frontend/redux/event/event_state.dart';
-import 'package:justmeet_frontend/view/event_info_view.dart';
-import 'package:justmeet_frontend/view/event_list_view.dart';
 import 'package:justmeet_frontend/view/filters_list_view.dart';
 import 'package:justmeet_frontend/view/new_event_view.dart';
 import 'package:justmeet_frontend/widgets/home_app_bar.dart';
@@ -13,8 +8,6 @@ import 'package:justmeet_frontend/widgets/home_filter_bar.dart';
 import 'package:justmeet_frontend/widgets/home_search_bar.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'cloud_storage.dart';
-import 'controller/events_controller.dart';
-import 'model/event_list_data.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({this.navigatorKey});
@@ -27,30 +20,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   AnimationController animationController;
   CloudStorage storage;
-
-  Future<List<EventListData>> _getEvents;
   final ScrollController _scrollController = ScrollController();
 
   int eventCount;
-  List<EventListData> eventList;
-  EventsController eventsController;
-
-  /*Future<List<EventListData>> getEvents() async {
-    return await eventsController.getAllEvents(widget.auth);
-  }*/
-
-  /*void refreshList() {
-    setState(() {
-      _getEvents = getEvents();
-    });
-  }*/
 
   @override
   void initState() {
-
     animationController = new AnimationController(
         duration: const Duration(milliseconds: 1000), vsync: this);
-
     super.initState();
   }
 
@@ -127,8 +104,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       MaterialPageRoute<dynamic>(
           builder: (BuildContext context) => NewEventView(
               //auth: widget.auth,
-              eventsController: eventsController),
-          fullscreenDialog: true),
+              //eventsController: eventsController),
+          ),fullscreenDialog: true),
     );
   }
 

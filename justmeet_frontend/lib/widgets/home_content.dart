@@ -28,23 +28,28 @@ class _HomeContentState extends State<HomeContent>
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Future<void> getEventsList() async{
     OnEventListUpdate _onEventListUpdate = OnEventListUpdate();
     StoreProvider.of<AppState>(context).dispatch(_onEventListUpdate);
-    _onEventListUpdate.completer.future.catchError((error) {
-      return Center(child: Text('Data error'));
+    Scaffold.of(context).showSnackBar(SnackBar(content: Text("Get events...")));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    getEventsList().catchError((error) {
+      Scaffold.of(context).hideCurrentSnackBar();
+      return Container(
+        child: Center(
+          child: Text('Error: $error')
+        ),
+      );
     });
     return StoreConnector<AppState, EventState>(
       converter: (store) => store.state.eventState,
       builder: (BuildContext context, EventState eventState) {
         return RefreshIndicator(
-          onRefresh: () async {
-            _onEventListUpdate = OnEventListUpdate();
-            StoreProvider.of<AppState>(context).dispatch(_onEventListUpdate);
-            _onEventListUpdate.completer.future.catchError((error) {
-              return Center(child: Text('Data error'));
-            });
+          onRefresh: () {
+            return getEventsList();
           },
           child: Container(
               color: ThemeProvider.themeOf(context).data.backgroundColor,

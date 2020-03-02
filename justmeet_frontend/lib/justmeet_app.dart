@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:justmeet_frontend/cloud_storage.dart';
 import 'package:justmeet_frontend/home_page.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/auth/auth_actions.dart';
 import 'package:justmeet_frontend/redux/store.dart';
+import 'package:justmeet_frontend/repository/attachment_repository.dart';
 import 'package:justmeet_frontend/repository/event_repository.dart';
 import 'package:justmeet_frontend/repository/user_repository.dart';
 import 'package:justmeet_frontend/routes.dart';
@@ -28,11 +30,12 @@ class _JustMeetAppState extends State<JustMeetApp> {
   static final _navigatorKey = GlobalKey<NavigatorState>();
   final userRepo = UserRepository(FirebaseAuth.instance, new GoogleSignIn());
   final eventRepo = EventRepository();
+  final attachmentRepo = AttachmentRepository(new CloudStorage());
 
   @override
   void initState() {
     super.initState();
-    store = createStore(userRepo, eventRepo, _navigatorKey);
+    store = createStore(userRepo, eventRepo, attachmentRepo, _navigatorKey);
     store.dispatch(VerifyAuthenticationState());
   }
 
