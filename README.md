@@ -4,7 +4,7 @@
 
 Just meet è un progetto realizzato in Flutter e Spring Boot per l'esame "Programmazione Web App e Mobie". L'applicativo è stato realizzato da :
 
-  > Diego Diomedi
+  > Diego Diomedi e 
   > Alessandro Berdozzi
 
 # Branches
@@ -40,6 +40,8 @@ l'organizzatore.
 | Java  | Linguaggio di programmazione utilizzato da Spring Boot  |
 | Firebase  | Piattaforma back-end per i database e per il cloud |
 | Google  | Provider per l'autenticazione |
+
+### In particolare : 
 
 Per il lato front-end è stato utilizzato Flutter in quanto capace di sviluppare degli applicativi cross 
 platform (sia Android che IOS) molto ottimizzati. La logica front-end si occupa di definire un'esperienza
