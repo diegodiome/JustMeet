@@ -1,8 +1,7 @@
 # Just Meet
 
 
-
-Just meet è un progetto realizzato in Flutter e Spring Boot per l'esame "Programmazione Web App e Mobile". L'applicativo è stato realizzato da :
+Just Meet è un progetto realizzato in Flutter e Spring Boot per l'esame "Programmazione Web App e Mobile". L'applicativo è stato realizzato da :
 
   > Diego Diomedi e 
   > Alessandro Berdozzi
