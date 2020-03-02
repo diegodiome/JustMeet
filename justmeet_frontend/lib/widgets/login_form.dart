@@ -141,6 +141,9 @@ class _LoginFormState extends State<LoginForm> {
                 ),
               ],
             ),
+            SizedBox(
+              height: 15.0
+            ),
             LoginAuthButton(
               function: submitCallback,
             )

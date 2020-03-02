@@ -19,6 +19,18 @@ class LogIn {
 
 class LogInWithGoogle {}
 
+class SignIn {
+  final String email;
+  final String password;
+  final Completer completer;
+
+  SignIn({
+    this.email, 
+    this.password,
+    Completer completer
+  }) : completer = completer ?? Completer();
+}
+
 @immutable
 class OnAuthenticated {
   final User user;

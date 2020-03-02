@@ -1,6 +1,7 @@
 class Routes {
   static final home = "/";
   static final login = "/login";
+  static final registration = "/registration";
   static final channelNew = "/channel/new";
   static final channelInvite = "/channel/invite";
   static final eventNew = "/event/new";

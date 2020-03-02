@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:justmeet_frontend/controller/base_auth.dart';
+import 'package:justmeet_frontend/routes.dart';
 import 'package:justmeet_frontend/widgets/login_form.dart';
 import 'package:justmeet_frontend/widgets/login_google_button.dart';
 
-class LoginPage extends StatefulWidget {
-  LoginPage({this.auth, this.loginCallback});
+class LoginPage extends StatelessWidget {
 
-  final BaseAuth auth;
-  final VoidCallback loginCallback;
+  final GlobalKey<NavigatorState> navigatorKey;
 
-  @override
-  _LoginPageState createState() => _LoginPageState();
-}
+  LoginPage({this.navigatorKey});
 
-class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,11 +32,26 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 50),
                 LoginForm(),
                 SizedBox(height: 30),
+                Text(
+                  'OR',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 20,
+                  ),
+                ),
+                SizedBox(height: 30),
                 Padding(
                   padding: EdgeInsets.only(left: 16, right: 16),
                   child: LoginGoogleButton(),
+                ),
+                SizedBox(height: 30),
+                GestureDetector(
+                  onTap: () async{
+                    await navigatorKey.currentState.pushReplacementNamed(Routes.registration);
+                  },
+                  child: Text('Create account'),
                 )
-                //_googleSignInButton(),
               ],
             ),
           ),
@@ -49,5 +59,4 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
 }

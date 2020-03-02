@@ -8,9 +8,11 @@ import 'package:justmeet_frontend/home_page.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/auth/auth_actions.dart';
 import 'package:justmeet_frontend/redux/store.dart';
+import 'package:justmeet_frontend/repository/event_repository.dart';
 import 'package:justmeet_frontend/repository/user_repository.dart';
 import 'package:justmeet_frontend/routes.dart';
 import 'package:justmeet_frontend/view/login_page.dart';
+import 'package:justmeet_frontend/view/registration_page.dart';
 import 'package:redux/redux.dart';
 import 'package:theme_provider/theme_provider.dart';
 
@@ -25,11 +27,12 @@ class _JustMeetAppState extends State<JustMeetApp> {
   Store<AppState> store;
   static final _navigatorKey = GlobalKey<NavigatorState>();
   final userRepo = UserRepository(FirebaseAuth.instance, new GoogleSignIn());
+  final eventRepo = EventRepository();
 
   @override
   void initState() {
     super.initState();
-    store = createStore(userRepo, _navigatorKey);
+    store = createStore(userRepo, eventRepo, _navigatorKey);
     store.dispatch(VerifyAuthenticationState());
   }
 
@@ -74,10 +77,15 @@ class _JustMeetAppState extends State<JustMeetApp> {
                 navigatorKey: _navigatorKey,
                 routes: {
                   Routes.login: (context) {
-                    return LoginPage();
+                    return LoginPage(
+                      navigatorKey: _navigatorKey,
+                    );
                   },
                   Routes.home: (context) {
                     return HomePage();
+                  },
+                  Routes.registration: (context) {
+                    return RegistrationPage();
                   }
                 },
               ),

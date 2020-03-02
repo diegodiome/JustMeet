@@ -8,9 +8,7 @@ import 'package:theme_provider/theme_provider.dart';
 
 class EventInfoView extends StatefulWidget {
   final EventListData event;
-  final EventsController eventsController;
-  final BaseAuth auth;
-  EventInfoView({@required this.event, @required this.eventsController, @required this.auth});
+  EventInfoView({@required this.event});
 
   @override
   _EventInfoViewState createState() => _EventInfoViewState();
@@ -103,10 +101,10 @@ class _EventInfoViewState extends State<EventInfoView> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    widget.eventsController.joinEvent(widget.auth, widget.event.eventId)
+                                    /*widget.eventsController.joinEvent(widget.auth, widget.event.eventId)
                                       .whenComplete((){
                                       Navigator.pop(context);
-                                    });
+                                    });*/
                                   },
                                   child: Container(
                                     height: 48,

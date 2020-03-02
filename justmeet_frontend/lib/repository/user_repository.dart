@@ -22,7 +22,6 @@ class UserRepository {
   }
 
   Future<void> signOut() async {
-    await updateUserToken(null);
     await _firebaseAuth.signOut();
   }
 
@@ -38,12 +37,15 @@ class UserRepository {
     return await fromFirebaseUser(authResult.user);
   }
 
-  Future<void> updateUserToken(String token) async {
-
-  }
-
   Future<void> updateUser(User user) async {
     
+  }
+
+  Future<void> createUserWithEmailAndPassword(String email, String password) async {
+    await _firebaseAuth.createUserWithEmailAndPassword(
+      email: email, 
+      password: password
+    );
   }
 
   Stream<User> getAuthenticationStateChange() {

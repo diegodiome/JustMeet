@@ -18,7 +18,30 @@ List<Middleware<AppState>> createAuthenticationMiddleware(
       _authLogOut(userRepository, navigatorKey)),
     TypedMiddleware<AppState, LogIn>(_authLogIn(userRepository, navigatorKey)),
     TypedMiddleware<AppState, LogInWithGoogle>(_authLogInWithGoogle(userRepository, navigatorKey)),
+    TypedMiddleware<AppState, SignIn>(_signInWithEmailAndPassword(userRepository, navigatorKey))
   ];
+}
+
+void Function(
+  Store<AppState> store,
+  dynamic action,
+  NextDispatcher next
+) _signInWithEmailAndPassword(
+  UserRepository userRepository,
+  GlobalKey<NavigatorState> navigatorKey
+) {
+  return (store, action, next) async {
+    next(action);
+    try {
+      await userRepository.createUserWithEmailAndPassword(action.email, action.password);
+      await navigatorKey.currentState.pushReplacementNamed(Routes.login);
+      action.completer.complete();
+    }
+    catch(e) {
+      print('Login failed: $e');
+      action.completer.completeError(e);
+    }
+  };
 }
 
 void Function(
@@ -33,11 +56,10 @@ void Function(
     next(action);
     try {
       final user = await userRepository.signInWithGoogle();
-      print(user.email);
       store.dispatch(OnAuthenticated(user: user));
       await navigatorKey.currentState.pushReplacementNamed(Routes.home);
     }
-    catch(e) {
+    on PlatformException catch(e) {
       print('Login failed: $e');
     }
   };
