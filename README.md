@@ -1,8 +1,8 @@
 # Just Meet
 
-[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
-Just meet è un progetto realizzato in Flutter e Spring Boot per l'esame "Programmazione Web App e Mobie". L'applicativo è stato realizzato da :
+
+Just meet è un progetto realizzato in Flutter e Spring Boot per l'esame "Programmazione Web App e Mobile". L'applicativo è stato realizzato da :
 
   > Diego Diomedi e 
   > Alessandro Berdozzi
@@ -53,6 +53,9 @@ lato front-end.
 Per quanto riguarda il back-end Spring Boot definisce i servizi REST API offerti dalla piattaforma. Si appoggia a Firebase per il salvataggio dei dati nei database e per le query da effettuare. La sicurezza viene in primo luogo
 gestita attraverso un controllo nell'header di ogni richiesta(deve essere presente un token che verrà poi comparato
 a quelli salvati da Firebase), e poi filtrando le richieste piu' invasive con l'utilizzo delle "Authority".
+Per semplificare la gestione degli stati si è optato per l'utilizzo di Redux, un framework architetturale in grado
+di gestire gli stati dell'applicativo con una visione ad "albero" molto piu' organizzata e pulita rendendo il codice
+piu' semplice da leggere e da modificare.
 
 
 
