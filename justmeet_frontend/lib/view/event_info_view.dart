@@ -5,8 +5,8 @@ import 'package:justmeet_frontend/widgets/event_info_content.dart';
 import 'package:theme_provider/theme_provider.dart';
 
 class EventInfoView extends StatefulWidget {
-  final EventListData event;
   EventInfoView({@required this.event});
+  final EventListData event;
 
   @override
   _EventInfoViewState createState() => _EventInfoViewState();
@@ -54,7 +54,7 @@ class _EventInfoViewState extends State<EventInfoView> {
                       ],
                     ),
                     child: EventInfoContent(
-                      eventData: widget.event,
+                      event: widget.event,
                     ))),
             EventInfoAppBar()
           ],

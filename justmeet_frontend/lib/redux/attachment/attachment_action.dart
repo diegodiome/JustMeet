@@ -10,19 +10,3 @@ class OnUploadEventImage {
     Completer completer
   }) : completer = completer ?? Completer();
 }
-
-class OnImageStream {
-  String localImageUrl;
-  Completer completer;
-
-  OnImageStream({
-    this.localImageUrl, 
-    Completer completer
-  }) : completer = completer ?? Completer();
-}
-
-class OnImageStramSuccess{
-  String storageImageUrl;
-
-  OnImageStramSuccess(this.storageImageUrl);
-}

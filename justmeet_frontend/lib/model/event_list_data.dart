@@ -1,3 +1,4 @@
+import 'dart:convert';
 
 class EventListData {
   EventListData(
@@ -48,16 +49,17 @@ class EventListData {
         isPrivate: json['eventPrivate'] as bool,
         eventDate: DateTime.tryParse(json['eventDate']));
   }
-  
-  Map<String, dynamic> toJson() => 
-  {
-    'eventId': eventId,
-    'eventName': eventName,
-    'eventDescription': eventDescription,
-    'eventAdmin': eventAdmin,
-    'eventCategory': eventCategory,
-    'eventLocation': eventLocation,
-    'eventPrivate': isPrivate,
-    'eventDate': eventDate.toString(),
-  };
+
+  String toJson() {
+    return jsonEncode({
+      "eventId": eventId,
+      "eventName": eventName,
+      "eventDescription": eventDescription,
+      "eventAdmin": eventAdmin,
+      "eventCategory": eventCategory,
+      "eventLocation": eventLocation,
+      "eventPrivate": isPrivate,
+      "eventDate": eventDate.toString(),
+    });
+  }
 }

@@ -1,4 +1,5 @@
 
+import 'dart:io';
 
 import 'package:justmeet_frontend/cloud_storage.dart';
 
@@ -12,5 +13,9 @@ class AttachmentRepository {
     String storageImageUrl;
     storageImageUrl = await storage.getImage(imageUrl);
     return storageImageUrl;
+  }
+
+  Future<void> uploadImage(File localImage) async {
+    storage.saveFile(localImage);
   }
 }

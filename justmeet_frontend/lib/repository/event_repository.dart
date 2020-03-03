@@ -20,9 +20,10 @@ class EventRepository {
 
   Future<void> createNewEvent(EventListData newEvent) async {
     Response response;
-    response = await post(postCreateEventUrl,
-        headers: await RequestHeader().getBasicHeader(),
-        body: newEvent.toJson());
+    response = await post(
+      postCreateEventUrl,
+      headers: await RequestHeader().getBasicHeader(),
+      body: newEvent.toJson());
     int statusCode = response.statusCode;
     if (statusCode != 200) {
       print('Connection error: $statusCode');

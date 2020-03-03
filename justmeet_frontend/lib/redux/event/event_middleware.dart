@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:justmeet_frontend/model/event_list_data.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/event/event_action.dart';
+import 'package:justmeet_frontend/repository/attachment_repository.dart';
 import 'package:justmeet_frontend/repository/event_repository.dart';
 import "package:flutter/services.dart";
 import 'package:justmeet_frontend/routes.dart';

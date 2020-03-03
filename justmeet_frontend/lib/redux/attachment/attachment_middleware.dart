@@ -10,21 +10,20 @@ import 'package:redux/redux.dart';
 List<Middleware<AppState>> createAttachmentMiddleware(
     AttachmentRepository attachmentRepository, GlobalKey<NavigatorState> navigatorKey) {
   return [
-    TypedMiddleware<AppState, OnImageStream>(
-      _onImageStream(navigatorKey, attachmentRepository)),
+    TypedMiddleware<AppState, OnUploadEventImage>(
+      _onUploadEventImage(navigatorKey, attachmentRepository)),
   ];
 }
 
 void Function(Store<AppState> store, dynamic action, NextDispatcher next)
-    _onImageStream(
+    _onUploadEventImage(
   GlobalKey<NavigatorState> navigatorKey,
   AttachmentRepository attachmentRepository,
 ) {
   return (store, action, next) async {
     next(action);
     try {
-      final imageUrl = await attachmentRepository.getStorageImageUrl(action.localImageUrl);
-      await store.dispatch(OnImageStramSuccess(imageUrl));
+      await attachmentRepository.uploadImage(action.localImage);
       action.completer.complete();
     } on PlatformException catch (e) {
       print('Error: $e');
