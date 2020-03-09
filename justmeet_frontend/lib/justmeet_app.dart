@@ -85,7 +85,9 @@ class _JustMeetAppState extends State<JustMeetApp> {
                     );
                   },
                   Routes.home: (context) {
-                    return HomePage();
+                    return HomePage(
+                      navigatorKey: _navigatorKey,
+                    );
                   },
                   Routes.registration: (context) {
                     return RegistrationPage();

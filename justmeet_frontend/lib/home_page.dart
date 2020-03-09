@@ -103,8 +103,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       context,
       MaterialPageRoute<dynamic>(
           builder: (BuildContext context) => NewEventView(
-              //auth: widget.auth,
-              //eventsController: eventsController),
           ),fullscreenDialog: true),
     );
   }
