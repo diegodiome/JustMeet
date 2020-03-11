@@ -122,4 +122,12 @@ public class EventController {
         }
         return 0;
     }
+
+    @PostMapping(value= ApiConstants.API_ADD_EVENT_REQUESTS)
+    public void addRequest(
+        @PathVariable("eventId")String eventId,
+        @PathVariable("userEmail")String userEmail ) {
+        firestoreService.addRequest(eventId, userEmail);
+    }
+    
 }

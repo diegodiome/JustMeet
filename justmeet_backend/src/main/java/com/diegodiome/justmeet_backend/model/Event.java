@@ -26,6 +26,8 @@ public class Event {
 
     private List<Double> eventRates;
 
+    private List<String> eventRequests;
+
     @NotNull
     private String eventImageUrl;
 
@@ -119,6 +121,22 @@ public class Event {
     }
 
     public void setPrivate(boolean eventPrivate) {
+        this.eventPrivate = eventPrivate;
+    }
+
+    public void setEventRates(List<Double> eventRates) {
+        this.eventRates = eventRates;
+    }
+
+    public List<String> getEventRequests() {
+        return eventRequests;
+    }
+
+    public void setEventRequests(List<String> eventRequests) {
+        this.eventRequests = eventRequests;
+    }
+
+    public void setEventPrivate(boolean eventPrivate) {
         this.eventPrivate = eventPrivate;
     }
 }

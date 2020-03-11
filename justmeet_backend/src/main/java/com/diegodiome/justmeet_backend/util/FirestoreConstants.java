@@ -49,4 +49,5 @@ public class FirestoreConstants {
     public static final String EVENT_IMAGE_FIELD = "eventImageUrl";
     public static final String EVENT_RATING_FIELD = "eventRates";
     public static final String EVENT_IS_PRIVATE_FIELD = "eventPrivate";
+    public static final String EVENT_REQUESTS_FIELD = "eventRequests";
 }

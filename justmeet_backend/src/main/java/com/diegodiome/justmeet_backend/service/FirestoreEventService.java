@@ -17,6 +17,7 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
@@ -165,6 +166,12 @@ public class FirestoreEventService implements FirestoreService<Event, String> {
             reports.add(reporting);
         }
         return reports;
+    }
+
+    public void addRequest(final String eventId, final String userEmail) {
+        eventsReference = db.collection(FirestoreConstants.EVENTS_COLLECTION);
+        eventsReference.document(eventId)
+            .update(FirestoreConstants.EVENT_REQUESTS_FIELD, FieldValue.arrayUnion(userEmail));
     }
 
     public double getAverageRate(final String eventId) throws InterruptedException, ExecutionException {
