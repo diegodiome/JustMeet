@@ -43,4 +43,6 @@ public class ApiConstants {
     public static final String API_JOIN_EVENT = "/join/id={eventId}&displayName={displayName}";
     public static final String API_REPORTING_EVENT = "/report";
     public static final String API_GET_EVENT_AVERAGE_RATE = "/rate/eventId={eventId}";
+    public static final String API_GET_EVENT_REQUESTS = "/requests/eventId={eventId}";
+    public static final String API_ADD_EVENT_REQUESTS = "/requests/add/eventId={eventId}&userEmail={userEmail}";
 }

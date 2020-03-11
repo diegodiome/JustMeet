@@ -7,7 +7,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.diegodiome.justmeet_backend.security.FirebaseAuthenticationToken;
 import com.google.api.client.util.Strings;
 import com.google.api.core.ApiFuture;
 import com.google.firebase.auth.FirebaseAuth;
