@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:justmeet_frontend/view/filters_list_view.dart';
 import 'package:justmeet_frontend/view/new_event_view.dart';
+import 'package:justmeet_frontend/view/profile_page.dart';
 import 'package:justmeet_frontend/widgets/home_app_bar.dart';
 import 'package:justmeet_frontend/widgets/home_content.dart';
 import 'package:justmeet_frontend/widgets/home_contest_tab_header.dart';
@@ -49,7 +50,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             hoverColor: Colors.transparent,
             onTap: () {},
             child: Column(children: <Widget>[
-              HomeAppBar(userFunction: () {}),
+              HomeAppBar(userFunction: () {
+                showProfileDialog(context: context);
+              }),
               Expanded(
                 child: NestedScrollView(
                   controller: _scrollController,
@@ -103,6 +106,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       context,
       MaterialPageRoute<dynamic>(
           builder: (BuildContext context) => NewEventView(
+          ),fullscreenDialog: true),
+    );
+  }
+
+  void showProfileDialog({BuildContext context}) {
+    FocusScope.of(context).requestFocus(FocusNode());
+    Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+          builder: (BuildContext context) => ProfilePage(
           ),fullscreenDialog: true),
     );
   }
