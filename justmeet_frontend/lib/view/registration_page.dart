@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:justmeet_frontend/widgets/event_info_app_bar.dart';
 import 'package:justmeet_frontend/widgets/registration_form.dart';
 
 class RegistrationPage extends StatelessWidget {
@@ -16,6 +17,8 @@ class RegistrationPage extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                EventInfoAppBar(),
+                Text('Sign up'),
                 SizedBox(height: 50),
                 RegistrationForm(),
               ],

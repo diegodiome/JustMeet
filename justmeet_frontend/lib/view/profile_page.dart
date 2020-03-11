@@ -26,13 +26,13 @@ class ProfilePage extends StatelessWidget {
     final userImage = Container(
       height: 100.0,
       width: 100.0,
-      /*decoration: BoxDecoration(
+      decoration: BoxDecoration(
         image: DecorationImage(
-          image: /*AssetImage(user.photo)*/,
+          image: AssetImage('assets/images/hotel_3.png')/*Image.asset('/images/hotel_3.png')*/,
           fit: BoxFit.cover,
         ),
         shape: BoxShape.circle,
-      ),*/
+      ),
     );
 
     final userNameLocation = Container(
@@ -41,7 +41,7 @@ class ProfilePage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            'Diego',
+            'Diego Diomedi',
             //user.name,
             style: TextStyle(
               fontSize: 24.0,
@@ -49,7 +49,7 @@ class ProfilePage extends StatelessWidget {
             ),
           ),
           Text(
-            'Cvt',
+            'Civitanova Marche',
             //user.location,
             style: TextStyle(
               color: Colors.grey.withOpacity(0.6),
@@ -111,39 +111,13 @@ class ProfilePage extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Icon(Icons.favorite,color: Colors.red),
+              Text('Own events'),
               hr,
               Icon(Icons.remove_red_eye, color: Colors.green),
+              Text('Edit profile'),
               hr,
               Icon(Icons.group, color: Colors.purpleAccent),
-            ],
-          ),
-        ),
-      ),
-    );
-
-    final thirdCard = Padding(
-      padding: EdgeInsets.only(right: 20.0, left: 20.0, bottom: 30.0),
-      child: Material(
-        elevation: 5.0,
-        borderRadius: BorderRadius.circular(8.0),
-        shadowColor: Colors.white,
-        child: Container(
-          height: 350.0,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          child: Column(
-            children: <Widget>[
-              Icon(Icons.favorite, color: Colors.red),
-              hr,
-              Icon(Icons.favorite, color: Colors.red),
-              hr,
-              Icon(Icons.favorite, color: Colors.red),
-              hr,
-              Icon(Icons.favorite, color: Colors.red),
-              hr,
-              Icon(Icons.favorite, color: Colors.red),
+              Text('Log Out'),
             ],
           ),
         ),
@@ -170,7 +144,7 @@ class ProfilePage extends StatelessWidget {
                       Positioned(top: 100, right: 0, left: 0, child: userInfo)
                     ],
                   ),
-                  secondCard, thirdCard
+                  secondCard, 
                 ],
               ),
             ),
