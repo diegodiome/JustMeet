@@ -11,8 +11,6 @@ import 'package:theme_provider/theme_provider.dart';
 import 'cloud_storage.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({this.navigatorKey});
-  final GlobalKey<NavigatorState> navigatorKey;
 
   @override
   _HomePageState createState() => _HomePageState();

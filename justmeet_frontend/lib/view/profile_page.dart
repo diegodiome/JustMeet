@@ -1,7 +1,10 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:justmeet_frontend/model/user.dart';
+import 'package:justmeet_frontend/redux/app/app_state.dart';
+import 'package:justmeet_frontend/redux/auth/auth_actions.dart';
 
 class ProfilePage extends StatelessWidget {
   //final User user = users[0];
@@ -116,8 +119,17 @@ class ProfilePage extends StatelessWidget {
               Icon(Icons.remove_red_eye, color: Colors.green),
               Text('Edit profile'),
               hr,
-              Icon(Icons.group, color: Colors.purpleAccent),
-              Text('Log Out'),
+              GestureDetector(
+                onTap: () {
+                  StoreProvider.of<AppState>(context).dispatch(LogOut());
+                },
+                child: Row(
+                  children: [
+                    Icon(Icons.group, color: Colors.purpleAccent),
+                    Text('Log Out')
+                  ]
+                ),
+              ),
             ],
           ),
         ),

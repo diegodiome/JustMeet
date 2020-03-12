@@ -14,7 +14,8 @@ class RequestHeader {
 
   Future<Map<String, String>> getBasicHeader() async{
     FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
-    final tokenId = await firebaseUser.getIdToken();
+    final tokenId = await firebaseUser.
+    getIdToken();
     final token = tokenId.token;
     Map<String,String> headers = {
       "Content-type": "application/json",

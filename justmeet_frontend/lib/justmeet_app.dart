@@ -15,6 +15,7 @@ import 'package:justmeet_frontend/repository/user_repository.dart';
 import 'package:justmeet_frontend/routes.dart';
 import 'package:justmeet_frontend/view/login_page.dart';
 import 'package:justmeet_frontend/view/registration_page.dart';
+import 'package:justmeet_frontend/view/splash_page.dart';
 import 'package:redux/redux.dart';
 import 'package:theme_provider/theme_provider.dart';
 
@@ -79,18 +80,21 @@ class _JustMeetAppState extends State<JustMeetApp> {
                 title: 'Flutter Demo',
                 navigatorKey: _navigatorKey,
                 routes: {
+                  Routes.splash: (context) {
+                    return SplashPage();
+                  },
                   Routes.login: (context) {
                     return LoginPage(
                       navigatorKey: _navigatorKey,
                     );
                   },
                   Routes.home: (context) {
-                    return HomePage(
-                      navigatorKey: _navigatorKey,
-                    );
+                    return HomePage();
                   },
                   Routes.registration: (context) {
-                    return RegistrationPage();
+                    return RegistrationPage(
+                      navigatorKey: _navigatorKey
+                    );
                   }
                 },
               ),

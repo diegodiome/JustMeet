@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:justmeet_frontend/routes.dart';
+import 'package:justmeet_frontend/view/registration_page.dart';
 import 'package:justmeet_frontend/widgets/login_form.dart';
 import 'package:justmeet_frontend/widgets/login_google_button.dart';
 
@@ -47,8 +48,8 @@ class LoginPage extends StatelessWidget {
                 ),
                 SizedBox(height: 30),
                 GestureDetector(
-                  onTap: () async{
-                    await navigatorKey.currentState.pushReplacementNamed(Routes.registration);
+                  onTap: () {
+                    navigatorKey.currentState.pushReplacementNamed(Routes.registration);
                   },
                   child: Text('Create account'),
                 )

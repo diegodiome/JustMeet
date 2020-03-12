@@ -14,7 +14,7 @@ List<Middleware<AppState>> createAuthenticationMiddleware(
   return [
     TypedMiddleware<AppState, VerifyAuthenticationState>(
       _verifyAuthState(userRepository, navigatorKey)),
-    TypedMiddleware<AppState, OnLogOutSuccess>(
+    TypedMiddleware<AppState, LogOut>(
       _authLogOut(userRepository, navigatorKey)),
     TypedMiddleware<AppState, LogIn>(_authLogIn(userRepository, navigatorKey)),
     TypedMiddleware<AppState, LogInWithGoogle>(_authLogInWithGoogle(userRepository, navigatorKey)),
@@ -119,11 +119,12 @@ void Function(
   return (store, action, next) {
     next(action);
 
-    userRepository.getAuthenticationStateChange().listen((user) {
+    userRepository.getAuthenticationStateChange().listen((user) async{
       if(user == null) {
-        navigatorKey.currentState.pushReplacementNamed(Routes.login);
+        await navigatorKey.currentState.pushReplacementNamed(Routes.login);
       }else {
         store.dispatch(OnAuthenticated(user: user));
+        navigatorKey.currentState.pushReplacementNamed(Routes.home);
       }
     });
   };
