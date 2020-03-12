@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:justmeet_frontend/model/event_list_data.dart';
-import 'package:justmeet_frontend/view/event_info_view.dart';
-import 'package:justmeet_frontend/view/event_list_view.dart';
+import 'package:justmeet_frontend/models/event_list_data.dart';
+import 'package:justmeet_frontend/screens/event_info_view.dart';
+import 'package:justmeet_frontend/screens/event_list_view.dart';
 
 class HomeEventList extends StatefulWidget {
   HomeEventList({this.animationController, this.eventsList});

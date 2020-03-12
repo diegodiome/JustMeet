@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:justmeet_frontend/routes.dart';
-import 'package:justmeet_frontend/widgets/event_info_app_bar.dart';
-import 'package:justmeet_frontend/widgets/registration_form.dart';
+import 'package:justmeet_frontend/widgets/registration/registration_form.dart';
 import 'package:theme_provider/theme_provider.dart';
 
 class RegistrationPage extends StatelessWidget {

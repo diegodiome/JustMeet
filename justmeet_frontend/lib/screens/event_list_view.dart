@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:justmeet_frontend/cloud_storage.dart';
-import 'package:justmeet_frontend/model/event_list_data.dart';
+import 'package:justmeet_frontend/models/event_list_data.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:theme_provider/theme_provider.dart';
 

@@ -4,9 +4,9 @@ import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/attachment/attachment_middleware.dart';
 import 'package:justmeet_frontend/redux/auth/auth_middleware.dart';
 import 'package:justmeet_frontend/redux/event/event_middleware.dart';
-import 'package:justmeet_frontend/repository/attachment_repository.dart';
-import 'package:justmeet_frontend/repository/event_repository.dart';
-import 'package:justmeet_frontend/repository/user_repository.dart';
+import 'package:justmeet_frontend/repositories/attachment_repository.dart';
+import 'package:justmeet_frontend/repositories/event_repository.dart';
+import 'package:justmeet_frontend/repositories/user_repository.dart';
 import 'package:redux/redux.dart';
 
 Store<AppState> createStore(

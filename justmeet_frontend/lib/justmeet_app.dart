@@ -5,17 +5,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:justmeet_frontend/cloud_storage.dart';
-import 'package:justmeet_frontend/home_page.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/auth/auth_actions.dart';
 import 'package:justmeet_frontend/redux/store.dart';
-import 'package:justmeet_frontend/repository/attachment_repository.dart';
-import 'package:justmeet_frontend/repository/event_repository.dart';
-import 'package:justmeet_frontend/repository/user_repository.dart';
+import 'package:justmeet_frontend/repositories/attachment_repository.dart';
+import 'package:justmeet_frontend/repositories/event_repository.dart';
+import 'package:justmeet_frontend/repositories/user_repository.dart';
 import 'package:justmeet_frontend/routes.dart';
-import 'package:justmeet_frontend/view/login_page.dart';
-import 'package:justmeet_frontend/view/registration_page.dart';
-import 'package:justmeet_frontend/view/splash_page.dart';
+import 'package:justmeet_frontend/screens/home_page.dart';
+import 'package:justmeet_frontend/screens/login_page.dart';
+import 'package:justmeet_frontend/screens/registration_page.dart';
+import 'package:justmeet_frontend/screens/splash_page.dart';
 import 'package:redux/redux.dart';
 import 'package:theme_provider/theme_provider.dart';
 
@@ -89,7 +89,9 @@ class _JustMeetAppState extends State<JustMeetApp> {
                     );
                   },
                   Routes.home: (context) {
-                    return HomePage();
+                    return HomePage(
+                      navigatorKey: _navigatorKey,
+                    );
                   },
                   Routes.registration: (context) {
                     return RegistrationPage(

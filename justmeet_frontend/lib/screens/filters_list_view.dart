@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:justmeet_frontend/view/slider_view.dart';
+import 'package:justmeet_frontend/screens/slider_view.dart';
 
 class FiltersListView extends StatefulWidget {
   @override

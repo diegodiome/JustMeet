@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:justmeet_frontend/widgets/new_event_app_bar.dart';
-import 'package:justmeet_frontend/widgets/new_event_form.dart';
-
-
+import 'package:justmeet_frontend/widgets/new_event/new_event_app_bar.dart';
+import 'package:justmeet_frontend/widgets/new_event/new_event_form.dart';
 
 class NewEventView extends StatelessWidget {
 

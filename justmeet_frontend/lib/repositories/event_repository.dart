@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart';
-import 'package:justmeet_frontend/controller/request_header.dart';
-import 'package:justmeet_frontend/model/event_list_data.dart';
+import 'package:justmeet_frontend/controllers/request_header.dart';
+import 'package:justmeet_frontend/models/event_list_data.dart';
 import 'package:justmeet_frontend/redux/config.dart';
 
 class EventRepository {

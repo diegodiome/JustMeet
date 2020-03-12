@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:justmeet_frontend/model/user.dart';
+import 'package:justmeet_frontend/models/user.dart';
 
 class VerifyAuthenticationState {}
 

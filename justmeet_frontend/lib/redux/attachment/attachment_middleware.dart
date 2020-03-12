@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/attachment/attachment_action.dart';
-import 'package:justmeet_frontend/repository/attachment_repository.dart';
+import 'package:justmeet_frontend/repositories/attachment_repository.dart';
 import 'package:flutter/services.dart';
 import 'package:redux/redux.dart';
 

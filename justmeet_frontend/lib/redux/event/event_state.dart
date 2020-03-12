@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:justmeet_frontend/model/event_list_data.dart';
+import 'package:justmeet_frontend/models/event_list_data.dart';
 
 @immutable
 class EventState {

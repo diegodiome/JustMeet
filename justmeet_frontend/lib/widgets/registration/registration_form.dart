@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/auth/auth_actions.dart';
-import 'package:justmeet_frontend/widgets/registration_auth_button.dart';
+import 'package:justmeet_frontend/widgets/registration/registration_auth_button.dart';
 
 class RegistrationForm extends StatefulWidget {
   RegistrationForm({Key key}) : super(key: key);

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:intl/intl.dart';
 import 'package:justmeet_frontend/cloud_storage.dart';
-import 'package:justmeet_frontend/model/event_list_data.dart';
+import 'package:justmeet_frontend/models/event_list_data.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/event/event_action.dart';
 import 'package:theme_provider/theme_provider.dart';

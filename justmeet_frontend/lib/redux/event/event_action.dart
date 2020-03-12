@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:justmeet_frontend/model/event_list_data.dart';
+import 'package:justmeet_frontend/models/event_list_data.dart';
 
 class AddNewEvent {
   final EventListData event;

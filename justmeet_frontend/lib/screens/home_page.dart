@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:justmeet_frontend/view/filters_list_view.dart';
-import 'package:justmeet_frontend/view/new_event_view.dart';
-import 'package:justmeet_frontend/view/profile_page.dart';
-import 'package:justmeet_frontend/widgets/home_app_bar.dart';
-import 'package:justmeet_frontend/widgets/home_content.dart';
-import 'package:justmeet_frontend/widgets/home_contest_tab_header.dart';
-import 'package:justmeet_frontend/widgets/home_filter_bar.dart';
-import 'package:justmeet_frontend/widgets/home_search_bar.dart';
+import 'package:justmeet_frontend/cloud_storage.dart';
+import 'package:justmeet_frontend/screens/filters_list_view.dart';
+import 'package:justmeet_frontend/screens/new_event_view.dart';
+import 'package:justmeet_frontend/screens/profile_page.dart';
+import 'package:justmeet_frontend/widgets/home/home_app_bar.dart';
+import 'package:justmeet_frontend/widgets/home/home_content.dart';
+import 'package:justmeet_frontend/widgets/home/home_contest_tab_header.dart';
+import 'package:justmeet_frontend/widgets/home/home_filter_bar.dart';
+import 'package:justmeet_frontend/widgets/home/home_search_bar.dart';
 import 'package:theme_provider/theme_provider.dart';
-import 'cloud_storage.dart';
 
 class HomePage extends StatefulWidget {
+  final GlobalKey<NavigatorState> navigatorKey;
+
+  HomePage({this.navigatorKey});
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -49,7 +52,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             onTap: () {},
             child: Column(children: <Widget>[
               HomeAppBar(userFunction: () {
-                showProfileDialog(context: context);
+                showProfileDialog(
+                  context: context
+                );
               }),
               Expanded(
                 child: NestedScrollView(

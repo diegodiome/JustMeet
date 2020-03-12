@@ -3,7 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/event/event_action.dart';
 import 'package:justmeet_frontend/redux/event/event_state.dart';
-import 'package:justmeet_frontend/widgets/home_event_list.dart';
+import 'package:justmeet_frontend/widgets/home/home_event_list.dart';
 import 'package:theme_provider/theme_provider.dart';
 
 class HomeContent extends StatefulWidget {

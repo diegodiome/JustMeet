@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:justmeet_frontend/routes.dart';
-import 'package:justmeet_frontend/view/registration_page.dart';
-import 'package:justmeet_frontend/widgets/login_form.dart';
-import 'package:justmeet_frontend/widgets/login_google_button.dart';
+import 'package:justmeet_frontend/widgets/login/login_form.dart';
+import 'package:justmeet_frontend/widgets/login/login_google_button.dart';
 
 class LoginPage extends StatelessWidget {
 
