@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:justmeet_frontend/cloud_storage.dart';
 import 'package:justmeet_frontend/screens/filters_list_view.dart';
 import 'package:justmeet_frontend/screens/new_event_view.dart';
 import 'package:justmeet_frontend/screens/profile_page.dart';
@@ -21,7 +20,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   AnimationController animationController;
-  CloudStorage storage;
   final ScrollController _scrollController = ScrollController();
 
   int eventCount;

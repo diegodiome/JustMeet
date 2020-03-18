@@ -1,5 +1,5 @@
+import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
-import 'package:justmeet_frontend/cloud_storage.dart';
 import 'package:justmeet_frontend/models/event_list_data.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:theme_provider/theme_provider.dart';
@@ -23,22 +23,9 @@ class EventListView extends StatefulWidget {
 }
 
 class _EventListViewState extends State<EventListView> {
-  CloudStorage storage;
-  String imageUrl;
-
   @override
   void initState() {
     super.initState();
-    storage = new CloudStorage();
-    setImageUrl();
-  }
-
-  setImageUrl() async {
-    storage.getImage(widget.eventData.eventImageUrl).then((url) {
-      setState(() {
-        imageUrl = url;
-      });
-    });
   }
 
   @override
@@ -77,17 +64,18 @@ class _EventListViewState extends State<EventListView> {
                         Column(
                           children: <Widget>[
                             AspectRatio(
-                              aspectRatio: 2,
-                              child: imageUrl == null
-                                  ? Image.asset(
-                                      'assets/images/hotel_3.png',
-                                      height: 50.0,
-                                    )
-                                  : Image.network(
-                                      imageUrl,
-                                      fit: BoxFit.cover,
-                                    ),
-                            ),
+                                aspectRatio: 2,
+                                child: widget.eventData.eventImageUrl != ''
+                                    ? Image(
+                                        image: FirebaseImage(
+                                          widget.eventData.eventImageUrl,
+                                        ),
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image.asset(
+                                        'assets/images/hotel_3.png',
+                                        height: 50.0,
+                                      )),
                             Container(
                               color: Colors.white,
                               child: Row(

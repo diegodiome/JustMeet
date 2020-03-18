@@ -59,6 +59,7 @@ class EventListData {
       "eventCategory": eventCategory,
       "eventLocation": eventLocation,
       "eventPrivate": isPrivate,
+      "eventImageUrl": eventImageUrl,
       "eventDate": eventDate.toString(),
     });
   }

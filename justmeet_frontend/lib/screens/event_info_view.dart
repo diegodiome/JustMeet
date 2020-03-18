@@ -1,3 +1,4 @@
+import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:justmeet_frontend/models/event_list_data.dart';
 import 'package:justmeet_frontend/widgets/event_info/event_info_app_bar.dart';
@@ -13,7 +14,6 @@ class EventInfoView extends StatefulWidget {
 }
 
 class _EventInfoViewState extends State<EventInfoView> {
-
   @override
   void initState() {
     super.initState();
@@ -31,7 +31,15 @@ class _EventInfoViewState extends State<EventInfoView> {
               children: <Widget>[
                 AspectRatio(
                   aspectRatio: 1.2,
-                  child: Image.asset('assets/images/back_info.png'),
+                  child: widget.event.eventImageUrl != ''
+                      ? Image(
+                          image: FirebaseImage(widget.event.eventImageUrl),
+                          fit: BoxFit.cover,
+                        )
+                      : Image.asset(
+                          'assets/images/back_info.png',
+                          fit: BoxFit.cover,
+                        ),
                 ),
               ],
             ),
@@ -42,7 +50,8 @@ class _EventInfoViewState extends State<EventInfoView> {
                 right: 0,
                 child: Container(
                     decoration: BoxDecoration(
-                      color: ThemeProvider.themeOf(context).data.backgroundColor,
+                      color:
+                          ThemeProvider.themeOf(context).data.backgroundColor,
                       borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(32.0),
                           topRight: Radius.circular(32.0)),

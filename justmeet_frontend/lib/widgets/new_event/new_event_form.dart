@@ -4,11 +4,13 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:justmeet_frontend/models/event_list_data.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
-import 'package:justmeet_frontend/redux/attachment/attachment_action.dart';
 import 'package:justmeet_frontend/redux/event/event_action.dart';
+import 'package:justmeet_frontend/repositories/attachment_repository.dart';
 
 class NewEventForm extends StatefulWidget {
-  NewEventForm({Key key}) : super(key: key);
+  NewEventForm({@required this.attachmentRepository});
+
+  final AttachmentRepository attachmentRepository;
 
   @override
   _NewEventFormState createState() => _NewEventFormState();
@@ -25,11 +27,12 @@ class _NewEventFormState extends State<NewEventForm> {
   var categories = ['Studio', 'Lavoro', 'Teatro', 'Ricreativo'];
 
   File _image;
+  String _imageUrl;
 
   @override
   void initState() {
     eventToAdd = new EventListData();
-    selectedRadio = 1;
+    setSelectedRadio(1);
     super.initState();
   }
 
@@ -49,24 +52,31 @@ class _NewEventFormState extends State<NewEventForm> {
 
   @override
   Widget build(BuildContext context) {
-    final submitCallback = () {
+    final submitCallback = () async {
+      if (_image != null) {
+        await widget.attachmentRepository.uploadImage(_image).then((imageUrl) {
+          setState(() {
+            _imageUrl = imageUrl;
+          });
+        });
+      } else {
+        setState(() {
+          _imageUrl = '';
+        });
+      }
+      EventListData newEvent = new EventListData(
+          eventAdmin: 'diomedi79@gmail.com',
+          eventName: _nameEventTextEditingController.text,
+          eventDescription: _descriptionEventTextEditingController.text,
+          eventCategory: eventToAdd.eventCategory,
+          eventDate: DateTime.parse('2020-02-26 11:00:00'),
+          eventLocation: 'Civitanova Marche',
+          eventImageUrl: _imageUrl,
+          isPrivate: false);
       if (_formKey.currentState.validate()) {
-        final createEventAction = OnCreateEvent(
-            newEvent: new EventListData(
-                eventAdmin: 'diomedi79@gmail.com',
-                eventName: _nameEventTextEditingController.text,
-                eventDescription: _descriptionEventTextEditingController.text,
-                eventCategory: eventToAdd.eventCategory,
-                eventDate: DateTime.parse('2020-02-26 11:00:00'),
-                eventLocation: 'Civitanova Marche',
-                isPrivate: false));
+        final createEventAction = OnCreateEvent(newEvent: newEvent);
+
         StoreProvider.of<AppState>(context).dispatch(createEventAction);
-        if(_image != null) {
-          print('Arrivato');
-          StoreProvider.of<AppState>(context).dispatch(OnUploadEventImage(
-            localImage: _image
-          ));
-        }
         Scaffold.of(context)
             .showSnackBar(SnackBar(content: Text("Create event...")));
 
@@ -248,12 +258,15 @@ class _NewEventFormState extends State<NewEventForm> {
                   child: Container(
                     width: 60,
                     height: 60,
-                    child: Icon(
-                      Icons.add_a_photo,
-                      size: 25,
-                    ),
+                    child: _image != null ? null : Icon(Icons.image),
                     decoration: BoxDecoration(
+                        image: _image != null
+                            ? DecorationImage(
+                                image: FileImage(_image), fit: BoxFit.cover)
+                            : null,
                         shape: BoxShape.rectangle,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10.0)),
                         color: Colors.amber.shade300),
                   ),
                 ),
