@@ -1,4 +1,3 @@
-
 import 'package:justmeet_frontend/redux/event/event_action.dart';
 import 'package:justmeet_frontend/redux/event/event_state.dart';
 import 'package:redux/redux.dart';

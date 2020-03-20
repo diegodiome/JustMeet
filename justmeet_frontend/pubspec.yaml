@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -39,6 +39,8 @@ dependencies:
   firebase_storage: ^3.1.1
   google_sign_in: ^4.1.1
   firebase_image: ^0.1.5
+  search_map_place: ^0.1.1
+  google_maps_flutter: ^0.5.11
   
 dev_dependencies:
   flutter_test:
@@ -62,6 +64,9 @@ flutter:
    - assets/images/justmeet_logo.png
    - assets/images/hotel_3.png
    - assets/images/back_info.png
+   - assets/json_assets/dark_map.txt
+   - assets/json_assets/silver_map.txt
+   - assets/json_assets/green_map.txt
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

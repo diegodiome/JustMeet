@@ -6,6 +6,7 @@ import 'package:justmeet_frontend/models/event_list_data.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/event/event_action.dart';
 import 'package:justmeet_frontend/repositories/attachment_repository.dart';
+import 'package:justmeet_frontend/screens/map_page.dart';
 
 class NewEventForm extends StatefulWidget {
   NewEventForm({@required this.attachmentRepository});
@@ -281,7 +282,15 @@ class _NewEventFormState extends State<NewEventForm> {
                   padding: EdgeInsets.all(10),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MapPage(
+                        fixed: false,
+                        mapStyle: MAP_STYLE.GREEN,
+                      )),
+                    );
+                  },
                   child: Container(
                     width: 60,
                     height: 60,

@@ -16,3 +16,11 @@ String getPostJoinEventUrl(String eventId, String email) {
   return '$eventApiUrl/join/id=$eventId&displayName=$email';
 }
 
+/* COMMENT API */
+const String commentApiUrl = '$eventApiUrl/comments';
+
+String getAllCommentByUrl(String eventId) {
+  return '$commentApiUrl/eventId=$eventId/all';
+}
+
+

@@ -9,6 +9,7 @@ import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/auth/auth_actions.dart';
 import 'package:justmeet_frontend/redux/store.dart';
 import 'package:justmeet_frontend/repositories/attachment_repository.dart';
+import 'package:justmeet_frontend/repositories/comment_repository.dart';
 import 'package:justmeet_frontend/repositories/event_repository.dart';
 import 'package:justmeet_frontend/repositories/user_repository.dart';
 import 'package:justmeet_frontend/routes.dart';
@@ -31,11 +32,12 @@ class _JustMeetAppState extends State<JustMeetApp> {
   static final _navigatorKey = GlobalKey<NavigatorState>();
   final userRepo = UserRepository(FirebaseAuth.instance, new GoogleSignIn());
   final eventRepo = EventRepository();
+  final commentRepo = CommentRepository();
 
   @override
   void initState() {
     super.initState();
-    store = createStore(userRepo, eventRepo, _navigatorKey);
+    store = createStore(userRepo, eventRepo, commentRepo, _navigatorKey);
     store.dispatch(VerifyAuthenticationState());
   }
 

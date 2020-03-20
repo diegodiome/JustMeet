@@ -23,10 +23,6 @@ class EventListView extends StatefulWidget {
 }
 
 class _EventListViewState extends State<EventListView> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

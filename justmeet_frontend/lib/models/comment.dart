@@ -20,7 +20,7 @@ class Comment {
       eventId: json['eventId'] as String,
       commentBody: json['commentBody'] as String,
       commentCreator: json['commentCreator'] as String,
-      commentDate: DateTime.tryParse(json['eventDate'])
+      commentDate: DateTime.tryParse(json['commentDate'])
     );
   }
 
