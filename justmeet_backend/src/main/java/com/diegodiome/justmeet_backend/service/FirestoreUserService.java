@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-
-import com.diegodiome.justmeet_backend.model.EventOrganizer;
 import com.diegodiome.justmeet_backend.model.User;
-import com.diegodiome.justmeet_backend.model.UserAuthenticated;
 import com.diegodiome.justmeet_backend.util.FirestoreConstants;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
@@ -31,12 +28,15 @@ public class FirestoreUserService implements FirestoreService<User, String> {
     @Override
     public void create(User document) throws Exception {
         usersCollection = db.collection(FirestoreConstants.USERS_COLLECTION);
-        usersCollection.document(document.getUserId()).set(new HashMap<String, Object>() {
+        usersCollection.document(document.getUserUid()).set(new HashMap<String, Object>() {
             private static final long serialVersionUID = 1L;
             {
                 put(FirestoreConstants.USER_EMAIL_FIELD, document.getUserEmail());
-                put(FirestoreConstants.USER_BANNED_FIELD, document.isBanned());
-                put(FirestoreConstants.USER_AUTH_PROVIDER_FIELD, document.getAuthProvider().toString());
+                put(FirestoreConstants.USER_DISPLAY_NAME_FIELD, document.getUserDisplayName());
+                put(FirestoreConstants.USER_BANNED_FIELD, false);
+                put(FirestoreConstants.USER_PHOTO_URL_FIELD, document.getUserPhotoUrl());
+                put(FirestoreConstants.USER_STATUS_FIELD, document.getUserStatus());
+                put(FirestoreConstants.USER_TOKEN_FIELD, document.getUserToken());
             }
         });
     }
@@ -45,10 +45,7 @@ public class FirestoreUserService implements FirestoreService<User, String> {
     public User get(String documentId) throws Exception {
         usersCollection = db.collection(FirestoreConstants.USERS_COLLECTION);
         DocumentReference user = usersCollection.document(documentId);
-        if(user.get().get().contains(FirestoreConstants.USER_EVENTS_FIELD)) {
-            return user.get().get().toObject(EventOrganizer.class);
-        }
-        return user.get().get().toObject(UserAuthenticated.class);
+        return user.get().get().toObject(User.class);
     }
 
     @Override
@@ -56,16 +53,9 @@ public class FirestoreUserService implements FirestoreService<User, String> {
         usersCollection = db.collection(FirestoreConstants.USERS_COLLECTION);
         List<User> allUsers = new ArrayList<>();
         List<QueryDocumentSnapshot> documents = usersCollection.get().get().getDocuments();
-        for(QueryDocumentSnapshot document : documents) {
-            if(document.contains(FirestoreConstants.USER_EVENTS_FIELD)) {
-                EventOrganizer eventOrganizer = document.toObject(EventOrganizer.class);
-                eventOrganizer.setUserId(document.getId());
-                allUsers.add(eventOrganizer);
-            } else {
-                UserAuthenticated user = document.toObject(UserAuthenticated.class);
-                user.setUserId(document.getId());
-                allUsers.add(user);
-            }
+        for (QueryDocumentSnapshot document : documents) {
+            User currentUser = document.toObject(User.class);
+            allUsers.add(currentUser);
         }
         return allUsers;
     }
@@ -73,7 +63,25 @@ public class FirestoreUserService implements FirestoreService<User, String> {
     @Override
     public void update(User documentUpdated) throws Exception {
         usersCollection = db.collection(FirestoreConstants.USERS_COLLECTION);
-        usersCollection.document(documentUpdated.getUserId()).set(documentUpdated);
+        usersCollection.document(documentUpdated.getUserUid()).set(
+            new HashMap<String, Object> () {
+                private static final long serialVersionUID = 1L;
+                {
+                    put(FirestoreConstants.USER_EMAIL_FIELD , documentUpdated.getUserEmail());
+                    put(FirestoreConstants.USER_DISPLAY_NAME_FIELD, documentUpdated.getUserDisplayName());
+                    put(FirestoreConstants.USER_TOKEN_FIELD, documentUpdated.getUserToken());
+                    put(FirestoreConstants.USER_PHOTO_URL_FIELD, documentUpdated.getUserPhotoUrl());
+                    put(FirestoreConstants.USER_STATUS_FIELD, documentUpdated.getUserStatus());
+                }
+            }
+        );
+    }
+
+    public void updateStatus(String userUid, String status) {
+        usersCollection = db.collection(FirestoreConstants.USERS_COLLECTION);
+        usersCollection.document(userUid).update(
+            FirestoreConstants.USER_STATUS_FIELD, status
+        );
     }
 
     @Override
@@ -84,13 +92,11 @@ public class FirestoreUserService implements FirestoreService<User, String> {
 
     public void addEvent(String userId, String eventId) {
         usersCollection = db.collection(FirestoreConstants.USERS_COLLECTION);
-        usersCollection.document(userId)
-            .update(FirestoreConstants.USER_EVENTS_FIELD, FieldValue.arrayUnion(eventId));
+        usersCollection.document(userId).update(FirestoreConstants.USER_EVENTS_FIELD, FieldValue.arrayUnion(eventId));
     }
 
     public void banUser(String userId) {
         usersCollection = db.collection(FirestoreConstants.USERS_COLLECTION);
-        usersCollection.document(userId)
-            .update(FirestoreConstants.USER_BANNED_FIELD, true);
+        usersCollection.document(userId).update(FirestoreConstants.USER_BANNED_FIELD, true);
     }
 }

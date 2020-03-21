@@ -1,26 +1,58 @@
+import 'dart:convert';
 
+enum UserStatus {
+  ONLINE,
+  OFFLINE
+}
+
+extension userStatusExtension on UserStatus {
+  String get string {
+    switch (this) {
+      case UserStatus.ONLINE:
+        return 'online';
+      case UserStatus.OFFLINE:
+        return 'offline';
+      default:
+        return null;
+    }
+  }
+}
 
 class User {
 
-  String email;
-  String displayName;
-  String uid;
-  String photoUrl;
-  String token;
+  String userEmail;
+  String userDisplayName;
+  String userUid;
+  String userPhotoUrl;
+  String userToken;
+  UserStatus userStatus;
 
   User({
-    this.email,
-    this.displayName,
-    this.uid,
-    this.photoUrl,
-    this.token
+    this.userDisplayName,
+    this.userEmail,
+    this.userPhotoUrl,
+    this.userToken,
+    this.userUid,
+    this.userStatus
   });
 
   User.fromJson(Map<String, dynamic> json) {
-    email = json['email'];
-    displayName = json['displayName'];
-    uid = json['uid'];
-    photoUrl = json['photoUrl'];
-    token = json['token'];
+    userEmail = json['email'];
+    userDisplayName = json['displayName'];
+    userUid = json['uid'];
+    userPhotoUrl = json['photoUrl'];
+    userToken = json['token'];
+    userStatus = json['userStatus'];
+  }
+
+  String toJson() {
+    return json.encode({
+      "userEmail": userEmail,
+      "userDisplayName": userDisplayName,
+      "userUid": userUid,
+      "userPhotoUrl": userPhotoUrl,
+      "userToken": userToken,
+      "userStatus": userStatus.string
+    });
   }
 }

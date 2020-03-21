@@ -1,8 +1,9 @@
-
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart';
+import 'package:justmeet_frontend/controllers/request_header.dart';
 import 'package:justmeet_frontend/models/user.dart';
+import 'package:justmeet_frontend/redux/config.dart';
 
 class UserRepository {
 
@@ -18,10 +19,12 @@ class UserRepository {
     final firebaseUser = await _firebaseAuth.signInWithEmailAndPassword(
       email: email, 
       password: password);
+    //await updateUser(await fromFirebaseUser(firebaseUser.user));
     return await fromFirebaseUser(firebaseUser.user);
   }
 
   Future<void> signOut() async {
+    await updateUserStatus(UserStatus.OFFLINE);
     await _firebaseAuth.signOut();
   }
 
@@ -34,21 +37,32 @@ class UserRepository {
       accessToken: googleSignInAuthentication.accessToken
     ); 
     final AuthResult authResult = await _firebaseAuth.signInWithCredential(credential);
+    //await updateUser(await fromFirebaseUser(authResult.user));
     return await fromFirebaseUser(authResult.user);
   }
 
   Future<void> updateUser(User user) async {
-    
+    Response response;
+    response = await post(
+      postUpdateUserApiUrl,
+      headers: await RequestHeader().getBasicHeader(),
+      body: user.toJson()
+    );
+    int statusCode = response.statusCode;
+    if(statusCode != 200) {
+      print('Connection error. $statusCode');
+    }
   }
 
   Future<void> createUserWithEmailAndPassword(String email, String password) async {
-    await _firebaseAuth.createUserWithEmailAndPassword(
+    AuthResult authResult = await _firebaseAuth.createUserWithEmailAndPassword(
       email: email, 
       password: password
     );
+    await updateUser(await fromFirebaseUser(authResult.user));
   }
 
-  Stream<User> getAuthenticationStateChange() {
+  Stream<User> getAuthenticationStateChange(){
     return _firebaseAuth.onAuthStateChanged.asyncMap((firebaseUser) {
       return fromFirebaseUser(firebaseUser); 
     });
@@ -62,15 +76,29 @@ class UserRepository {
   Future<User> fromFirebaseUser(FirebaseUser firebaseUser) async {
     if(firebaseUser != null) {
       return new User(
-        email: firebaseUser.email,
-        displayName: firebaseUser.displayName,
-        token: await getUserToken(firebaseUser),
-        uid: firebaseUser.uid,
-        photoUrl: firebaseUser.photoUrl
+        userEmail: firebaseUser.email,
+        userDisplayName: firebaseUser.displayName,
+        userToken: await getUserToken(firebaseUser),
+        userUid: firebaseUser.uid,
+        userPhotoUrl: firebaseUser.photoUrl,
+        userStatus: UserStatus.ONLINE
       );
     }
     return Future.value(null);
   } 
+
+  Future<void> updateUserStatus(UserStatus status) async {
+    FirebaseUser firebaseUser = await _firebaseAuth.currentUser();
+    Response response;
+    response = await post(
+      postUpdateUserStatus(firebaseUser.uid, status.string),
+      headers: await RequestHeader().getBasicHeader()
+    );
+    int statusCode = response.statusCode;
+    if(statusCode != 200) {
+      print('Connection error: $statusCode');
+    }
+  }
 
   Future<User> getUser(userId) async{
     return null;

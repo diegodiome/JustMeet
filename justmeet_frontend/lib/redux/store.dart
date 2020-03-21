@@ -4,6 +4,7 @@ import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/auth/auth_middleware.dart';
 import 'package:justmeet_frontend/redux/comment/comment_middleware.dart';
 import 'package:justmeet_frontend/redux/event/event_middleware.dart';
+import 'package:justmeet_frontend/redux/user/user_middleware.dart';
 import 'package:justmeet_frontend/repositories/comment_repository.dart';
 import 'package:justmeet_frontend/repositories/event_repository.dart';
 import 'package:justmeet_frontend/repositories/user_repository.dart';
@@ -21,5 +22,6 @@ Store<AppState> createStore(
         ..addAll(createAuthenticationMiddleware(userRepository, navigatorKey))
         ..addAll(createEventMiddleware(eventRepository, navigatorKey))
         ..addAll(createCommentMiddleware(commentRepository, navigatorKey))
+        ..addAll(createUserMiddleware(userRepository, navigatorKey))
   );
 }

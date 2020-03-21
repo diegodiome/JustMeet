@@ -10,7 +10,7 @@ final authReducers = combineReducers<AuthState>([
 AuthState _onAuthenticated(AuthState state, OnAuthenticated action) {
   return state.copyWith(
     isAuthenticated: action.user != null,
-    uid: action.user.uid
+    uid: action.user.userUid
   );
 }
 

@@ -23,4 +23,12 @@ String getAllCommentByUrl(String eventId) {
   return '$commentApiUrl/eventId=$eventId/all';
 }
 
+/* USER API */
+const String userApiUrl = '$apiUrl/user';
+const String postUpdateUserApiUrl = '$apiUrl/user/update';
+
+String postUpdateUserStatus(String userUid, String status) {
+  return '$apiUrl/user/update/userUid=$userUid&status=$status';
+}
+
 

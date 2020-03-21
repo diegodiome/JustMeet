@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:justmeet_frontend/models/user.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/auth/auth_actions.dart';
 import 'package:justmeet_frontend/redux/store.dart';
+import 'package:justmeet_frontend/redux/user/user_action.dart';
 import 'package:justmeet_frontend/repositories/attachment_repository.dart';
 import 'package:justmeet_frontend/repositories/comment_repository.dart';
 import 'package:justmeet_frontend/repositories/event_repository.dart';
@@ -27,7 +29,7 @@ class JustMeetApp extends StatefulWidget {
   _JustMeetAppState createState() => _JustMeetAppState();
 }
 
-class _JustMeetAppState extends State<JustMeetApp> {
+class _JustMeetAppState extends State<JustMeetApp> with WidgetsBindingObserver {
   Store<AppState> store;
   static final _navigatorKey = GlobalKey<NavigatorState>();
   final userRepo = UserRepository(FirebaseAuth.instance, new GoogleSignIn());
@@ -39,6 +41,26 @@ class _JustMeetAppState extends State<JustMeetApp> {
     super.initState();
     store = createStore(userRepo, eventRepo, commentRepo, _navigatorKey);
     store.dispatch(VerifyAuthenticationState());
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      if(store.state.authState.isAuthenticated) {
+        store.dispatch(OnUserStatusUpdate(
+          status: UserStatus.ONLINE
+        ));
+      }
+    }
+    else {
+      if(store.state.authState.isAuthenticated) {
+        store.dispatch(OnUserStatusUpdate(
+          status: UserStatus.OFFLINE
+        ));
+      }
+    }
   }
 
   @override

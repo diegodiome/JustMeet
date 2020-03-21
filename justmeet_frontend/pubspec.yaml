@@ -28,7 +28,6 @@ dependencies:
   image_picker: 
   intl:
   theme_provider: ^0.3.2
-  cached_network_image: ^2.0.0
 
   # Redux dependencies
   redux: ^4.0.0

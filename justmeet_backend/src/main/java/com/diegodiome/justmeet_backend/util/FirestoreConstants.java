@@ -23,11 +23,13 @@ public class FirestoreConstants {
     public static final String PARTICIPANTS_SIGN_IN_TIME_FIELD = "signInTime";
 
     /* Users collection constants */
-    public static final String USER_ROLE_FIELD = "userRole";
-    public static final String USER_AUTH_PROVIDER_FIELD = "userProvider";
     public static final String USER_EMAIL_FIELD = "userEmail";
+    public static final String USER_PHOTO_URL_FIELD = "userPhotoUrl";
+    public static final String USER_TOKEN_FIELD = "userToken";
+    public static final String USER_STATUS_FIELD = "userStatus";
+    public static final String USER_DISPLAY_NAME_FIELD = "userDisplayName";
     public static final String USER_EVENTS_FIELD = "userEvents";
-    public static final String USER_BANNED_FIELD = "banned";
+    public static final String USER_BANNED_FIELD = "userBanned";
 
     /* Comments collection constants */
     public static final String COMMENT_CREATOR_FIELD = "commentCreator";

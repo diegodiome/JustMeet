@@ -33,6 +33,26 @@ public class UserController {
         firestoreService.addEvent(userId, eventId);
     }
 
+    @PostMapping(value = ApiConstants.API_UPDATE_USER, consumes = "application/json")
+    public void updateUser(@RequestBody User user) {
+        try {
+            firestoreService.update(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @PostMapping(value = ApiConstants.API_UPDATE_USER_STATUS, consumes = "application/json")
+    public void updateUser(
+        @PathVariable("userUid") String userUid,
+        @PathVariable("status") String status) {
+        try {
+            firestoreService.updateStatus(userUid, status);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @GetMapping(value = ApiConstants.API_GET_USER, produces = "application/json")
     public User getUser(@PathVariable("userId") String userId) {
         try {

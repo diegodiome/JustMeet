@@ -26,6 +26,7 @@ public class ApiConstants {
     public static final String API_USER_ADD_EVENT = "/userId={userId}&eventId={eventId}";
     public static final String API_UPDATE_USER = "/update";
     public static final String API_GET_USER =  "/userId={userId}";
+    public static final String API_UPDATE_USER_STATUS = "/update/userUid={userUid}&status={status}";
 
     /* Api user reporting */
     public static final String API_USER_REPORTING = API_USER + "/reporting";
