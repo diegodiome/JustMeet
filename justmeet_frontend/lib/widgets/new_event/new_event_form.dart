@@ -6,7 +6,8 @@ import 'package:justmeet_frontend/models/event_list_data.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/event/event_action.dart';
 import 'package:justmeet_frontend/repositories/attachment_repository.dart';
-import 'package:justmeet_frontend/screens/map_page.dart';
+
+import '../../map_place_picker.dart';
 
 class NewEventForm extends StatefulWidget {
   NewEventForm({@required this.attachmentRepository});
@@ -51,8 +52,19 @@ class _NewEventFormState extends State<NewEventForm> {
     });
   }
 
+  void showPlacePicker() async {
+    LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            MapPlacePicker("AIzaSyD2B72q-OlcROlnHi7DOQf3VCS6e9-OqdE",
+            )));
+
+    // Handle the result in your way
+    print(result);
+  }
+
   @override
   Widget build(BuildContext context) {
+
     final submitCallback = () async {
       if (_image != null) {
         await widget.attachmentRepository.uploadImage(_image).then((imageUrl) {
@@ -283,13 +295,7 @@ class _NewEventFormState extends State<NewEventForm> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MapPage(
-                        fixed: false,
-                        mapStyle: MAP_STYLE.GREEN,
-                      )),
-                    );
+                    showPlacePicker();
                   },
                   child: Container(
                     width: 60,

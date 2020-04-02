@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -10,7 +9,6 @@ import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/auth/auth_actions.dart';
 import 'package:justmeet_frontend/redux/store.dart';
 import 'package:justmeet_frontend/redux/user/user_action.dart';
-import 'package:justmeet_frontend/repositories/attachment_repository.dart';
 import 'package:justmeet_frontend/repositories/comment_repository.dart';
 import 'package:justmeet_frontend/repositories/event_repository.dart';
 import 'package:justmeet_frontend/repositories/user_repository.dart';

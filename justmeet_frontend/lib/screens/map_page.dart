@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -85,7 +84,7 @@ class MapPageState extends State<MapPage> {
       resizeToAvoidBottomPadding: false,
       body: Stack(
         children: <Widget>[
-          buildMap()
+          buildMap(),
         ],
       ),
     );

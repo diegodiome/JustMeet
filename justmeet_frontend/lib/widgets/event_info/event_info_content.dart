@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:justmeet_frontend/models/comment.dart';
 import 'package:justmeet_frontend/models/event_list_data.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/comment/comment_action.dart';
-import 'package:justmeet_frontend/redux/comment/comment_state.dart';
 import 'package:justmeet_frontend/redux/event/event_action.dart';
 import 'package:justmeet_frontend/screens/map_page.dart';
 import 'package:justmeet_frontend/widgets/event_info/event_info_comment_list_view.dart';

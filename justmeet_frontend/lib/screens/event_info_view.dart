@@ -1,7 +1,6 @@
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:justmeet_frontend/models/event_list_data.dart';
-import 'package:justmeet_frontend/screens/map_page.dart';
 import 'package:justmeet_frontend/widgets/event_info/event_info_app_bar.dart';
 import 'package:justmeet_frontend/widgets/event_info/event_info_content.dart';
 import 'package:theme_provider/theme_provider.dart';

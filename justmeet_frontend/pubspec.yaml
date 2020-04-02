@@ -28,6 +28,7 @@ dependencies:
   image_picker: 
   intl:
   theme_provider: ^0.3.2
+  location: ^2.3.5
 
   # Redux dependencies
   redux: ^4.0.0
@@ -38,7 +39,6 @@ dependencies:
   firebase_storage: ^3.1.1
   google_sign_in: ^4.1.1
   firebase_image: ^0.1.5
-  search_map_place: ^0.1.1
   google_maps_flutter: ^0.5.11
   
 dev_dependencies:
