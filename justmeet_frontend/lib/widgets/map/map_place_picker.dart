@@ -4,7 +4,7 @@ import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:justmeet_frontend/uuid.dart';
+import 'package:justmeet_frontend/widgets/map/uuid.dart';
 
 /// The result returned after completing location selection.
 class LocationResult {
@@ -49,20 +49,6 @@ class AddressComponent {
   );
 }
 
-/// Nearby place data will be deserialized into this model.
-class NearbyPlace {
-  /// The human-readable name of the location provided. This value is provided
-  /// for [LocationResult.name] when the user selects this nearby place.
-  String name;
-
-  /// The icon identifying the kind of place provided. Eg. lodging, chapel,
-  /// hospital, etc.
-  String icon;
-
-  // Latitude/Longitude of the provided location.
-  LatLng latLng;
-}
-
 /// Autocomplete results item returned from Google will be deserialized
 /// into this model.
 class AutoCompleteItem {
@@ -80,12 +66,6 @@ class AutoCompleteItem {
   int length;
 }
 
-/// Place picker widget made with map widget from
-/// [google_maps_flutter](https://github.com/flutter/plugins/tree/master/packages/google_maps_flutter)
-/// and other API calls to [Google Places API](https://developers.google.com/places/web-service/intro)
-///
-/// API key provided should have `Maps SDK for Android`, `Maps SDK for iOS`
-/// and `Places API`  enabled for it
 class MapPlacePicker extends StatefulWidget {
   /// API key generated from Google Cloud Console. You can get an API key
   /// [here](https://cloud.google.com/maps-platform/)
@@ -110,13 +90,14 @@ class MapPlacePickerState extends State<MapPlacePicker> {
   /// Indicator for the selected location
   final Set<Marker> markers = Set();
 
+  // Marker icon
+  BitmapDescriptor markerIcon;
+
   /// Result returned after user completes selection
   LocationResult locationResult;
 
   /// Overlay to display autocomplete suggestions
   OverlayEntry overlayEntry;
-
-  List<NearbyPlace> nearbyPlaces = List();
 
   /// Session token required for autocomplete API call
   String sessionToken = Uuid().generateV4();
@@ -145,8 +126,11 @@ class MapPlacePickerState extends State<MapPlacePicker> {
   @override
   void initState() {
     super.initState();
+    BitmapDescriptor.fromAssetImage(ImageConfiguration(size: Size(24, 24)), 'assets/images/marker.png').then((value) {
+      markerIcon = value;
+    });
     markers.add(Marker(
-      position: widget.displayLocation ?? LatLng(5.6037, 0.1870),
+      position: widget.displayLocation ?? LatLng(43.3168622, 13.7031319),
       markerId: MarkerId("selected-location"),
     ));
   }
@@ -393,14 +377,6 @@ class MapPlacePickerState extends State<MapPlacePicker> {
       return "Unnamed location";
     }
 
-    for (NearbyPlace np in this.nearbyPlaces) {
-      if (np.latLng == this.locationResult.latLng &&
-          np.name != this.locationResult.locality) {
-        this.locationResult.name = np.name;
-        return "${np.name}, ${this.locationResult.locality}";
-      }
-    }
-
     return "${this.locationResult.name}, ${this.locationResult.locality}";
   }
 
@@ -413,6 +389,7 @@ class MapPlacePickerState extends State<MapPlacePicker> {
         Marker(
           markerId: MarkerId("selected-location"),
           position: latLng,
+          icon: markerIcon
         ),
       );
     });

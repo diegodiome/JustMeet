@@ -6,8 +6,7 @@ import 'package:justmeet_frontend/models/event_list_data.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/event/event_action.dart';
 import 'package:justmeet_frontend/repositories/attachment_repository.dart';
-
-import '../../map_place_picker.dart';
+import '../map/map_place_picker.dart';
 
 class NewEventForm extends StatefulWidget {
   NewEventForm({@required this.attachmentRepository});

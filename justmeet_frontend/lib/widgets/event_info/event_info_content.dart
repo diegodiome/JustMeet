@@ -6,7 +6,7 @@ import 'package:justmeet_frontend/models/event_list_data.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/comment/comment_action.dart';
 import 'package:justmeet_frontend/redux/event/event_action.dart';
-import 'package:justmeet_frontend/screens/map_page.dart';
+import 'package:justmeet_frontend/widgets/map/map_page.dart';
 import 'package:justmeet_frontend/widgets/event_info/event_info_comment_list_view.dart';
 import 'package:redux/redux.dart';
 import 'package:theme_provider/theme_provider.dart';
