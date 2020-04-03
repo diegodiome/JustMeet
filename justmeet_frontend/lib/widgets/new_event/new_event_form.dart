@@ -2,11 +2,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:justmeet_frontend/controllers/map_helper.dart';
 import 'package:justmeet_frontend/models/event_list_data.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/event/event_action.dart';
 import 'package:justmeet_frontend/repositories/attachment_repository.dart';
-import '../map/map_place_picker.dart';
+import 'package:justmeet_frontend/widgets/map/map_page.dart';
 
 class NewEventForm extends StatefulWidget {
   NewEventForm({@required this.attachmentRepository});
@@ -51,19 +52,8 @@ class _NewEventFormState extends State<NewEventForm> {
     });
   }
 
-  void showPlacePicker() async {
-    LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) =>
-            MapPlacePicker("AIzaSyD2B72q-OlcROlnHi7DOQf3VCS6e9-OqdE",
-            )));
-
-    // Handle the result in your way
-    print(result);
-  }
-
   @override
   Widget build(BuildContext context) {
-
     final submitCallback = () async {
       if (_image != null) {
         await widget.attachmentRepository.uploadImage(_image).then((imageUrl) {
@@ -293,8 +283,17 @@ class _NewEventFormState extends State<NewEventForm> {
                   padding: EdgeInsets.all(10),
                 ),
                 GestureDetector(
-                  onTap: () {
-                    showPlacePicker();
+                  onTap: () async {
+                    MapLocationResult locationResult = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MapPage(
+                                searchInput: true,
+                                gestureEnabled: true,
+                                mapStyle: MAP_STYLE.DARK,
+                              )),
+                    );
+                    print(locationResult.locality);
                   },
                   child: Container(
                     width: 60,

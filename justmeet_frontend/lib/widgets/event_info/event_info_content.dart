@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:intl/intl.dart';
+import 'package:justmeet_frontend/controllers/map_helper.dart';
 import 'package:justmeet_frontend/models/comment.dart';
 import 'package:justmeet_frontend/models/event_list_data.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
@@ -82,7 +83,8 @@ class _EventInfoContentState extends State<EventInfoContent> {
           heightFactor: 0.3,
           widthFactor: 2.5,
           child: MapPage(
-            fixed: true,
+            gestureEnabled: false,
+            searchInput: false,
             mapStyle: MAP_STYLE.GREEN,
           ),
         ),

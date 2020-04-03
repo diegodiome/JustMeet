@@ -2,90 +2,412 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
-enum MAP_STYLE { DARK, LIGHT, GREEN }
-
-extension mapExtension on MAP_STYLE {
-  String get resource {
-    switch (this) {
-      case MAP_STYLE.DARK:
-        return 'assets/json_assets/dark_map.txt';
-      case MAP_STYLE.LIGHT:
-        return 'assets/json_assets/silver_map.txt';
-      case MAP_STYLE.GREEN:
-        return 'assets/json_assets/green_map.txt';
-      default:
-        return null;
-    }
-  }
-}
+import 'package:justmeet_frontend/controllers/map_helper.dart';
+import 'package:justmeet_frontend/repositories/map_repository.dart';
+import 'package:justmeet_frontend/widgets/map/map_search_input.dart';
+import 'package:location/location.dart';
+import 'map_rich_suggestion.dart';
 
 class MapPage extends StatefulWidget {
   final MAP_STYLE mapStyle;
-  final bool fixed;
-  MapPage({@required this.mapStyle, @required this.fixed});
+  final bool gestureEnabled;
+  final bool searchInput;
+
+  const MapPage({
+    this.mapStyle,
+    this.searchInput,
+    this.gestureEnabled});
 
   @override
-  State<MapPage> createState() => MapPageState();
+  State<StatefulWidget> createState() {
+    return MapPageState();
+  }
 }
 
+/// Place picker state
 class MapPageState extends State<MapPage> {
-  Completer<GoogleMapController> _mapController = Completer();
+  final Completer<GoogleMapController> mapController = Completer();
+
+  MapRepository mapRepository;
+
+  /// Indicator for the selected location
+  final Set<Marker> markers = Set();
+
+  BitmapDescriptor markerIcon;
+
+  /// Result returned after user completes selection
+  MapLocationResult locationResult;
+
+  /// Overlay to display autocomplete suggestions
+  OverlayEntry overlayEntry;
+
+  /// Session token required for autocomplete API call
+  String sessionToken = mapSessionCode;
+
+  GlobalKey appBarKey = GlobalKey();
+
+  bool hasSearchTerm = false;
+
+  String previousSearchTerm = '';
+
   String _mapStyle;
+
+  // constructor
+  MapPageState();
+
+  void onMapCreated(GoogleMapController controller) {
+    this.mapController.complete(controller);
+    controller.setMapStyle(_mapStyle);
+    moveToCurrentUserLocation();
+  }
+
+  @override
+  void setState(fn) {
+    if (this.mounted) {
+      super.setState(fn);
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    mapRepository = new MapRepository();
     rootBundle.loadString(widget.mapStyle.resource).then((string) {
       _mapStyle = string;
     });
+    markerIconAsset.then((value) {
+      markerIcon = value;
+    });
   }
 
-  final CameraPosition _initialCamera = CameraPosition(
-    target: LatLng(43.307161, 13.728369),
-    zoom: 14.0000,
-  );
+  @override
+  void dispose() {
+    this.overlayEntry?.remove();
+    super.dispose();
+  }
 
-  Widget buildMap() {
-    switch (widget.fixed) {
-      case true:
-        return GoogleMap(
-          myLocationEnabled: true,
-          mapType: MapType.normal,
-          scrollGesturesEnabled: false,
-          zoomGesturesEnabled: false,
-          initialCameraPosition: _initialCamera,
-          onMapCreated: (GoogleMapController controller) {
-            _mapController.complete(controller);
-            controller.setMapStyle(_mapStyle);
-          },
-        );
-        break;
-      case false:
-        return GoogleMap(
-          myLocationEnabled: true,
-          mapType: MapType.normal,
-          scrollGesturesEnabled: true,
-          zoomGesturesEnabled: true,
-          initialCameraPosition: _initialCamera,
-          onMapCreated: (GoogleMapController controller) {
-            _mapController.complete(controller);
-            controller.setMapStyle(_mapStyle);
-          },
-        );
-        break;
+  Widget appBarUi() {
+    if(widget.searchInput) {
+      return AppBar(
+        key: this.appBarKey,
+        title: MapSearchInput((it) {
+          searchPlace(it);
+        }),
+        centerTitle: true,
+        leading: null,
+        automaticallyImplyLeading: false,
+      );
     }
-    return Container();
+    return null;
+  }
+
+  Widget locationResultUi() {
+    if(widget.searchInput) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          SelectPlaceAction(getLocationName(), () {
+            Navigator.of(context).pop(this.locationResult);
+          })
+        ],
+      );
+    }
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      body: Stack(
+      appBar: appBarUi(),
+      body: Column(
         children: <Widget>[
-          buildMap(),
+          Expanded(
+            child: GoogleMap(
+              initialCameraPosition: initialCameraPosition,
+              zoomGesturesEnabled: widget.gestureEnabled,
+              scrollGesturesEnabled: widget.gestureEnabled,
+              myLocationButtonEnabled: true,
+              myLocationEnabled: true,
+              onMapCreated: onMapCreated,
+              onTap: (latLng) {
+                clearOverlay();
+                moveToLocation(latLng);
+              },
+              markers: markers,
+            ),
+          ),
+          locationResultUi()
         ],
+      ),
+    );
+  }
+
+  /// Hides the autocomplete overlay
+  void clearOverlay() {
+    if (this.overlayEntry != null) {
+      this.overlayEntry.remove();
+      this.overlayEntry = null;
+    }
+  }
+
+  void searchPlace(String place) {
+    if (place == this.previousSearchTerm) {
+      return;
+    } else {
+      previousSearchTerm = place;
+    }
+
+    if (context == null) {
+      return;
+    }
+
+    clearOverlay();
+
+    setState(() {
+      hasSearchTerm = place.length > 0;
+    });
+
+    if (place.length < 1) {
+      return;
+    }
+
+    final RenderBox renderBox = context.findRenderObject();
+    Size size = renderBox.size;
+
+    final RenderBox appBarBox =
+    this.appBarKey.currentContext.findRenderObject();
+
+    this.overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: appBarBox.size.height,
+        width: size.width,
+        child: Material(
+          elevation: 1,
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              vertical: 16,
+              horizontal: 24,
+            ),
+            child: Row(
+              children: <Widget>[
+                SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 3,
+                  ),
+                ),
+                SizedBox(
+                  width: 24,
+                ),
+                Expanded(
+                  child: Text(
+                    "Finding place...",
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    Overlay.of(context).insert(this.overlayEntry);
+
+    autoCompleteSearch(place);
+  }
+
+  /// Fetches the place autocomplete list with the query [place].
+  void autoCompleteSearch(String place) {
+    place = place.replaceAll(" ", "+");
+    String additionalString = '';
+
+    if (this.locationResult != null) {
+      additionalString += "&location=${this.locationResult.latLng.latitude}," +
+          "${this.locationResult.latLng.longitude}";
+    }
+
+    mapRepository.getAutoCompleteSearch(place, sessionToken, optionalString: additionalString).then((value) {
+        List<dynamic> predictions = value;
+
+        List<MapRichSuggestion> suggestions = [];
+
+        if (predictions.isEmpty) {
+          MapAutoCompleteItem aci = MapAutoCompleteItem();
+          aci.text = "No result found";
+          aci.offset = 0;
+          aci.length = 0;
+
+          suggestions.add(MapRichSuggestion(aci, () {}));
+        } else {
+          for (dynamic t in predictions) {
+            MapAutoCompleteItem aci = MapAutoCompleteItem();
+
+            aci.id = t['place_id'];
+            aci.text = t['description'];
+            aci.offset = t['matched_substrings'][0]['offset'];
+            aci.length = t['matched_substrings'][0]['length'];
+
+            suggestions.add(MapRichSuggestion(aci, () {
+              FocusScope.of(context).requestFocus(FocusNode());
+              decodeAndSelectPlace(aci.id);
+            }));
+          }
+        }
+
+        displayAutoCompleteSuggestions(suggestions);
+    }).catchError((error) {
+      print(error);
+    });
+  }
+
+  /// To navigate to the selected place from the autocomplete list to the map,
+  /// the lat,lng is required. This method fetches the lat,lng of the place and
+  /// proceeds to moving the map to that location.
+  Future<void> decodeAndSelectPlace(String placeId) async {
+    clearOverlay();
+    moveToLocation(await mapRepository.getDecodeSelectPlace(placeId));
+  }
+
+  /// Display autocomplete suggestions with the overlay.
+  void displayAutoCompleteSuggestions(List<MapRichSuggestion> suggestions) {
+    final RenderBox renderBox = context.findRenderObject();
+    Size size = renderBox.size;
+
+    final RenderBox appBarBox =
+    this.appBarKey.currentContext.findRenderObject();
+
+    clearOverlay();
+
+    this.overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        width: size.width,
+        top: appBarBox.size.height,
+        child: Material(
+          elevation: 1,
+          child: Column(
+            children: suggestions,
+          ),
+        ),
+      ),
+    );
+
+    Overlay.of(context).insert(this.overlayEntry);
+  }
+
+  String getLocationName() {
+    if (this.locationResult == null) {
+      return "Unnamed location";
+    }
+
+    return "${this.locationResult.name}, ${this.locationResult.locality}";
+  }
+
+  /// Moves the marker to the indicated lat,lng
+  void setMarker(LatLng latLng) {
+    // markers.clear();
+    setState(() {
+      markers.clear();
+      markers.add(
+        Marker(
+            markerId: MarkerId("selected-location"),
+            position: latLng,
+            icon: markerIcon
+        ),
+      );
+    });
+  }
+
+  /// This method gets the human readable name of the location. Mostly appears
+  /// to be the road name and the locality.
+  void reverseGeocodeLatLng(LatLng latLng) {
+    mapRepository.getReverseGeocodeLatLng(latLng.latitude, latLng.longitude).then((value) {
+      setState(() {
+        this.locationResult = value;
+      });
+    });
+  }
+
+  /// Moves the camera to the provided location and updates other UI features to
+  /// match the location.
+  void moveToLocation(LatLng latLng) {
+    this.mapController.future.then((controller) {
+      controller.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: latLng,
+            zoom: 15.0,
+          ),
+        ),
+      );
+    });
+
+    setMarker(latLng);
+
+    reverseGeocodeLatLng(latLng);
+  }
+
+  void moveToCurrentUserLocation() {
+    var location = Location();
+    location.getLocation().then((locationData) {
+      LatLng target = LatLng(locationData.latitude, locationData.longitude);
+      moveToLocation(target);
+    }).catchError((error) {
+      // TODO: Handle the exception here
+      print(error);
+    });
+  }
+}
+
+class SelectPlaceAction extends StatelessWidget {
+  final String locationName;
+  final VoidCallback onTap;
+
+  SelectPlaceAction(this.locationName, this.onTap);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: InkWell(
+        onTap: () {
+          this.onTap();
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 16,
+          ),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      locationName,
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      "Tap to select this location",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward,
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
