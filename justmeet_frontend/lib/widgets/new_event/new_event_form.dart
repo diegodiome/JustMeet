@@ -293,7 +293,6 @@ class _NewEventFormState extends State<NewEventForm> {
                                 mapStyle: MAP_STYLE.DARK,
                               )),
                     );
-                    print(locationResult.locality);
                   },
                   child: Container(
                     width: 60,

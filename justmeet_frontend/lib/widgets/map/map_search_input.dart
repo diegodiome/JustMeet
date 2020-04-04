@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class MapSearchInput extends StatefulWidget {
   final ValueChanged<String> onSearchInput;
 
-  MapSearchInput(this.onSearchInput);
+  const MapSearchInput(this.onSearchInput, {GlobalKey key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -54,8 +54,10 @@ class MapSearchInputState extends State<MapSearchInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(
+    return Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Container(
+        padding: EdgeInsets.symmetric(
         horizontal: 8,
       ),
       child: Row(
@@ -95,14 +97,13 @@ class MapSearchInputState extends State<MapSearchInput> {
                 this.hasSearchEntry = false;
               });
             },
-          )
-              : SizedBox(),
+          ) : SizedBox(),
         ],
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: Theme.of(context).canvasColor,
+        color: Colors.white,
       ),
-    );
+        ));
   }
 }

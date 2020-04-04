@@ -13,10 +13,7 @@ class MapPage extends StatefulWidget {
   final bool gestureEnabled;
   final bool searchInput;
 
-  const MapPage({
-    this.mapStyle,
-    this.searchInput,
-    this.gestureEnabled});
+  const MapPage({this.mapStyle, this.searchInput, this.gestureEnabled});
 
   @override
   State<StatefulWidget> createState() {
@@ -44,7 +41,7 @@ class MapPageState extends State<MapPage> {
   /// Session token required for autocomplete API call
   String sessionToken = mapSessionCode;
 
-  GlobalKey appBarKey = GlobalKey();
+  GlobalKey searchBarKey = GlobalKey();
 
   bool hasSearchTerm = false;
 
@@ -72,6 +69,8 @@ class MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
     mapRepository = new MapRepository();
+    // hide status bar
+    SystemChrome.setEnabledSystemUIOverlays([]);
     rootBundle.loadString(widget.mapStyle.resource).then((string) {
       _mapStyle = string;
     });
@@ -83,26 +82,19 @@ class MapPageState extends State<MapPage> {
   @override
   void dispose() {
     this.overlayEntry?.remove();
+    // bring back status bar
+    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     super.dispose();
   }
 
-  Widget appBarUi() {
-    if(widget.searchInput) {
-      return AppBar(
-        key: this.appBarKey,
-        title: MapSearchInput((it) {
-          searchPlace(it);
-        }),
-        centerTitle: true,
-        leading: null,
-        automaticallyImplyLeading: false,
-      );
-    }
-    return null;
+  Widget searchOverlay() {
+    return MapSearchInput((it) {
+      searchPlace(it);
+    }, key: searchBarKey);
   }
 
   Widget locationResultUi() {
-    if(widget.searchInput) {
+    if (widget.searchInput) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
@@ -118,15 +110,15 @@ class MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarUi(),
-      body: Column(
+      body: Stack(children: <Widget>[
+      Column(
         children: <Widget>[
           Expanded(
             child: GoogleMap(
               initialCameraPosition: initialCameraPosition,
               zoomGesturesEnabled: widget.gestureEnabled,
               scrollGesturesEnabled: widget.gestureEnabled,
-              myLocationButtonEnabled: true,
+              myLocationButtonEnabled: false,
               myLocationEnabled: true,
               onMapCreated: onMapCreated,
               onTap: (latLng) {
@@ -139,7 +131,8 @@ class MapPageState extends State<MapPage> {
           locationResultUi()
         ],
       ),
-    );
+        searchOverlay()
+    ]));
   }
 
   /// Hides the autocomplete overlay
@@ -175,7 +168,7 @@ class MapPageState extends State<MapPage> {
     Size size = renderBox.size;
 
     final RenderBox appBarBox =
-    this.appBarKey.currentContext.findRenderObject();
+        this.searchBarKey.currentContext.findRenderObject();
 
     this.overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
@@ -216,7 +209,6 @@ class MapPageState extends State<MapPage> {
     );
 
     Overlay.of(context).insert(this.overlayEntry);
-
     autoCompleteSearch(place);
   }
 
@@ -230,35 +222,38 @@ class MapPageState extends State<MapPage> {
           "${this.locationResult.latLng.longitude}";
     }
 
-    mapRepository.getAutoCompleteSearch(place, sessionToken, optionalString: additionalString).then((value) {
-        List<dynamic> predictions = value;
+    mapRepository
+        .getAutoCompleteSearch(place, sessionToken,
+            optionalString: additionalString)
+        .then((value) {
+      List<dynamic> predictions = value;
 
-        List<MapRichSuggestion> suggestions = [];
+      List<MapRichSuggestion> suggestions = [];
 
-        if (predictions.isEmpty) {
+      if (predictions.isEmpty) {
+        MapAutoCompleteItem aci = MapAutoCompleteItem();
+        aci.text = "No result found";
+        aci.offset = 0;
+        aci.length = 0;
+
+        suggestions.add(MapRichSuggestion(aci, () {}));
+      } else {
+        for (dynamic t in predictions) {
           MapAutoCompleteItem aci = MapAutoCompleteItem();
-          aci.text = "No result found";
-          aci.offset = 0;
-          aci.length = 0;
 
-          suggestions.add(MapRichSuggestion(aci, () {}));
-        } else {
-          for (dynamic t in predictions) {
-            MapAutoCompleteItem aci = MapAutoCompleteItem();
+          aci.id = t['place_id'];
+          aci.text = t['description'];
+          aci.offset = t['matched_substrings'][0]['offset'];
+          aci.length = t['matched_substrings'][0]['length'];
 
-            aci.id = t['place_id'];
-            aci.text = t['description'];
-            aci.offset = t['matched_substrings'][0]['offset'];
-            aci.length = t['matched_substrings'][0]['length'];
-
-            suggestions.add(MapRichSuggestion(aci, () {
-              FocusScope.of(context).requestFocus(FocusNode());
-              decodeAndSelectPlace(aci.id);
-            }));
-          }
+          suggestions.add(MapRichSuggestion(aci, () {
+            FocusScope.of(context).requestFocus(FocusNode());
+            decodeAndSelectPlace(aci.id);
+          }));
         }
+      }
 
-        displayAutoCompleteSuggestions(suggestions);
+      displayAutoCompleteSuggestions(suggestions);
     }).catchError((error) {
       print(error);
     });
@@ -278,7 +273,7 @@ class MapPageState extends State<MapPage> {
     Size size = renderBox.size;
 
     final RenderBox appBarBox =
-    this.appBarKey.currentContext.findRenderObject();
+        this.searchBarKey.currentContext.findRenderObject();
 
     clearOverlay();
 
@@ -315,8 +310,7 @@ class MapPageState extends State<MapPage> {
         Marker(
             markerId: MarkerId("selected-location"),
             position: latLng,
-            icon: markerIcon
-        ),
+            icon: markerIcon),
       );
     });
   }
@@ -324,7 +318,9 @@ class MapPageState extends State<MapPage> {
   /// This method gets the human readable name of the location. Mostly appears
   /// to be the road name and the locality.
   void reverseGeocodeLatLng(LatLng latLng) {
-    mapRepository.getReverseGeocodeLatLng(latLng.latitude, latLng.longitude).then((value) {
+    mapRepository
+        .getReverseGeocodeLatLng(latLng.latitude, latLng.longitude)
+        .then((value) {
       setState(() {
         this.locationResult = value;
       });
@@ -339,7 +335,7 @@ class MapPageState extends State<MapPage> {
         CameraUpdate.newCameraPosition(
           CameraPosition(
             target: latLng,
-            zoom: 15.0,
+            zoom: 16.0,
           ),
         ),
       );
@@ -356,7 +352,6 @@ class MapPageState extends State<MapPage> {
       LatLng target = LatLng(locationData.latitude, locationData.longitude);
       moveToLocation(target);
     }).catchError((error) {
-      // TODO: Handle the exception here
       print(error);
     });
   }

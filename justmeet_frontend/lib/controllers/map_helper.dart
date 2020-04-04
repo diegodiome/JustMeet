@@ -41,18 +41,12 @@ class MapLocationResult {
 
   String formattedAddress;
 
-  MapAddressComponent country;
-
   MapAddressComponent city;
-
-  String postalCode;
 
   String placeId;
 
   MapLocationResult(
       {this.city,
-      this.country,
-      this.postalCode,
       this.placeId,
       this.formattedAddress,
       this.latLng,
@@ -64,11 +58,6 @@ class MapLocationResult {
     locality = json['address_components'][1]['short_name'];
     formattedAddress = json['formatted_address'];
     placeId = json['place_id'];
-    postalCode = json['address_components'][7]['short_name'];
-    country = MapAddressComponent(
-      json['address_components'][6]['long_name'],
-      json['address_components'][6]['short_name'],
-    );
     city = MapAddressComponent(
       json['address_components'][3]['long_name'],
       json['address_components'][3]['short_name'],
