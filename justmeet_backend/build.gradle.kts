@@ -24,6 +24,7 @@ repositories {
 }
 
 dependencies {
+	implementation("com.google.firebase:firebase-admin:6.12.2")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
