@@ -27,7 +27,7 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
+                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
 
         http.addFilterBefore(firebaseAuthenticationFilterBean(), UsernamePasswordAuthenticationFilter::class.java)
