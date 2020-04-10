@@ -11,5 +11,5 @@ interface FirestoreRepository<E, T> {
 
     fun updateElement(element: E)
 
-    fun getElement(elementId: T)
+    fun getElement(elementId: T) : E?
 }
