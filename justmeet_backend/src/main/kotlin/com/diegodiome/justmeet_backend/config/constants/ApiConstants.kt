@@ -10,4 +10,12 @@ object ApiConstants {
     const val UPD_USER_API = "/update"
     const val S_UPD_USER_API = "/{userId}&{status}/update"
     const val GET_USER_API = "/{userId}"
+
+    /* Event API */
+    const val EVENT_API = "/event"
+    const val ADD_EVENT_API = "/create"
+    const val UPD_EVENT_API = "/{eventId}/update"
+    const val GET_EVENT_API =  "/{eventId}"
+    const val GET_EVENTS_API = "/all"
+    const val DEL_EVENT_API = "/{eventId}/delete"
 }
