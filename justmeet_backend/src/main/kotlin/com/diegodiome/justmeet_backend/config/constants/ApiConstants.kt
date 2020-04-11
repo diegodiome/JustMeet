@@ -14,8 +14,15 @@ object ApiConstants {
     /* Event API */
     const val EVENT_API = "/event"
     const val ADD_EVENT_API = "/create"
-    const val UPD_EVENT_API = "/{eventId}/update"
+    const val UPD_EVENT_API = "/update"
     const val GET_EVENT_API =  "/{eventId}"
     const val GET_EVENTS_API = "/all"
     const val DEL_EVENT_API = "/{eventId}/delete"
+    const val ADD_COM_API = "/{eventId}/comment"
+    const val GET_COMS_API = "/{eventId}/comments"
+    const val ADD_REP_API = "/{eventId}/reporting"
+    const val GET_REPS_API = "/{eventId}/reports"
+    const val ADD_REQ_API = "/{eventId}/{userId}/request"
+
+    /* Comment API */
 }

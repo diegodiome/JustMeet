@@ -2,6 +2,7 @@ package com.diegodiome.justmeet_backend.config
 
 import com.diegodiome.justmeet_backend.config.constants.SecurityConstants.TOKEN_HEADER
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseToken
 import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -34,7 +35,7 @@ class FirebaseAuthenticationTokenFilter : OncePerRequestFilter() {
             firebaseAuthTokenFilterLogger.info("Successfully authenticated")
         } catch (ex: Exception) {
             response.status = HttpServletResponse.SC_UNAUTHORIZED
-            firebaseAuthTokenFilterLogger.info("Fail to authenticate : ", ex)
+            firebaseAuthTokenFilterLogger.info("Error : ", ex)
         }
         filterChain.doFilter(request, response)
     }
