@@ -17,7 +17,6 @@ configurations {
 		extendsFrom(developmentOnly)
 	}
 }
-
 repositories {
 	mavenCentral()
 }
