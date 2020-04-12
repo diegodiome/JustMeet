@@ -176,7 +176,9 @@ class _EventInfoContentState extends State<EventInfoContent> {
                     child: Text(DateFormat('dd - MM - yyyy')
                         .format(widget.event.eventDate)),
                   ),
-                  SizedBox(width: 20,),
+                  SizedBox(
+                    width: 20,
+                  ),
                   Icon(Icons.watch_later),
                   Padding(
                     padding: EdgeInsets.only(left: 10.0),
@@ -186,14 +188,18 @@ class _EventInfoContentState extends State<EventInfoContent> {
                     ),
                   ),
                 ]),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 Row(
                   children: <Widget>[
                     Icon(Icons.map),
                     Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Text('Location', style: TextStyle(fontSize: 18),)
-                    )
+                        padding: EdgeInsets.only(left: 10),
+                        child: Text(
+                          'Location',
+                          style: TextStyle(fontSize: 18),
+                        ))
                   ],
                 ),
                 mapView()

@@ -121,7 +121,7 @@ void Function(
     userRepository.getAuthenticationStateChange().listen((user) async{
       if(user == null) {
         await navigatorKey.currentState.pushReplacementNamed(Routes.login);
-      }else {
+      } else {
         store.dispatch(OnAuthenticated(user: user));
         await userRepository.updateUser(user);
         await navigatorKey.currentState.pushReplacementNamed(Routes.home);

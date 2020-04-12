@@ -67,14 +67,14 @@ class _NewEventFormState extends State<NewEventForm> {
         });
       }
       EventListData newEvent = new EventListData(
-          eventAdmin: 'diomedi79@gmail.com',
+          eventCreator: 'diomedi79@gmail.com',
           eventName: _nameEventTextEditingController.text,
           eventDescription: _descriptionEventTextEditingController.text,
           eventCategory: eventToAdd.eventCategory,
           eventDate: DateTime.parse('2020-02-26 11:00:00'),
           eventLocation: 'Civitanova Marche',
           eventImageUrl: _imageUrl,
-          isPrivate: false);
+          eventPrivate: false);
       if (_formKey.currentState.validate()) {
         final createEventAction = OnCreateEvent(newEvent: newEvent);
 

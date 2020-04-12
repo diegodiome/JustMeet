@@ -164,7 +164,7 @@ class _EventListViewState extends State<EventListView> {
                                                       padding: EdgeInsets.only(
                                                           left: 30),
                                                       child: widget.eventData
-                                                              .isPrivate
+                                                              .eventPrivate
                                                           ? Icon(
                                                               Icons
                                                                   .lock_outline,

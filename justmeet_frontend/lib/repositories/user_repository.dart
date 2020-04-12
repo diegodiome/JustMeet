@@ -19,12 +19,12 @@ class UserRepository {
     final firebaseUser = await _firebaseAuth.signInWithEmailAndPassword(
       email: email, 
       password: password);
-    //await updateUser(await fromFirebaseUser(firebaseUser.user));
     return await fromFirebaseUser(firebaseUser.user);
   }
 
   Future<void> signOut() async {
     await updateUserStatus(UserStatus.OFFLINE);
+    await updateUserToken("");
     await _firebaseAuth.signOut();
   }
 
@@ -37,14 +37,13 @@ class UserRepository {
       accessToken: googleSignInAuthentication.accessToken
     ); 
     final AuthResult authResult = await _firebaseAuth.signInWithCredential(credential);
-    //await updateUser(await fromFirebaseUser(authResult.user));
     return await fromFirebaseUser(authResult.user);
   }
 
   Future<void> updateUser(User user) async {
     Response response;
-    response = await post(
-      postUpdateUserApiUrl,
+    response = await put(
+      putUpdateUserApiUrl,
       headers: await RequestHeader().getBasicHeader(),
       body: user.toJson()
     );
@@ -59,7 +58,7 @@ class UserRepository {
       email: email, 
       password: password
     );
-    await updateUser(await fromFirebaseUser(authResult.user));
+    await createUser(await fromFirebaseUser(authResult.user));
   }
 
   Stream<User> getAuthenticationStateChange(){
@@ -90,13 +89,39 @@ class UserRepository {
   Future<void> updateUserStatus(UserStatus status) async {
     FirebaseUser firebaseUser = await _firebaseAuth.currentUser();
     Response response;
-    response = await post(
-      postUpdateUserStatus(firebaseUser.uid, status.string),
+    response = await put(
+      putUpdateUserStatus(firebaseUser.uid, status.string),
       headers: await RequestHeader().getBasicHeader()
     );
     int statusCode = response.statusCode;
     if(statusCode != 200) {
       print('Connection error: $statusCode');
+    }
+  }
+
+  Future<void> updateUserToken(String token) async {
+    FirebaseUser firebaseUser = await _firebaseAuth.currentUser();
+    Response response;
+    response = await put(
+        putUpdateUserToken(firebaseUser.uid, token),
+        headers: await RequestHeader().getBasicHeader()
+    );
+    int statusCode = response.statusCode;
+    if(statusCode != 200) {
+      print('Connection error: $statusCode');
+    }
+  }
+
+  Future<void> createUser(User user) async {
+    Response response;
+    response = await post(
+        postCreateUserApiUrl,
+        headers: await RequestHeader().getBasicHeader(),
+        body: user.toJson()
+    );
+    int statusCode = response.statusCode;
+    if(statusCode != 200) {
+      print('Create user connection error. $statusCode');
     }
   }
 

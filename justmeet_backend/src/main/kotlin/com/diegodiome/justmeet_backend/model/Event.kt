@@ -9,6 +9,8 @@ data class Event(
         val eventId: String? = UUID.randomUUID().toString(),
         val eventName: String,
         val eventCreator: String,
+        val eventImageUrl: String,
+        val eventPrivate: Boolean,
         val eventLat: Double,
         val eventLong: Double,
         val eventCategory: EVENT_CATEGORY,
@@ -17,5 +19,5 @@ data class Event(
         val eventParticipants: List<String>? = ArrayList(),
         val eventRequest: List<String>? = ArrayList()
 ) {
-    constructor() : this("","","",0.0,0.0, EVENT_CATEGORY.Sport, Date(),"")
+    constructor() : this("","","", "",false,0.0,0.0, EVENT_CATEGORY.Sport, Date(),"")
 }

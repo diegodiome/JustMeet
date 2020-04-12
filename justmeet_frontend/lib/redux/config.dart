@@ -1,14 +1,14 @@
 const String protocol = 'http';
 const String backendIp = '192.168.1.4';
 const String backendPort = '9000';
-const String mapApiKey = 'AIzaSyD2B72q-OlcROlnHi7DOQf3VCS6e9-OqdE';
+const String mapApiKey = 'AIzaSyDA9Tu-nptJSl2CWJ-o_vH8fQr85wnqY5Y';
 
 const String baseUrl = '$protocol://$backendIp:$backendPort';
 
-const String apiUrl = '$baseUrl/api/v1';
+const String apiUrl = '$baseUrl';
 
 /* EVENT API */
-const String eventApiUrl = '$apiUrl/events';
+const String eventApiUrl = '$apiUrl/event';
 const String getAllEventsUrl = '$eventApiUrl/all';
 const String postCreateEventUrl = '$eventApiUrl/add';
 
@@ -25,10 +25,15 @@ String getAllCommentByUrl(String eventId) {
 
 /* USER API */
 const String userApiUrl = '$apiUrl/user';
-const String postUpdateUserApiUrl = '$apiUrl/user/update';
+const String postCreateUserApiUrl = '$userApiUrl/signUp';
+const String putUpdateUserApiUrl = '$userApiUrl/update';
 
-String postUpdateUserStatus(String userUid, String status) {
-  return '$apiUrl/user/update/userUid=$userUid&status=$status';
+String putUpdateUserStatus(String userUid, String status) {
+  return '$userApiUrl/$userUid&$status/supdate';
+}
+
+String putUpdateUserToken(String userUid, String token) {
+  return '$userApiUrl/$userUid&$token/tupdate';
 }
 
 /* GOOGLE MAP API*/

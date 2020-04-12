@@ -7,22 +7,22 @@ class EventListData {
       this.eventName,
       this.eventDescription,
       this.eventRates,
-      this.eventAdmin,
+      this.eventCreator,
       this.eventCategory,
       this.eventDate,
       this.eventLocation,
-      this.isPrivate});
+      this.eventPrivate});
 
   String eventId;
   String eventImageUrl;
   String eventName;
   String eventDescription;
-  String eventAdmin;
+  String eventCreator;
   List<double> eventRates;
   String eventLocation;
   String eventCategory;
   DateTime eventDate;
-  bool isPrivate;
+  bool eventPrivate;
 
   factory EventListData.fromJson(Map<String, dynamic> json) {
     if (json['eventRates'] != null) {
@@ -32,10 +32,10 @@ class EventListData {
           eventDescription: json['eventDescription'] as String,
           eventImageUrl: json['eventImageUrl'] as String,
           eventRates: List<double>.from(json['eventRates']),
-          eventAdmin: json['eventAdmin'] as String,
+          eventCreator: json['eventCreator'] as String,
           eventCategory: json['eventCategory'] as String,
           eventLocation: json['eventLocation'] as String,
-          isPrivate: json['isPrivate'] as bool,
+          eventPrivate: json['eventPrivate'] as bool,
           eventDate: DateTime.tryParse(json['eventDate']));
     }
     return EventListData(
@@ -43,10 +43,10 @@ class EventListData {
         eventName: json['eventName'] as String,
         eventDescription: json['eventDescription'] as String,
         eventImageUrl: json['eventImageUrl'] as String,
-        eventAdmin: json['eventAdmin'] as String,
+        eventCreator: json['eventCreator'] as String,
         eventCategory: json['eventCategory'] as String,
         eventLocation: json['eventLocation'] as String,
-        isPrivate: json['eventPrivate'] as bool,
+        eventPrivate: json['eventPrivate'] as bool,
         eventDate: DateTime.tryParse(json['eventDate']));
   }
 
@@ -55,10 +55,10 @@ class EventListData {
       "eventId": eventId,
       "eventName": eventName,
       "eventDescription": eventDescription,
-      "eventAdmin": eventAdmin,
+      "eventCreator": eventCreator,
       "eventCategory": eventCategory,
       "eventLocation": eventLocation,
-      "eventPrivate": isPrivate,
+      "eventPrivate": eventPrivate,
       "eventImageUrl": eventImageUrl,
       "eventDate": eventDate.toString(),
     });

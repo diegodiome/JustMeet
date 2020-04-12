@@ -16,7 +16,7 @@
         android:label="justmeet_frontend"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="AIzaSyD2B72q-OlcROlnHi7DOQf3VCS6e9-OqdE"/>
+               android:value="AIzaSyDA9Tu-nptJSl2CWJ-o_vH8fQr85wnqY5Y"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

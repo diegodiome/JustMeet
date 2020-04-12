@@ -4,10 +4,12 @@ import com.diegodiome.justmeet_backend.config.constants.ApiConstants.ADD_USER_AP
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.DEL_USER_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.GET_USER_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.S_UPD_USER_API
+import com.diegodiome.justmeet_backend.config.constants.ApiConstants.T_UPD_USER_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.UPD_USER_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.USER_API
 import com.diegodiome.justmeet_backend.model.User
 import com.diegodiome.justmeet_backend.repository.UserRepository
+import com.diegodiome.justmeet_backend.util.SecurityUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
@@ -40,8 +42,24 @@ class UserController {
 
     @PutMapping(value = [S_UPD_USER_API])
     fun updateUserStatus(@PathVariable(value = "userId") userId: String,
-                         @PathVariable(value = "status") newStatus: String) {
+                         @PathVariable(value = "status") newStatus: String,
+                         @RequestHeader("Authorization") token: String) {
+        if(!SecurityUtils().checkToken(token, userId)) {
+            print("[!] Status update for $userId not permitted")
+            return
+        }
         userRepository.updateStatus(userId, newStatus)
+    }
+
+    @PutMapping(value = [T_UPD_USER_API])
+    fun updateUserToken(@PathVariable(value = "userId") userId: String,
+                        @PathVariable(value = "token") token: String,
+                        @RequestHeader("Authorization") tokenHeader: String) {
+        if(!SecurityUtils().checkToken(tokenHeader, userId)) {
+            print("[!] Token update for $userId not permitted")
+            return
+        }
+        userRepository.updateToken(userId, token)
     }
 
 }

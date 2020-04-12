@@ -2,6 +2,7 @@ package com.diegodiome.justmeet_backend.repository
 
 import com.diegodiome.justmeet_backend.config.constants.FirestoreConstants.USERS_COLLECTION
 import com.diegodiome.justmeet_backend.config.constants.FirestoreConstants.USER_STATUS_FIELD
+import com.diegodiome.justmeet_backend.config.constants.FirestoreConstants.USER_TOKEN_FIELD
 import com.diegodiome.justmeet_backend.model.User
 import com.google.cloud.firestore.Firestore
 import com.google.firebase.cloud.FirestoreClient
@@ -16,8 +17,8 @@ class UserRepository : FirestoreRepository<User, String> {
     private var db: Firestore = FirestoreClient.getFirestore()
 
     override fun addElement(element: User) {
-        db.collection(USERS_COLLECTION).document(element.userId).create(element)
-        userRepositoryLogger.info("[+] User with id : " + element.userId + " added")
+        db.collection(USERS_COLLECTION).document(element.userUid).create(element)
+        userRepositoryLogger.info("[+] User with id : " + element.userUid + " added")
     }
 
     override fun removeElement(elementId: String) {
@@ -26,8 +27,8 @@ class UserRepository : FirestoreRepository<User, String> {
     }
 
     override fun updateElement(element: User) {
-        db.collection(USERS_COLLECTION).document(element.userId).set(element)
-        userRepositoryLogger.info("[~] User with id : " + element.userId + " updated")
+        db.collection(USERS_COLLECTION).document(element.userUid).set(element)
+        userRepositoryLogger.info("[~] User with id : " + element.userUid + " updated")
     }
 
     override fun getElement(elementId: String) : User? {
@@ -43,5 +44,10 @@ class UserRepository : FirestoreRepository<User, String> {
     fun updateStatus(elementId: String, status: String) {
         db.collection(USERS_COLLECTION).document(elementId).update(USER_STATUS_FIELD, status)
         userRepositoryLogger.info("[~] User with id : $elementId stauts updated")
+    }
+
+    fun updateToken(elementId: String, token: String) {
+        db.collection(USERS_COLLECTION).document(elementId).update(USER_TOKEN_FIELD, token)
+        userRepositoryLogger.info("[~] User with id : $elementId token updated")
     }
 }
