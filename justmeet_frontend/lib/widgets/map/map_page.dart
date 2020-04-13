@@ -12,8 +12,9 @@ class MapPage extends StatefulWidget {
   final MAP_STYLE mapStyle;
   final bool gestureEnabled;
   final bool searchInput;
+  final Marker locationMarker;
 
-  const MapPage({this.mapStyle, this.searchInput, this.gestureEnabled});
+  const MapPage({this.mapStyle, this.searchInput, this.gestureEnabled, this.locationMarker});
 
   @override
   State<StatefulWidget> createState() {
@@ -55,6 +56,10 @@ class MapPageState extends State<MapPage> {
   void onMapCreated(GoogleMapController controller) {
     this.mapController.complete(controller);
     controller.setMapStyle(_mapStyle);
+    if(widget.locationMarker != null) {
+      moveToLocation(widget.locationMarker.position);
+      return;
+    }
     moveToCurrentUserLocation();
   }
 
@@ -104,7 +109,7 @@ class MapPageState extends State<MapPage> {
         ],
       );
     }
-    return null;
+    return Container();
   }
 
   @override
@@ -131,7 +136,7 @@ class MapPageState extends State<MapPage> {
           locationResultUi()
         ],
       ),
-        searchOverlay()
+        widget.searchInput == true ? searchOverlay() : Container()
     ]));
   }
 
@@ -344,6 +349,11 @@ class MapPageState extends State<MapPage> {
     setMarker(latLng);
 
     reverseGeocodeLatLng(latLng);
+  }
+
+  Future<LatLng> getCurrentPosition() async {
+    LocationData currentLocation = await Location().getLocation();
+    return new LatLng(currentLocation.latitude, currentLocation.longitude);
   }
 
   void moveToCurrentUserLocation() {

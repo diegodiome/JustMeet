@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:justmeet_frontend/models/event_list_data.dart';
+import 'package:justmeet_frontend/models/event.dart';
 import 'package:justmeet_frontend/screens/event_info_view.dart';
 import 'package:justmeet_frontend/screens/event_list_view.dart';
 
@@ -7,7 +7,7 @@ class HomeEventList extends StatefulWidget {
   HomeEventList({this.animationController, this.eventsList});
 
   final AnimationController animationController;
-  final List<EventListData> eventsList;
+  final List<Event> eventsList;
 
   @override
   _HomeEventListState createState() => _HomeEventListState();

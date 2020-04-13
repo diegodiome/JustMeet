@@ -1,13 +1,13 @@
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
-import 'package:justmeet_frontend/models/event_list_data.dart';
+import 'package:justmeet_frontend/models/event.dart';
 import 'package:justmeet_frontend/widgets/event_info/event_info_app_bar.dart';
 import 'package:justmeet_frontend/widgets/event_info/event_info_content.dart';
 import 'package:theme_provider/theme_provider.dart';
 
 class EventInfoView extends StatefulWidget {
   EventInfoView({@required this.event});
-  final EventListData event;
+  final Event event;
 
   @override
   _EventInfoViewState createState() => _EventInfoViewState();

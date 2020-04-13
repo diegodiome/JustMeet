@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:justmeet_frontend/controllers/map_helper.dart';
 import 'package:justmeet_frontend/models/comment.dart';
-import 'package:justmeet_frontend/models/event_list_data.dart';
+import 'package:justmeet_frontend/models/event.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/comment/comment_action.dart';
 import 'package:justmeet_frontend/redux/event/event_action.dart';
@@ -14,7 +15,7 @@ import 'package:theme_provider/theme_provider.dart';
 
 class EventInfoContent extends StatefulWidget {
   EventInfoContent({this.event});
-  final EventListData event;
+  final Event event;
 
   @override
   _EventInfoContentState createState() => _EventInfoContentState();
@@ -45,27 +46,27 @@ class _EventInfoContentState extends State<EventInfoContent> {
         padding: const EdgeInsets.only(left: 8, right: 8),
         child: SingleChildScrollView(
             child: Column(children: <Widget>[
-          infoWidgetUi(),
-          joinButtonUi(),
-          Container(
-              constraints: BoxConstraints(
+              infoWidgetUi(),
+              joinButtonUi(),
+              Container(
+                  constraints: BoxConstraints(
                   minHeight: infoHeight,
                   maxHeight: tempHeight > infoHeight ? tempHeight : infoHeight),
-              child: StoreBuilder(
-                  onInit: (store) => store.dispatch(
-                      OnCommentListUpdate(eventId: widget.event.eventId)),
-                  builder: (context, Store<AppState> store) {
-                    return RefreshIndicator(
-                      onRefresh: () {
-                        return store.dispatch(
-                            OnCommentListUpdate(eventId: widget.event.eventId));
-                      },
-                      child: Container(
-                          child: commentSectionUi(
-                              store.state.commentState.commentsList,
-                              store.state.commentState.commentsCount)),
-                    );
-                  })),
+                  child: StoreBuilder(
+                      onInit: (store) => store.dispatch(OnCommentListUpdate(eventId: widget.event.eventId)),
+                      builder: (context, Store<AppState> store) {
+                        return RefreshIndicator(
+                          onRefresh: () {
+                            return store.dispatch(
+                                OnCommentListUpdate(eventId: widget.event
+                                    .eventId));
+                            },
+                          child: Container(
+                              child: commentSectionUi(
+                                  store.state.commentState.commentsList,
+                                  store.state.commentState.commentsCount)),
+                        );
+                      })),
         ])));
   }
 
@@ -83,8 +84,9 @@ class _EventInfoContentState extends State<EventInfoContent> {
           heightFactor: 0.3,
           widthFactor: 2.5,
           child: MapPage(
-            gestureEnabled: false,
+            gestureEnabled: true,
             searchInput: false,
+            locationMarker: new Marker(markerId: MarkerId('locationMarker'), position: new LatLng(widget.event.eventLat, widget.event.eventLong)),
             mapStyle: MAP_STYLE.GREEN,
           ),
         ),
@@ -195,7 +197,7 @@ class _EventInfoContentState extends State<EventInfoContent> {
                   children: <Widget>[
                     Icon(Icons.map),
                     Padding(
-                        padding: EdgeInsets.only(left: 10),
+                        padding: EdgeInsets.only(left: 10, bottom: 10),
                         child: Text(
                           'Location',
                           style: TextStyle(fontSize: 18),

@@ -1,3 +1,5 @@
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 const String protocol = 'http';
 const String backendIp = '192.168.1.4';
 const String backendPort = '9000';
@@ -10,7 +12,7 @@ const String apiUrl = '$baseUrl';
 /* EVENT API */
 const String eventApiUrl = '$apiUrl/event';
 const String getAllEventsUrl = '$eventApiUrl/all';
-const String postCreateEventUrl = '$eventApiUrl/add';
+const String postCreateEventUrl = '$eventApiUrl/create';
 
 String getPostJoinEventUrl(String eventId, String email) {
   return '$eventApiUrl/join/id=$eventId&displayName=$email';
@@ -20,7 +22,7 @@ String getPostJoinEventUrl(String eventId, String email) {
 const String commentApiUrl = '$eventApiUrl/comments';
 
 String getAllCommentByUrl(String eventId) {
-  return '$commentApiUrl/eventId=$eventId/all';
+  return '$eventApiUrl/$eventId/comments';
 }
 
 /* USER API */

@@ -17,7 +17,7 @@ class AttachmentRepository {
           '.' +
           file.path.split('.').last;
       storageReference.child(storagePath).putFile(file);
-      return 'gs://justmeet-3fd33.appspot.com/' + storagePath;
+      return 'gs://justmeet-538b1.appspot.com/' + storagePath;
     } on Exception catch (e) {
       print('Saving file error : $e');
       return '';

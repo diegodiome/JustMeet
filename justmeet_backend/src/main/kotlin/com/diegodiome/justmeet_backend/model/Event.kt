@@ -9,7 +9,7 @@ data class Event(
         val eventId: String? = UUID.randomUUID().toString(),
         val eventName: String,
         val eventCreator: String,
-        val eventImageUrl: String,
+        val eventImageUrl: String? = "",
         val eventPrivate: Boolean,
         val eventLat: Double,
         val eventLong: Double,

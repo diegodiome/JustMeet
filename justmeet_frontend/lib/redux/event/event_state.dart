@@ -1,12 +1,12 @@
 
 import 'package:flutter/material.dart';
-import 'package:justmeet_frontend/models/event_list_data.dart';
+import 'package:justmeet_frontend/models/event.dart';
 
 @immutable
 class EventState {
 
   final int eventsCount;
-  final List<EventListData> eventsList;
+  final List<Event> eventsList;
 
   EventState({
     this.eventsList,
@@ -15,14 +15,14 @@ class EventState {
 
   factory EventState.initial() {
     return new EventState(
-      eventsList: new List<EventListData>(),
+      eventsList: new List<Event>(),
       eventsCount: 0
     );
   }
 
   EventState copyWith({
     int eventsCount,
-    List<EventListData> eventsList
+    List<Event> eventsList
   }) {
     return new EventState(
       eventsList: eventsList ?? this.eventsList,

@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:justmeet_frontend/models/event_list_data.dart';
+import 'package:justmeet_frontend/models/event.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/event/event_action.dart';
 import "package:flutter/services.dart";
@@ -62,7 +62,7 @@ void Function(Store<AppState> store, dynamic action, NextDispatcher next)
   return (store, action, next) async {
     next(action);
     try {
-      final List<EventListData> eventList =
+      final List<Event> eventList =
           await eventRepository.getAllEvents();
       store.dispatch(OnEventListUpdateSuccess(
           eventsList: eventList, eventCount: eventList.length));

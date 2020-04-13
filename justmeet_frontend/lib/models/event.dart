@@ -1,17 +1,20 @@
 import 'dart:convert';
 
-class EventListData {
-  EventListData(
-      {this.eventId,
-      this.eventImageUrl,
-      this.eventName,
-      this.eventDescription,
-      this.eventRates,
-      this.eventCreator,
-      this.eventCategory,
-      this.eventDate,
-      this.eventLocation,
-      this.eventPrivate});
+class Event {
+  Event(
+      {
+        this.eventId,
+        this.eventImageUrl,
+        this.eventName,
+        this.eventDescription,
+        this.eventRates,
+        this.eventCreator,
+        this.eventCategory,
+        this.eventLat,
+        this.eventLong,
+        this.eventDate,
+        this.eventPrivate
+      });
 
   String eventId;
   String eventImageUrl;
@@ -19,14 +22,15 @@ class EventListData {
   String eventDescription;
   String eventCreator;
   List<double> eventRates;
-  String eventLocation;
+  double eventLat;
+  double eventLong;
   String eventCategory;
   DateTime eventDate;
   bool eventPrivate;
 
-  factory EventListData.fromJson(Map<String, dynamic> json) {
+  factory Event.fromJson(Map<String, dynamic> json) {
     if (json['eventRates'] != null) {
-      return EventListData(
+      return Event(
           eventId: json['eventId'] as String,
           eventName: json['eventName'] as String,
           eventDescription: json['eventDescription'] as String,
@@ -34,30 +38,32 @@ class EventListData {
           eventRates: List<double>.from(json['eventRates']),
           eventCreator: json['eventCreator'] as String,
           eventCategory: json['eventCategory'] as String,
-          eventLocation: json['eventLocation'] as String,
+          eventLat: json['eventLat'] as double,
+          eventLong: json['eventLong'] as double,
           eventPrivate: json['eventPrivate'] as bool,
           eventDate: DateTime.tryParse(json['eventDate']));
     }
-    return EventListData(
+    return Event(
         eventId: json['eventId'] as String,
         eventName: json['eventName'] as String,
         eventDescription: json['eventDescription'] as String,
         eventImageUrl: json['eventImageUrl'] as String,
         eventCreator: json['eventCreator'] as String,
         eventCategory: json['eventCategory'] as String,
-        eventLocation: json['eventLocation'] as String,
+        eventLat: json['eventLat'] as double,
+        eventLong: json['eventLong'] as double,
         eventPrivate: json['eventPrivate'] as bool,
         eventDate: DateTime.tryParse(json['eventDate']));
   }
 
   String toJson() {
     return jsonEncode({
-      "eventId": eventId,
       "eventName": eventName,
       "eventDescription": eventDescription,
       "eventCreator": eventCreator,
       "eventCategory": eventCategory,
-      "eventLocation": eventLocation,
+      "eventLat": eventLat,
+      "eventLong": eventLong,
       "eventPrivate": eventPrivate,
       "eventImageUrl": eventImageUrl,
       "eventDate": eventDate.toString(),

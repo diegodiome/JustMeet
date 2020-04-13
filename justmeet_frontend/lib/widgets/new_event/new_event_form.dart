@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:justmeet_frontend/controllers/map_helper.dart';
-import 'package:justmeet_frontend/models/event_list_data.dart';
+import 'package:justmeet_frontend/models/event.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/event/event_action.dart';
 import 'package:justmeet_frontend/repositories/attachment_repository.dart';
@@ -23,17 +23,18 @@ class _NewEventFormState extends State<NewEventForm> {
   final _nameEventTextEditingController = TextEditingController();
   final _descriptionEventTextEditingController = TextEditingController();
 
-  EventListData eventToAdd;
+  Event eventToAdd;
   int selectedRadio;
 
   var categories = ['Studio', 'Lavoro', 'Teatro', 'Ricreativo'];
 
   File _image;
   String _imageUrl;
+  double locationLat, locationLong;
 
   @override
   void initState() {
-    eventToAdd = new EventListData();
+    eventToAdd = new Event();
     setSelectedRadio(1);
     super.initState();
   }
@@ -66,13 +67,14 @@ class _NewEventFormState extends State<NewEventForm> {
           _imageUrl = '';
         });
       }
-      EventListData newEvent = new EventListData(
+      Event newEvent = new Event(
           eventCreator: 'diomedi79@gmail.com',
           eventName: _nameEventTextEditingController.text,
           eventDescription: _descriptionEventTextEditingController.text,
           eventCategory: eventToAdd.eventCategory,
-          eventDate: DateTime.parse('2020-02-26 11:00:00'),
-          eventLocation: 'Civitanova Marche',
+          eventDate: DateTime.parse('2020-02-26 11:00'),
+          eventLat: locationLat == null ? 0.0 : locationLat,
+          eventLong: locationLong == null ? 0.0 : locationLong,
           eventImageUrl: _imageUrl,
           eventPrivate: false);
       if (_formKey.currentState.validate()) {
@@ -293,6 +295,12 @@ class _NewEventFormState extends State<NewEventForm> {
                                 mapStyle: MAP_STYLE.DARK,
                               )),
                     );
+                    if(locationResult != null) {
+                      setState(() {
+                        locationLat = locationResult.latLng.latitude;
+                        locationLong = locationResult.latLng.longitude;
+                      });
+                    }
                   },
                   child: Container(
                     width: 60,

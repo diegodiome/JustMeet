@@ -1,6 +1,6 @@
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
-import 'package:justmeet_frontend/models/event_list_data.dart';
+import 'package:justmeet_frontend/models/event.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:theme_provider/theme_provider.dart';
 
@@ -14,7 +14,7 @@ class EventListView extends StatefulWidget {
       : super(key: key);
 
   final VoidCallback callback;
-  final EventListData eventData;
+  final Event eventData;
   final AnimationController animationController;
   final Animation<dynamic> animation;
 
