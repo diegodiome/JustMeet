@@ -12,7 +12,7 @@ extension mapExtension on MAP_STYLE {
       case MAP_STYLE.LIGHT:
         return 'assets/json_assets/silver_map.txt';
       case MAP_STYLE.GREEN:
-        return 'assets/json_assets/green_map.txt';
+        return 'assets/json_assets/purple_map.txt';
       default:
         return null;
     }

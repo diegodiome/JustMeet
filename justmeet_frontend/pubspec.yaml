@@ -65,7 +65,7 @@ flutter:
    - assets/images/back_info.png
    - assets/json_assets/dark_map.txt
    - assets/json_assets/silver_map.txt
-   - assets/json_assets/green_map.txt
+   - assets/json_assets/purple_map.txt
    - assets/images/marker.png
 
   # An image asset can refer to one or more resolution-specific "variants", see

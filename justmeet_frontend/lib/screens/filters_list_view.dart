@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:justmeet_frontend/screens/slider_view.dart';
+import 'package:justmeet_frontend/widgets/filter/slider_view.dart';
 
 class FiltersListView extends StatefulWidget {
+
   @override
   _FiltersListViewState createState() => _FiltersListViewState();
 }
@@ -12,7 +13,7 @@ class _FiltersListViewState extends State<FiltersListView>
   bool barrierDismissible = true;
   double distValue = 50.0;
 
-  bool _isChecked = true;
+  List<bool> _isChecked = [false,false,false,false];
   List<String> categories = ['Studio', 'Intrattenimento', 'Lavoro'];
 
   @override
@@ -115,9 +116,7 @@ class _FiltersListViewState extends State<FiltersListView>
                                         Radius.circular(24.0)),
                                     highlightColor: Colors.transparent,
                                     onTap: () {
-                                      try {
-                                        Navigator.pop(context);
-                                      } catch (_) {}
+                                      Navigator.pop(context, createFilterChoice());
                                     },
                                     child: Center(
                                       child: Text(
@@ -145,19 +144,29 @@ class _FiltersListViewState extends State<FiltersListView>
       ),
     );
   }
+  
+  FilterChoice createFilterChoice() {
+    List<String> categoriesChosen = List<String>();
+    _isChecked.asMap().forEach((index, value) => {
+      if(value) {
+        categoriesChosen.add(categories[index])
+      }
+    });
+    return FilterChoice(categoriesChosen: categoriesChosen, distanceChoosen: distValue);
+  }
 
   Widget categoriesViewUi() {
     return Flexible(
       child: ListView(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
-        children: categories.map((text) => 
+        children: categories.map((text) =>
           CheckboxListTile(
             title: Text(text),
-            value: _isChecked,
+            value: _isChecked[categories.indexOf(text)],
             onChanged: (val) {
               setState(() {
-                _isChecked = val;
+                _isChecked[categories.indexOf(text)] = val;
               });
             },
           )).toList(),
@@ -173,7 +182,7 @@ class _FiltersListViewState extends State<FiltersListView>
           padding:
               const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
           child: Text(
-            'Distance from city center',
+            'Distance from my position',
             textAlign: TextAlign.left,
             style: TextStyle(
                 color: Colors.grey,
@@ -193,4 +202,15 @@ class _FiltersListViewState extends State<FiltersListView>
       ],
     );
   }
+}
+
+class FilterChoice {
+  
+  List<String> categoriesChosen;
+  double distanceChoosen;
+  
+  FilterChoice({
+    this.categoriesChosen, 
+    this.distanceChoosen
+  });
 }
