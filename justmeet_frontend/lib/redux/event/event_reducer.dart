@@ -9,6 +9,6 @@ final eventReducers = combineReducers<EventState>([
 EventState _onEventListUpdateSuccess(EventState state, OnEventListUpdateSuccess action) {
   return state.copyWith(
     eventsList: action.eventsList,
-    eventsCount: action.eventCount
+    eventsCount: action.eventCount,
   );
 }

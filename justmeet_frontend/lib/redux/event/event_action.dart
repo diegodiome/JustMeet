@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:justmeet_frontend/models/event.dart';
+import 'package:justmeet_frontend/models/filter_data.dart';
 
 class AddNewEvent {
   final Event event;
@@ -25,6 +26,16 @@ class OnEventListUpdateSuccess {
     this.eventsList,
     this.eventCount
   });
+}
+
+class OnFilterEventUpdate {
+  final List<FilterData> filters;
+  Completer completer;
+
+  OnFilterEventUpdate({
+    this.filters,
+    Completer completer
+  }) : completer = completer ?? Completer();
 }
 
 class OnJoinEvent {

@@ -41,7 +41,7 @@ class _HomeContentState extends State<HomeContent>
               color: ThemeProvider.themeOf(context).data.backgroundColor,
               child: HomeEventList(
                 animationController: animationController,
-                eventsList: store.state.eventState.eventsList,
+                eventsList: store.state.eventState.eventsFiltered,
               )),
         );
       },

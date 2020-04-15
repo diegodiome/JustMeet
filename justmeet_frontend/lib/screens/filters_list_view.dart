@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:justmeet_frontend/models/filter_data.dart';
+import 'package:justmeet_frontend/redux/app/app_state.dart';
+import 'package:justmeet_frontend/redux/event/event_action.dart';
 import 'package:justmeet_frontend/widgets/filter/slider_view.dart';
 
 class FiltersListView extends StatefulWidget {
-
   @override
   _FiltersListViewState createState() => _FiltersListViewState();
 }
@@ -12,9 +15,7 @@ class _FiltersListViewState extends State<FiltersListView>
   AnimationController animationController;
   bool barrierDismissible = true;
   double distValue = 50.0;
-
-  List<bool> _isChecked = [false,false,false,false];
-  List<String> categories = ['Studio', 'Intrattenimento', 'Lavoro'];
+  List<FilterData> localFilters = FilterData.defaultCategoriesList;
 
   @override
   void initState() {
@@ -115,8 +116,11 @@ class _FiltersListViewState extends State<FiltersListView>
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(24.0)),
                                     highlightColor: Colors.transparent,
-                                    onTap: () {
-                                      Navigator.pop(context, createFilterChoice());
+                                    onTap: () async {
+                                      await StoreProvider.of<AppState>(context)
+                                          .dispatch(OnFilterEventUpdate(
+                                              filters: localFilters));
+                                      Navigator.pop(context);
                                     },
                                     child: Center(
                                       child: Text(
@@ -144,33 +148,27 @@ class _FiltersListViewState extends State<FiltersListView>
       ),
     );
   }
-  
-  FilterChoice createFilterChoice() {
-    List<String> categoriesChosen = List<String>();
-    _isChecked.asMap().forEach((index, value) => {
-      if(value) {
-        categoriesChosen.add(categories[index])
-      }
-    });
-    return FilterChoice(categoriesChosen: categoriesChosen, distanceChoosen: distValue);
-  }
 
   Widget categoriesViewUi() {
     return Flexible(
-      child: ListView(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        children: categories.map((text) =>
-          CheckboxListTile(
-            title: Text(text),
-            value: _isChecked[categories.indexOf(text)],
-            onChanged: (val) {
-              setState(() {
-                _isChecked[categories.indexOf(text)] = val;
-              });
-            },
-          )).toList(),
-    ));
+        child: ListView(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            children: localFilters
+                .asMap()
+                .map((index, filter) => MapEntry(
+                    index,
+                    CheckboxListTile(
+                      title: Text(filter.titleTxt),
+                      value: filter.isSelected,
+                      onChanged: (val) {
+                        setState(() {
+                          localFilters[index].isSelected = val;
+                        });
+                      },
+                    )))
+                .values
+                .toList()));
   }
 
   Widget distanceViewUI() {
@@ -202,15 +200,4 @@ class _FiltersListViewState extends State<FiltersListView>
       ],
     );
   }
-}
-
-class FilterChoice {
-  
-  List<String> categoriesChosen;
-  double distanceChoosen;
-  
-  FilterChoice({
-    this.categoriesChosen, 
-    this.distanceChoosen
-  });
 }
