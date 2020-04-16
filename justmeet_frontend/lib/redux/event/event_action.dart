@@ -29,11 +29,13 @@ class OnEventListUpdateSuccess {
 }
 
 class OnFilterEventUpdate {
-  final List<FilterData> filters;
+  final List<CategoryFilterData> filters;
+  final DistanceFilterData distanceFilter;
   Completer completer;
 
   OnFilterEventUpdate({
     this.filters,
+    this.distanceFilter,
     Completer completer
   }) : completer = completer ?? Completer();
 }

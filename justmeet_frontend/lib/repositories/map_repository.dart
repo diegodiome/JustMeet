@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart';
-import 'package:justmeet_frontend/controllers/map_helper.dart';
+import 'package:justmeet_frontend/utils/map_helper.dart';
 import 'package:justmeet_frontend/redux/config.dart';
 
 class MapRepository {

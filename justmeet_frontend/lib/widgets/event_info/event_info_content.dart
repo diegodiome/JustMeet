@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:justmeet_frontend/controllers/map_helper.dart';
+import 'package:justmeet_frontend/utils/map_helper.dart';
 import 'package:justmeet_frontend/models/comment.dart';
 import 'package:justmeet_frontend/models/event.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';

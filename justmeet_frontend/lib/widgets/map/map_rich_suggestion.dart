@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:justmeet_frontend/controllers/map_helper.dart';
+import 'package:justmeet_frontend/utils/map_helper.dart';
 
 class MapRichSuggestion extends StatelessWidget {
   final VoidCallback onTap;

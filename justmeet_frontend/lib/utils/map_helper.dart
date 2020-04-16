@@ -1,6 +1,8 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:justmeet_frontend/widgets/map/uuid.dart';
+import 'package:location/location.dart';
 
 enum MAP_STYLE { DARK, LIGHT, GREEN }
 
@@ -17,6 +19,40 @@ extension mapExtension on MAP_STYLE {
         return null;
     }
   }
+}
+
+Future<LatLng> getCurrentPosition() async {
+    LocationData currentLocation = await Location().getLocation();
+    return new LatLng(currentLocation.latitude, currentLocation.longitude);
+ }
+
+/*
+*  K = kilometers
+*  N = nautical miles
+*/
+double eventDistanceCalculator(
+    double lat1, double lon1, double lat2, double lon2, String unit) {
+  double theta = lon1 - lon2;
+  double dist = sin(deg2rad(lat1)) * sin(deg2rad(lat2)) +
+      cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * cos(deg2rad(theta));
+  dist = acos(dist);
+  dist = rad2deg(dist);
+  dist = dist * 60 * 1.1515;
+  if (unit == 'K') {
+    dist = dist * 1.609344;
+  } else if (unit == 'N') {
+    dist = dist * 0.8684;
+  }
+  print(dist);
+  return dist;//.toStringAsFixed(2);
+}
+
+double deg2rad(double deg) {
+  return (deg * pi / 180.0);
+}
+
+double rad2deg(double rad) {
+  return (rad * 180.0 / pi);
 }
 
 CameraPosition get initialCameraPosition => CameraPosition(

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:justmeet_frontend/controllers/map_helper.dart';
+import 'package:justmeet_frontend/utils/map_helper.dart';
 import 'package:justmeet_frontend/repositories/map_repository.dart';
 import 'package:justmeet_frontend/widgets/map/map_search_input.dart';
 import 'package:location/location.dart';
@@ -349,11 +349,6 @@ class MapPageState extends State<MapPage> {
     setMarker(latLng);
 
     reverseGeocodeLatLng(latLng);
-  }
-
-  Future<LatLng> getCurrentPosition() async {
-    LocationData currentLocation = await Location().getLocation();
-    return new LatLng(currentLocation.latitude, currentLocation.longitude);
   }
 
   void moveToCurrentUserLocation() {

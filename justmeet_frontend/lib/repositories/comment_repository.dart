@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
-import 'package:justmeet_frontend/controllers/request_header.dart';
+import 'package:justmeet_frontend/utils/request_header.dart';
 import 'package:justmeet_frontend/models/comment.dart';
 import 'package:justmeet_frontend/redux/config.dart';
 

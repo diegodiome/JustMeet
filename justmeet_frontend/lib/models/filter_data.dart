@@ -1,6 +1,7 @@
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class FilterData {
-  FilterData({
+class CategoryFilterData {
+  CategoryFilterData({
     this.titleTxt = '',
     this.isSelected = false,
   });
@@ -8,23 +9,29 @@ class FilterData {
   String titleTxt;
   bool isSelected;
 
-  static List<FilterData> defaultCategoriesList = <FilterData>[
-    FilterData(
+  static List<CategoryFilterData> defaultCategoriesList = <CategoryFilterData>[
+    CategoryFilterData(
       titleTxt: 'Studio',
       isSelected: true,
     ),
-    FilterData(
+    CategoryFilterData(
       titleTxt: 'Lavoro',
       isSelected: true,
     ),
-    FilterData(
+    CategoryFilterData(
       titleTxt: 'Sport',
       isSelected: true,
     ),
-    FilterData(
+    CategoryFilterData(
       titleTxt: 'Intrattenimento',
       isSelected: true,
     ),
   ];
+}
 
+class DistanceFilterData {
+  LatLng fromPosition;
+  double maxDistance;
+
+  DistanceFilterData({this.fromPosition, this.maxDistance});
 }

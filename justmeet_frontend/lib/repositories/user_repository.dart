@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
-import 'package:justmeet_frontend/controllers/request_header.dart';
+import 'package:justmeet_frontend/utils/request_header.dart';
 import 'package:justmeet_frontend/models/user.dart';
 import 'package:justmeet_frontend/redux/config.dart';
 

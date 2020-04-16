@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:justmeet_frontend/models/filter_data.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/event/event_action.dart';
+import 'package:justmeet_frontend/utils/map_helper.dart';
 import 'package:justmeet_frontend/widgets/filter/slider_view.dart';
 
 class FiltersListView extends StatefulWidget {
@@ -15,7 +16,7 @@ class _FiltersListViewState extends State<FiltersListView>
   AnimationController animationController;
   bool barrierDismissible = true;
   double distValue = 50.0;
-  List<FilterData> localFilters = FilterData.defaultCategoriesList;
+  List<CategoryFilterData> localFilters = CategoryFilterData.defaultCategoriesList;
 
   @override
   void initState() {
@@ -119,7 +120,8 @@ class _FiltersListViewState extends State<FiltersListView>
                                     onTap: () async {
                                       await StoreProvider.of<AppState>(context)
                                           .dispatch(OnFilterEventUpdate(
-                                              filters: localFilters));
+                                          filters: localFilters,
+                                          distanceFilter: new DistanceFilterData(fromPosition: await getCurrentPosition(), maxDistance: distValue/10)));
                                       Navigator.pop(context);
                                     },
                                     child: Center(
