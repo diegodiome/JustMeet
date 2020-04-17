@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart';
 import 'package:justmeet_frontend/utils/map_helper.dart';
 import 'package:justmeet_frontend/redux/config.dart';
+import 'package:location/location.dart';
 
 class MapRepository {
   Future<MapLocationResult> getReverseGeocodeLatLng(
@@ -44,4 +45,11 @@ class MapRepository {
     }
     return Future.value(null);
   }
+
+  Stream<LocationData> getLocationStateChange() {
+    return Location().onLocationChanged().asyncMap((location) {
+      return location;
+    });
+  }
+
 }

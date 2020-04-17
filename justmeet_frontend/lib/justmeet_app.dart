@@ -7,10 +7,12 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:justmeet_frontend/models/user.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/auth/auth_actions.dart';
+import 'package:justmeet_frontend/redux/location/location_action.dart';
 import 'package:justmeet_frontend/redux/store.dart';
 import 'package:justmeet_frontend/redux/user/user_action.dart';
 import 'package:justmeet_frontend/repositories/comment_repository.dart';
 import 'package:justmeet_frontend/repositories/event_repository.dart';
+import 'package:justmeet_frontend/repositories/map_repository.dart';
 import 'package:justmeet_frontend/repositories/user_repository.dart';
 import 'package:justmeet_frontend/routes.dart';
 import 'package:justmeet_frontend/screens/home_page.dart';
@@ -33,11 +35,13 @@ class _JustMeetAppState extends State<JustMeetApp> with WidgetsBindingObserver {
   final userRepo = UserRepository(FirebaseAuth.instance, new GoogleSignIn());
   final eventRepo = EventRepository();
   final commentRepo = CommentRepository();
+  final mapRepo = MapRepository();
 
   @override
   void initState() {
     super.initState();
-    store = createStore(userRepo, eventRepo, commentRepo, _navigatorKey);
+    store = createStore(userRepo, eventRepo, commentRepo, mapRepo, _navigatorKey);
+    store.dispatch(VerifyCurrentLocationState());
     store.dispatch(VerifyAuthenticationState());
     WidgetsBinding.instance.addObserver(this);
   }

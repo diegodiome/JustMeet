@@ -3,8 +3,9 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:justmeet_frontend/models/filter_data.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/event/event_action.dart';
-import 'package:justmeet_frontend/utils/map_helper.dart';
+import 'package:justmeet_frontend/redux/filters/filters_action.dart';
 import 'package:justmeet_frontend/widgets/filter/slider_view.dart';
+import 'package:redux/redux.dart';
 
 class FiltersListView extends StatefulWidget {
   @override
@@ -16,7 +17,8 @@ class _FiltersListViewState extends State<FiltersListView>
   AnimationController animationController;
   bool barrierDismissible = true;
   double distValue = 50.0;
-  List<CategoryFilterData> localFilters = CategoryFilterData.defaultCategoriesList;
+  List<CategoryFilterData> localFilters =
+      CategoryFilterData.defaultCategoriesList;
 
   @override
   void initState() {
@@ -119,9 +121,7 @@ class _FiltersListViewState extends State<FiltersListView>
                                     highlightColor: Colors.transparent,
                                     onTap: () async {
                                       await StoreProvider.of<AppState>(context)
-                                          .dispatch(OnFilterEventUpdate(
-                                          filters: localFilters,
-                                          distanceFilter: new DistanceFilterData(fromPosition: await getCurrentPosition(), maxDistance: distValue/10)));
+                                          .dispatch(OnFilterEventUpdate());
                                       Navigator.pop(context);
                                     },
                                     child: Center(
@@ -152,54 +152,65 @@ class _FiltersListViewState extends State<FiltersListView>
   }
 
   Widget categoriesViewUi() {
-    return Flexible(
-        child: ListView(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            children: localFilters
-                .asMap()
-                .map((index, filter) => MapEntry(
-                    index,
-                    CheckboxListTile(
-                      title: Text(filter.titleTxt),
-                      value: filter.isSelected,
-                      onChanged: (val) {
-                        setState(() {
-                          localFilters[index].isSelected = val;
-                        });
-                      },
-                    )))
-                .values
-                .toList()));
+    return StoreBuilder(
+      builder: (context, Store<AppState> store) {
+        return Flexible(
+            child: ListView(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                children: store.state.filtersState.categoriesFilter
+                    .asMap()
+                    .map((index, filter) => MapEntry(
+                        index,
+                        CheckboxListTile(
+                          title: Text(filter.titleTxt),
+                          value: filter.isSelected,
+                          onChanged: (val) {
+                            store.dispatch(OnCategoriesFilterUpdate(
+                              index: index,
+                              value: val
+                            ));
+                          },
+                        )))
+                    .values
+                    .toList()));
+      },
+    );
   }
 
   Widget distanceViewUI() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding:
+    return StoreBuilder(
+      builder: (context, Store<AppState> store) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding:
               const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-          child: Text(
-            'Distance from my position',
-            textAlign: TextAlign.left,
-            style: TextStyle(
-                color: Colors.grey,
-                fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
-                fontWeight: FontWeight.normal),
-          ),
-        ),
-        SliderView(
-          distValue: distValue,
-          onChangedistValue: (double value) {
-            distValue = value;
-          },
-        ),
-        const SizedBox(
-          height: 8,
-        ),
-      ],
+              child: Text(
+                'Distance from my position',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: MediaQuery.of(context).size.width > 360 ? 18 : 16,
+                    fontWeight: FontWeight.normal),
+              ),
+            ),
+            SliderView(
+              distValue: store.state.filtersState.distanceFilter.maxDistance,
+              onChangedistValue: (double value) {
+                store.dispatch(OnDistanceFilterUpdate(
+                  newDistanceFilterData: new DistanceFilterData(maxDistance: value)
+                ));
+              },
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+          ],
+        );
+      },
     );
   }
 }

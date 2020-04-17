@@ -2,7 +2,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:justmeet_frontend/widgets/map/uuid.dart';
-import 'package:location/location.dart';
 
 enum MAP_STYLE { DARK, LIGHT, GREEN }
 
@@ -20,11 +19,6 @@ extension mapExtension on MAP_STYLE {
     }
   }
 }
-
-Future<LatLng> getCurrentPosition() async {
-    LocationData currentLocation = await Location().getLocation();
-    return new LatLng(currentLocation.latitude, currentLocation.longitude);
- }
 
 /*
 *  K = kilometers

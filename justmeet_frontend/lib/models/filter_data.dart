@@ -1,4 +1,3 @@
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class CategoryFilterData {
   CategoryFilterData({
@@ -30,8 +29,7 @@ class CategoryFilterData {
 }
 
 class DistanceFilterData {
-  LatLng fromPosition;
   double maxDistance;
 
-  DistanceFilterData({this.fromPosition, this.maxDistance});
+  DistanceFilterData({this.maxDistance});
 }

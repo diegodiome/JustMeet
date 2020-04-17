@@ -11,10 +11,8 @@ List<Middleware<AppState>> createAuthenticationMiddleware(
   GlobalKey<NavigatorState> navigatorKey
 ) {
   return [
-    TypedMiddleware<AppState, VerifyAuthenticationState>(
-      _verifyAuthState(userRepository, navigatorKey)),
-    TypedMiddleware<AppState, LogOut>(
-      _authLogOut(userRepository, navigatorKey)),
+    TypedMiddleware<AppState, VerifyAuthenticationState>(_verifyAuthState(userRepository, navigatorKey)),
+    TypedMiddleware<AppState, LogOut>(_authLogOut(userRepository, navigatorKey)),
     TypedMiddleware<AppState, LogIn>(_authLogIn(userRepository, navigatorKey)),
     TypedMiddleware<AppState, LogInWithGoogle>(_authLogInWithGoogle(userRepository, navigatorKey)),
     TypedMiddleware<AppState, SignIn>(_signInWithEmailAndPassword(userRepository, navigatorKey))
@@ -117,7 +115,6 @@ void Function(
 ) {
   return (store, action, next) {
     next(action);
-
     userRepository.getAuthenticationStateChange().listen((user) async{
       if(user == null) {
         await navigatorKey.currentState.pushReplacementNamed(Routes.login);

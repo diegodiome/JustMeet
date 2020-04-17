@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:justmeet_frontend/models/event.dart';
-import 'package:justmeet_frontend/models/filter_data.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/event/event_action.dart';
 import "package:flutter/services.dart";
@@ -31,24 +30,20 @@ void Function(Store<AppState> store, dynamic action, NextDispatcher next)
   return (store, action, next) async {
     next(action);
     try {
+      print(store.state.locationState.currentLocation.toString());
       store.state.eventState.eventsFiltered.clear();
-      DistanceFilterData distanceFilter = action.distanceFilter;
       store.state.eventState.eventsList.forEach((event) => {
-        store.state.eventState.categoryfilters
+        store.state.filtersState.categoriesFilter
             .where((filter) => filter.isSelected)
             .toList()
             .forEach((filter) => {
               if(filter.titleTxt.compareTo(event.eventCategory) == 0) {
-                if(distanceFilter.fromPosition != null && distanceFilter.maxDistance > 0) {
-                  if(eventDistanceCalculator(
-                      distanceFilter.fromPosition.latitude,
-                      distanceFilter.fromPosition.longitude,
-                      event.eventLat,
-                      event.eventLong,
-                      'K') <= distanceFilter.maxDistance) {
-                    store.state.eventState.eventsFiltered.add(event)
-                  }
-                } else {
+                if(eventDistanceCalculator(
+                    store.state.locationState.currentLocation.latitude,
+                    store.state.locationState.currentLocation.longitude,
+                    event.eventLat,
+                    event.eventLong,
+                    'K') <= store.state.filtersState.distanceFilter.maxDistance) {
                   store.state.eventState.eventsFiltered.add(event)
                 }
               }
@@ -108,10 +103,7 @@ void Function(Store<AppState> store, dynamic action, NextDispatcher next)
       final List<Event> eventList = await eventRepository.getAllEvents();
       store.dispatch(OnEventListUpdateSuccess(
           eventsList: eventList, eventCount: eventList.length));
-      store.dispatch(OnFilterEventUpdate(
-        filters: store.state.eventState.categoryfilters,
-        distanceFilter: store.state.eventState.distanceFilter
-      ));
+      store.dispatch(OnFilterEventUpdate());
       action.completer.complete();
     } on PlatformException catch (e) {
       print('Error: $e');
