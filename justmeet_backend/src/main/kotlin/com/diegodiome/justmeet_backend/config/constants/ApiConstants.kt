@@ -22,6 +22,7 @@ object ApiConstants {
     const val ADD_REP_API = "/{eventId}/reporting"
     const val GET_REPS_API = "/{eventId}/reports"
     const val ADD_REQ_API = "/{eventId}/{userId}/request"
+    const val GET_PRD_API = "/{text}/predictions"
 
     /* Comment API */
 }

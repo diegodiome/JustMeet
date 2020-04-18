@@ -37,8 +37,7 @@ double eventDistanceCalculator(
   } else if (unit == 'N') {
     dist = dist * 0.8684;
   }
-  print(dist);
-  return dist;//.toStringAsFixed(2);
+  return dist;
 }
 
 double deg2rad(double deg) {
@@ -105,12 +104,3 @@ class MapAddressComponent {
   );
 }
 
-class MapAutoCompleteItem {
-  String id;
-
-  String text;
-
-  int offset;
-
-  int length;
-}

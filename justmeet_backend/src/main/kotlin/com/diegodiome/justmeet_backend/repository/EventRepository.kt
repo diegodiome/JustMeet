@@ -4,9 +4,8 @@ import com.diegodiome.justmeet_backend.config.constants.FirestoreConstants
 import com.diegodiome.justmeet_backend.config.constants.FirestoreConstants.COMMENTS_COLLECTION
 import com.diegodiome.justmeet_backend.config.constants.FirestoreConstants.EVENTS_COLLECTION
 import com.diegodiome.justmeet_backend.config.constants.FirestoreConstants.EVENT_REPORTS_COLLECTION
-import com.diegodiome.justmeet_backend.model.Comment
-import com.diegodiome.justmeet_backend.model.Event
-import com.diegodiome.justmeet_backend.model.EventReporting
+import com.diegodiome.justmeet_backend.model.*
+import com.diegodiome.justmeet_backend.util.PredictionsUtils
 import com.google.cloud.firestore.FieldValue
 import com.google.firebase.cloud.FirestoreClient
 import org.slf4j.LoggerFactory
@@ -102,5 +101,24 @@ class EventRepository : FirestoreRepository<Event, String> {
         val docRef = db.collection(EVENTS_COLLECTION).document(elementId)
         docRef.update(FirestoreConstants.EVENT_REQUEST_FIELD, FieldValue.arrayUnion(userId))
         eventRepositoryLogger.info("[+] Request to event with id : $elementId added")
+    }
+
+    fun getSearchPredictions(text: String) : AutoCompleteItems {
+        val colRef = db.collection(EVENTS_COLLECTION)
+        val docsSnap = colRef.get().get().documents
+        val eventsName = ArrayList<AutoCompleteItem>()
+        for(doc in docsSnap) {
+            val match = PredictionsUtils().getStringMatchDetail(text, doc.get(FirestoreConstants.EVENT_NAME_FIELD).toString())
+            if(match.lenght >= 2) {
+                eventsName.add(AutoCompleteItem(
+                        text = doc.get(FirestoreConstants.EVENT_NAME_FIELD).toString(),
+                        detail = match
+                ))
+            }
+        }
+        eventRepositoryLogger.info("[~] Search predictions recovered")
+        return AutoCompleteItems(
+                predictions = eventsName
+        )
     }
 }

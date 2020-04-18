@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:theme_provider/theme_provider.dart';
 
 class SliderView extends StatefulWidget {
   const SliderView({Key key, this.onChangedistValue, this.distValue})
@@ -59,7 +60,7 @@ class _SliderViewState extends State<SliderView> {
               },
               min: 0,
               max: 100,
-              activeColor: Colors.amber,
+              activeColor: ThemeProvider.themeOf(context).data.primaryColor,
               inactiveColor: Colors.grey.withOpacity(0.4),
               divisions: 100,
               value: distValue,

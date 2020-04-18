@@ -42,4 +42,19 @@ class EventRepository {
       print('Connection error: $statusCode');
     }
   }
+
+  Future<List<dynamic>> getEventPredictions(String eventName) async {
+    Response response;
+    response = await get(
+      getEventPredictions(eventName),
+      headers: await RequestHeader().getBasicHeader()
+    );
+    int statusCode = response.statusCode;
+    if(statusCode == 200) {
+      Map<String, dynamic> data = jsonDecode(response.body);
+      return data["predictions"];
+    }
+    print('Connection error: $statusCode');
+    return Future.value(null);
+  }
 }

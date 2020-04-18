@@ -10,6 +10,7 @@ object FirestoreConstants {
     /* Events collection */
     const val EVENTS_COLLECTION = "events"
     const val EVENT_REQUEST_FIELD = "eventRequest"
+    const val EVENT_NAME_FIELD = "eventName"
 
     /* Comment collection */
     const val COMMENTS_COLLECTION = "comments"

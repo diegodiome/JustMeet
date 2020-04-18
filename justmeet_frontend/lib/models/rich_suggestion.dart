@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:justmeet_frontend/utils/map_helper.dart';
 
-class MapRichSuggestion extends StatelessWidget {
-  final VoidCallback onTap;
-  final MapAutoCompleteItem autoCompleteItem;
+import 'autocomplete_item.dart';
 
-  MapRichSuggestion(this.autoCompleteItem, this.onTap);
+class RichSuggestion extends StatelessWidget {
+  final VoidCallback onTap;
+  final AutoCompleteItem autoCompleteItem;
+
+  RichSuggestion(this.autoCompleteItem, this.onTap);
 
   @override
   Widget build(BuildContext context) {

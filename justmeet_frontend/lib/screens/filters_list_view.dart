@@ -6,6 +6,7 @@ import 'package:justmeet_frontend/redux/event/event_action.dart';
 import 'package:justmeet_frontend/redux/filters/filters_action.dart';
 import 'package:justmeet_frontend/widgets/filter/slider_view.dart';
 import 'package:redux/redux.dart';
+import 'package:theme_provider/theme_provider.dart';
 
 class FiltersListView extends StatefulWidget {
   @override
@@ -16,9 +17,6 @@ class _FiltersListViewState extends State<FiltersListView>
     with TickerProviderStateMixin {
   AnimationController animationController;
   bool barrierDismissible = true;
-  double distValue = 50.0;
-  List<CategoryFilterData> localFilters =
-      CategoryFilterData.defaultCategoriesList;
 
   @override
   void initState() {
@@ -102,7 +100,7 @@ class _FiltersListViewState extends State<FiltersListView>
                               child: Container(
                                 height: 48,
                                 decoration: BoxDecoration(
-                                  color: Colors.amber,
+                                  color: ThemeProvider.themeOf(context).data.primaryColor,
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(24.0)),
                                   boxShadow: <BoxShadow>[
@@ -163,6 +161,7 @@ class _FiltersListViewState extends State<FiltersListView>
                     .map((index, filter) => MapEntry(
                         index,
                         CheckboxListTile(
+                          activeColor: ThemeProvider.themeOf(context).data.primaryColor,
                           title: Text(filter.titleTxt),
                           value: filter.isSelected,
                           onChanged: (val) {

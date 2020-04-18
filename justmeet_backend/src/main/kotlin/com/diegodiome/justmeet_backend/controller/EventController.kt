@@ -9,11 +9,10 @@ import com.diegodiome.justmeet_backend.config.constants.ApiConstants.EVENT_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.GET_COMS_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.GET_EVENTS_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.GET_EVENT_API
+import com.diegodiome.justmeet_backend.config.constants.ApiConstants.GET_PRD_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.GET_REPS_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.UPD_EVENT_API
-import com.diegodiome.justmeet_backend.model.Comment
-import com.diegodiome.justmeet_backend.model.Event
-import com.diegodiome.justmeet_backend.model.EventReporting
+import com.diegodiome.justmeet_backend.model.*
 import com.diegodiome.justmeet_backend.repository.EventRepository
 import com.diegodiome.justmeet_backend.util.SecurityUtils
 import org.slf4j.LoggerFactory
@@ -84,6 +83,11 @@ class EventController  {
     fun addRequest(@PathVariable("eventId") eventId: String
                    , @PathVariable("userId") userId: String) {
         eventRepository.addRequest(eventId, userId)
+    }
+
+    @GetMapping(value = [GET_PRD_API])
+    fun getPredictions(@PathVariable(value = "text") text: String) : AutoCompleteItems {
+        return eventRepository.getSearchPredictions(text)
     }
 
 }

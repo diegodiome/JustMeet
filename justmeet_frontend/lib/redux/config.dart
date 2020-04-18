@@ -18,6 +18,10 @@ String getPostJoinEventUrl(String eventId, String email) {
   return '$eventApiUrl/join/id=$eventId&displayName=$email';
 }
 
+String getEventNamePredictionsUrl(String text) {
+  return '$eventApiUrl/$text/predictions';
+}
+
 /* COMMENT API */
 const String commentApiUrl = '$eventApiUrl/comments';
 

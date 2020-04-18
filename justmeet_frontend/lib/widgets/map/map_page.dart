@@ -2,11 +2,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:justmeet_frontend/models/autocomplete_item.dart';
 import 'package:justmeet_frontend/utils/map_helper.dart';
 import 'package:justmeet_frontend/repositories/map_repository.dart';
 import 'package:justmeet_frontend/widgets/map/map_search_input.dart';
 import 'package:location/location.dart';
-import 'map_rich_suggestion.dart';
+import '../../models/rich_suggestion.dart';
 
 class MapPage extends StatefulWidget {
   final MAP_STYLE mapStyle;
@@ -233,25 +234,25 @@ class MapPageState extends State<MapPage> {
         .then((value) {
       List<dynamic> predictions = value;
 
-      List<MapRichSuggestion> suggestions = [];
+      List<RichSuggestion> suggestions = [];
 
       if (predictions.isEmpty) {
-        MapAutoCompleteItem aci = MapAutoCompleteItem();
+        AutoCompleteItem aci = AutoCompleteItem();
         aci.text = "No result found";
         aci.offset = 0;
         aci.length = 0;
 
-        suggestions.add(MapRichSuggestion(aci, () {}));
+        suggestions.add(RichSuggestion(aci, () {}));
       } else {
         for (dynamic t in predictions) {
-          MapAutoCompleteItem aci = MapAutoCompleteItem();
+          AutoCompleteItem aci = AutoCompleteItem();
 
           aci.id = t['place_id'];
           aci.text = t['description'];
           aci.offset = t['matched_substrings'][0]['offset'];
           aci.length = t['matched_substrings'][0]['length'];
 
-          suggestions.add(MapRichSuggestion(aci, () {
+          suggestions.add(RichSuggestion(aci, () {
             FocusScope.of(context).requestFocus(FocusNode());
             decodeAndSelectPlace(aci.id);
           }));
@@ -273,7 +274,7 @@ class MapPageState extends State<MapPage> {
   }
 
   /// Display autocomplete suggestions with the overlay.
-  void displayAutoCompleteSuggestions(List<MapRichSuggestion> suggestions) {
+  void displayAutoCompleteSuggestions(List<RichSuggestion> suggestions) {
     final RenderBox renderBox = context.findRenderObject();
     Size size = renderBox.size;
 

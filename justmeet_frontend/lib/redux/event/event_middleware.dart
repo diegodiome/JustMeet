@@ -30,7 +30,6 @@ void Function(Store<AppState> store, dynamic action, NextDispatcher next)
   return (store, action, next) async {
     next(action);
     try {
-      print(store.state.locationState.currentLocation.toString());
       store.state.eventState.eventsFiltered.clear();
       store.state.eventState.eventsList.forEach((event) => {
         store.state.filtersState.categoriesFilter
@@ -43,7 +42,7 @@ void Function(Store<AppState> store, dynamic action, NextDispatcher next)
                     store.state.locationState.currentLocation.longitude,
                     event.eventLat,
                     event.eventLong,
-                    'K') <= store.state.filtersState.distanceFilter.maxDistance) {
+                    'K') <= store.state.filtersState.distanceFilter.maxDistance / 10) {
                   store.state.eventState.eventsFiltered.add(event)
                 }
               }

@@ -29,6 +29,7 @@ dependencies:
   intl:
   theme_provider: ^0.3.2
   location: ^2.3.5
+  permission_handler: ^5.0.0+hotfix.3
 
   # Redux dependencies
   redux: ^4.0.0
