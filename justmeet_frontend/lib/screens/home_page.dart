@@ -24,8 +24,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   int eventCount;
 
-  GlobalKey homeKey = GlobalKey();
-
   @override
   void initState() {
     animationController = new AnimationController(
@@ -67,7 +65,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             (BuildContext context, int index) {
                           return Column(
                             children: <Widget>[
-                              HomeSearchBar(function: () {}, homeKey: homeKey,),
+                              HomeSearchBar(function: () {},),
                             ],
                           );
                         }, childCount: 1),

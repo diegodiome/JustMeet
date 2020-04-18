@@ -14,7 +14,7 @@ class PredictionsUtils {
         }
         return AutoCompleteItemMatchDetail(
                 offset = 0,
-                lenght = count
+                length = count
         )
     }
 }

@@ -21,10 +21,9 @@ class EventRepository {
   Future<void> createNewEvent(Event newEvent) async {
     print(newEvent.toJson().toString());
     Response response;
-    response = await post(
-      postCreateEventUrl,
-      headers: await RequestHeader().getBasicHeader(),
-      body: newEvent.toJson());
+    response = await post(postCreateEventUrl,
+        headers: await RequestHeader().getBasicHeader(),
+        body: newEvent.toJson());
     int statusCode = response.statusCode;
     if (statusCode != 200) {
       print('Connection error: $statusCode');
@@ -38,19 +37,17 @@ class EventRepository {
       headers: await RequestHeader().getBasicHeader(),
     );
     int statusCode = response.statusCode;
-    if(statusCode != 200) {
+    if (statusCode != 200) {
       print('Connection error: $statusCode');
     }
   }
 
   Future<List<dynamic>> getEventPredictions(String eventName) async {
     Response response;
-    response = await get(
-      getEventPredictions(eventName),
-      headers: await RequestHeader().getBasicHeader()
-    );
+    response = await get(getEventNamePredictionsUrl(eventName),
+        headers: await RequestHeader().getBasicHeader());
     int statusCode = response.statusCode;
-    if(statusCode == 200) {
+    if (statusCode == 200) {
       Map<String, dynamic> data = jsonDecode(response.body);
       return data["predictions"];
     }

@@ -7,12 +7,8 @@ import 'package:theme_provider/theme_provider.dart';
 
 class HomeSearchBar extends StatefulWidget {
   final Function function;
-  final GlobalKey homeKey;
 
-  HomeSearchBar({
-    @required this.function,
-    this.homeKey
-  });
+  HomeSearchBar({@required this.function});
 
   @override
   State<StatefulWidget> createState() {
@@ -21,7 +17,6 @@ class HomeSearchBar extends StatefulWidget {
 }
 
 class HomeSearchBarState extends State<HomeSearchBar> {
-
   /// Overlay to display autocomplete suggestions
   OverlayEntry overlayEntry;
 
@@ -30,6 +25,8 @@ class HomeSearchBarState extends State<HomeSearchBar> {
   String previousSearchTerm = '';
 
   EventRepository eventRepository;
+
+  GlobalKey homeKey = GlobalKey();
 
   @override
   void initState() {
@@ -74,12 +71,14 @@ class HomeSearchBarState extends State<HomeSearchBar> {
                   ],
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 16, right: 16, top: 4, bottom: 4),
-                  child: HomeSearchInput((it) {
-                    searchPlace(it);
-                  }, key: widget.homeKey,)
-                ),
+                    padding: const EdgeInsets.only(
+                        left: 16, right: 16, top: 4, bottom: 4),
+                    child: HomeSearchInput(
+                      (it) {
+                        searchPlace(it);
+                      },
+                      key: homeKey,
+                    )),
               ),
             ),
           ),
@@ -119,16 +118,17 @@ class HomeSearchBarState extends State<HomeSearchBar> {
   void displayAutoCompleteSuggestions(List<RichSuggestion> suggestions) {
     final RenderBox renderBox = context.findRenderObject();
     Size size = renderBox.size;
+    var offset = renderBox.localToGlobal(Offset.zero);
 
     final RenderBox appBarBox =
-    this.widget.homeKey.currentContext.findRenderObject();
+        this.homeKey.currentContext.findRenderObject();
 
     clearOverlay();
 
     this.overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
         width: size.width,
-        top: appBarBox.size.height,
+        top: appBarBox.size.height + offset.dy + 40.0,
         child: Material(
           elevation: 1,
           child: Column(
@@ -164,13 +164,14 @@ class HomeSearchBarState extends State<HomeSearchBar> {
 
     final RenderBox renderBox = context.findRenderObject();
     Size size = renderBox.size;
+    var offset = renderBox.localToGlobal(Offset.zero);
 
     final RenderBox appBarBox =
-    this.widget.homeKey.currentContext.findRenderObject();
+        this.homeKey.currentContext.findRenderObject();
 
     this.overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
-        top: appBarBox.size.height,
+        top: appBarBox.size.height + offset.dy + 40.0,
         width: size.width,
         child: Material(
           elevation: 1,
@@ -212,17 +213,14 @@ class HomeSearchBarState extends State<HomeSearchBar> {
 
   /// Fetches the place autocomplete list with the query [place].
   void autoCompleteSearch(String text) {
-    //text = text.replaceAll(" ", "+");
+    text = text.replaceAll(" ", "+");
 
-    eventRepository
-        .getEventPredictions(text)
-        .then((value) {
+    eventRepository.getEventPredictions(text).then((value) {
       List<dynamic> predictions = value;
 
       List<RichSuggestion> suggestions = [];
 
       if (predictions.isEmpty) {
-        print('Arrivato');
         AutoCompleteItem aci = AutoCompleteItem();
         aci.text = "No result found";
         aci.offset = 0;
@@ -233,8 +231,8 @@ class HomeSearchBarState extends State<HomeSearchBar> {
         for (dynamic t in predictions) {
           AutoCompleteItem aci = AutoCompleteItem();
           aci.text = t['text'];
-          aci.offset = t['detail'][0]['offset'];
-          aci.length = t['detail'][0]['length'];
+          aci.offset = t['detail']['offset'];
+          aci.length = t['detail']['length'];
 
           suggestions.add(RichSuggestion(aci, () {
             //azione da fare cliccato il testo

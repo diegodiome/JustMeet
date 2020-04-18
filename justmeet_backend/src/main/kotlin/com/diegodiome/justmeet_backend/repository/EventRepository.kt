@@ -109,7 +109,7 @@ class EventRepository : FirestoreRepository<Event, String> {
         val eventsName = ArrayList<AutoCompleteItem>()
         for(doc in docsSnap) {
             val match = PredictionsUtils().getStringMatchDetail(text, doc.get(FirestoreConstants.EVENT_NAME_FIELD).toString())
-            if(match.lenght >= 2) {
+            if(match.length >= 2) {
                 eventsName.add(AutoCompleteItem(
                         text = doc.get(FirestoreConstants.EVENT_NAME_FIELD).toString(),
                         detail = match

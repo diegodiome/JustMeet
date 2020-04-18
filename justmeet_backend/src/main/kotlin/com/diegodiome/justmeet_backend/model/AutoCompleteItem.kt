@@ -11,5 +11,5 @@ data class AutoCompleteItem(
 
 data class AutoCompleteItemMatchDetail (
     val offset: Int,
-    val lenght: Int
+    val length: Int
 )
