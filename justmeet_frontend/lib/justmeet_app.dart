@@ -19,7 +19,6 @@ import 'package:justmeet_frontend/screens/home_page.dart';
 import 'package:justmeet_frontend/screens/login_page.dart';
 import 'package:justmeet_frontend/screens/registration_page.dart';
 import 'package:justmeet_frontend/screens/splash_page.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:redux/redux.dart';
 import 'package:theme_provider/theme_provider.dart';
 

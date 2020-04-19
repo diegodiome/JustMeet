@@ -17,36 +17,19 @@ class HomeSearchBar extends StatefulWidget {
 }
 
 class HomeSearchBarState extends State<HomeSearchBar> {
-  /// Overlay to display autocomplete suggestions
-  OverlayEntry overlayEntry;
 
-  bool hasSearchTerm = false;
-
-  String previousSearchTerm = '';
-
-  EventRepository eventRepository;
-
-  GlobalKey homeKey = GlobalKey();
+  GlobalKey<HomeSearchInputState> homeKey = GlobalKey();
 
   @override
   void initState() {
-    eventRepository = EventRepository();
     super.initState();
   }
 
   @override
   void dispose() {
-    this.overlayEntry?.remove();
     super.dispose();
   }
 
-  /// Hides the autocomplete overlay
-  void clearOverlay() {
-    if (this.overlayEntry != null) {
-      this.overlayEntry.remove();
-      this.overlayEntry = null;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,11 +56,7 @@ class HomeSearchBarState extends State<HomeSearchBar> {
                 child: Padding(
                     padding: const EdgeInsets.only(
                         left: 16, right: 16, top: 4, bottom: 4),
-                    child: HomeSearchInput(
-                      (it) {
-                        searchPlace(it);
-                      },
-                      key: homeKey,
+                    child: HomeSearchInput(key: homeKey,
                     )),
               ),
             ),
@@ -112,137 +91,5 @@ class HomeSearchBarState extends State<HomeSearchBar> {
         ],
       ),
     );
-  }
-
-  /// Display autocomplete suggestions with the overlay.
-  void displayAutoCompleteSuggestions(List<RichSuggestion> suggestions) {
-    final RenderBox renderBox = context.findRenderObject();
-    Size size = renderBox.size;
-    var offset = renderBox.localToGlobal(Offset.zero);
-
-    final RenderBox appBarBox =
-        this.homeKey.currentContext.findRenderObject();
-
-    clearOverlay();
-
-    this.overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        width: size.width,
-        top: appBarBox.size.height + offset.dy + 40.0,
-        child: Material(
-          elevation: 1,
-          child: Column(
-            children: suggestions,
-          ),
-        ),
-      ),
-    );
-
-    Overlay.of(context).insert(this.overlayEntry);
-  }
-
-  void searchPlace(String place) {
-    if (place == this.previousSearchTerm) {
-      return;
-    } else {
-      previousSearchTerm = place;
-    }
-
-    if (context == null) {
-      return;
-    }
-
-    clearOverlay();
-
-    setState(() {
-      hasSearchTerm = place.length > 0;
-    });
-
-    if (place.length < 1) {
-      return;
-    }
-
-    final RenderBox renderBox = context.findRenderObject();
-    Size size = renderBox.size;
-    var offset = renderBox.localToGlobal(Offset.zero);
-
-    final RenderBox appBarBox =
-        this.homeKey.currentContext.findRenderObject();
-
-    this.overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        top: appBarBox.size.height + offset.dy + 40.0,
-        width: size.width,
-        child: Material(
-          elevation: 1,
-          child: Container(
-            padding: EdgeInsets.symmetric(
-              vertical: 16,
-              horizontal: 24,
-            ),
-            child: Row(
-              children: <Widget>[
-                SizedBox(
-                  height: 24,
-                  width: 24,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 3,
-                  ),
-                ),
-                SizedBox(
-                  width: 24,
-                ),
-                Expanded(
-                  child: Text(
-                    "Finding event...",
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-
-    Overlay.of(context).insert(this.overlayEntry);
-    autoCompleteSearch(place);
-  }
-
-  /// Fetches the place autocomplete list with the query [place].
-  void autoCompleteSearch(String text) {
-    text = text.replaceAll(" ", "+");
-
-    eventRepository.getEventPredictions(text).then((value) {
-      List<dynamic> predictions = value;
-
-      List<RichSuggestion> suggestions = [];
-
-      if (predictions.isEmpty) {
-        AutoCompleteItem aci = AutoCompleteItem();
-        aci.text = "No result found";
-        aci.offset = 0;
-        aci.length = 0;
-
-        suggestions.add(RichSuggestion(aci, () {}));
-      } else {
-        for (dynamic t in predictions) {
-          AutoCompleteItem aci = AutoCompleteItem();
-          aci.text = t['text'];
-          aci.offset = t['detail']['offset'];
-          aci.length = t['detail']['length'];
-
-          suggestions.add(RichSuggestion(aci, () {
-            //azione da fare cliccato il testo
-          }));
-        }
-      }
-
-      displayAutoCompleteSuggestions(suggestions);
-    }).catchError((error) {
-      print(error);
-    });
   }
 }
