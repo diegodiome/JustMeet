@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
@@ -90,7 +92,7 @@ class UserRepository {
     FirebaseUser firebaseUser = await _firebaseAuth.currentUser();
     Response response;
     response = await put(
-      putUpdateUserStatus(firebaseUser.uid, status.string),
+      putUpdateUserStatusUrl(firebaseUser.uid, status.string),
       headers: await RequestHeader().getBasicHeader()
     );
     int statusCode = response.statusCode;
@@ -103,7 +105,7 @@ class UserRepository {
     FirebaseUser firebaseUser = await _firebaseAuth.currentUser();
     Response response;
     response = await put(
-        putUpdateUserToken(firebaseUser.uid, token),
+        putUpdateUserTokenUrl(firebaseUser.uid, token),
         headers: await RequestHeader().getBasicHeader()
     );
     int statusCode = response.statusCode;
@@ -125,7 +127,17 @@ class UserRepository {
     }
   }
 
-  Future<User> getUser(userId) async{
-    return null;
+  Future<User> getUser(userId) async {
+    Response response;
+    response = await get(
+      getUserUrl(userId),
+      headers: await RequestHeader().getBasicHeader()
+    );
+    int statusCode = response.statusCode;
+    if(statusCode == 200) {
+      return User.fromJson(jsonDecode(response.body));
+    }
+    print('Connection error: $statusCode');
+    return Future.value(null);
   }
 }

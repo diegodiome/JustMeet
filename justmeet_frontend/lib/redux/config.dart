@@ -1,4 +1,3 @@
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 const String protocol = 'http';
 const String backendIp = '192.168.1.4';
@@ -34,12 +33,16 @@ const String userApiUrl = '$apiUrl/user';
 const String postCreateUserApiUrl = '$userApiUrl/signUp';
 const String putUpdateUserApiUrl = '$userApiUrl/update';
 
-String putUpdateUserStatus(String userUid, String status) {
+String putUpdateUserStatusUrl(String userUid, String status) {
   return '$userApiUrl/$userUid&$status/supdate';
 }
 
-String putUpdateUserToken(String userUid, String token) {
+String putUpdateUserTokenUrl(String userUid, String token) {
   return '$userApiUrl/$userUid&$token/tupdate';
+}
+
+String getUserUrl(String userId) {
+  return '$userApiUrl/$userId';
 }
 
 /* GOOGLE MAP API*/

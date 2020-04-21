@@ -12,3 +12,4 @@ EventState _onEventListUpdateSuccess(EventState state, OnEventListUpdateSuccess 
     eventsCount: action.eventCount,
   );
 }
+

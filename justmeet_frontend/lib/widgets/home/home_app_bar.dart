@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:theme_provider/theme_provider.dart';
 
 class HomeAppBar extends StatelessWidget {
-  
-  final Function userFunction;
-  
-  const HomeAppBar({
-    @required this.userFunction
-  });
+
+  final Function function;
+
+  HomeAppBar({this.function});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +24,24 @@ class HomeAppBar extends StatelessWidget {
             top: MediaQuery.of(context).padding.top, left: 8, right: 8),
         child: Row(
           children: <Widget>[
+            Container(
+              alignment: Alignment.centerLeft,
+              width: AppBar().preferredSize.height + 40,
+              height: AppBar().preferredSize.height,
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(32.0),
+                  ),
+                  onTap: function,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Icons.menu, color: Colors.white,),
+                  ),
+                ),
+              ),
+            ),
             Expanded(
               child: Padding(
                 padding: EdgeInsets.only(left: 10.0),
@@ -37,29 +53,6 @@ class HomeAppBar extends StatelessWidget {
                     fontSize: 22,
                   ),
                 ),
-              ),
-            ),
-            Container(
-              width: AppBar().preferredSize.height + 40,
-              height: AppBar().preferredSize.height,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(32.0),
-                      ),
-                      onTap: userFunction,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(Icons.account_circle, color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ],
               ),
             ),
             Container(
