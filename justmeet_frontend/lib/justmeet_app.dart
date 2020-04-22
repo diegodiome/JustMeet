@@ -52,14 +52,14 @@ class _JustMeetAppState extends State<JustMeetApp> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       if(store.state.authState.isAuthenticated) {
         store.dispatch(OnUserStatusUpdate(
-          status: UserStatus.ONLINE
+          status: UserStatus.online
         ));
       }
     }
     else if(state == AppLifecycleState.inactive) {
       if(store.state.authState.isAuthenticated) {
         store.dispatch(OnUserStatusUpdate(
-          status: UserStatus.OFFLINE
+          status: UserStatus.offline
         ));
       }
     }

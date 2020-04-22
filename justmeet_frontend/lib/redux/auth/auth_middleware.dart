@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/auth/auth_actions.dart';
+import 'package:justmeet_frontend/redux/user/user_action.dart';
 import 'package:justmeet_frontend/repositories/user_repository.dart';
 import 'package:redux/redux.dart';
 import "package:flutter/services.dart";
@@ -121,6 +122,7 @@ void Function(
       } else {
         store.dispatch(OnAuthenticated(user: user));
         await userRepository.updateUser(user);
+        await store.dispatch(OnLocalUserUpdate(userId: user.userUid));
         await navigatorKey.currentState.pushReplacementNamed(Routes.home);
       }
     });

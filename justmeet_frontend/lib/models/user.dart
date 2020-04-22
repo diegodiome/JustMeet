@@ -1,16 +1,16 @@
 import 'dart:convert';
 
 enum UserStatus {
-  ONLINE,
-  OFFLINE
+  online,
+  offline
 }
 
 extension userStatusExtension on UserStatus {
   String get string {
     switch (this) {
-      case UserStatus.ONLINE:
+      case UserStatus.online:
         return 'online';
-      case UserStatus.OFFLINE:
+      case UserStatus.offline:
         return 'offline';
       default:
         return null;
@@ -37,12 +37,12 @@ class User {
   });
 
   User.fromJson(Map<String, dynamic> json) {
-    userEmail = json['email'];
-    userDisplayName = json['displayName'];
-    userUid = json['uid'];
-    userPhotoUrl = json['photoUrl'];
-    userToken = json['token'];
-    userStatus = json['userStatus'];
+    userEmail = json['userEmail'];
+    userDisplayName = json['userDisplayName'];
+    userUid = json['userUid'];
+    userPhotoUrl = json['userPhotoUrl'];
+    userToken = json['userToken'];
+    userStatus = json['userStatus'].toString().compareTo(UserStatus.offline.toString()) == 0 ? UserStatus.offline : UserStatus.online;
   }
 
   String toJson() {

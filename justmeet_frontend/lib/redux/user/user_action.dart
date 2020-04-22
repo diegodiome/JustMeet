@@ -17,7 +17,7 @@ class OnLocalUserUpdateSuccess {
 }
 
 class OnLocalUserUpdate {
-  int userId;
+  String userId;
   Completer completer;
 
   OnLocalUserUpdate({this.userId, Completer completer})

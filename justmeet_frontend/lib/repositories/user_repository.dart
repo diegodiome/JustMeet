@@ -25,7 +25,7 @@ class UserRepository {
   }
 
   Future<void> signOut() async {
-    await updateUserStatus(UserStatus.OFFLINE);
+    await updateUserStatus(UserStatus.offline);
     await updateUserToken("");
     await _firebaseAuth.signOut();
   }
@@ -82,7 +82,7 @@ class UserRepository {
         userToken: await getUserToken(firebaseUser),
         userUid: firebaseUser.uid,
         userPhotoUrl: firebaseUser.photoUrl,
-        userStatus: UserStatus.ONLINE
+        userStatus: UserStatus.online
       );
     }
     return Future.value(null);

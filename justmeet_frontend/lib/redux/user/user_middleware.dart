@@ -38,7 +38,7 @@ void Function(Store<AppState> store, dynamic action, NextDispatcher next)
     next(action);
     try {
       User userUpdated = await userRepository.getUser(action.userId);
-      store.dispatch(OnLocalUserUpdateSuccess(userUpdated: userUpdated));
+      await store.dispatch(OnLocalUserUpdateSuccess(userUpdated: userUpdated));
       action.completer.complete();
     } on PlatformException catch (e) {
       print('Error: $e');
