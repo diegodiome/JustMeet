@@ -7,6 +7,7 @@ import 'package:justmeet_frontend/models/event.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/event/event_action.dart';
 import 'package:justmeet_frontend/repositories/attachment_repository.dart';
+import 'package:justmeet_frontend/widgets/calendar/calendar_popup_view.dart';
 import 'package:justmeet_frontend/widgets/map/map_page.dart';
 
 class NewEventForm extends StatefulWidget {
@@ -22,6 +23,9 @@ class _NewEventFormState extends State<NewEventForm> {
   final _formKey = GlobalKey<FormState>();
   final _nameEventTextEditingController = TextEditingController();
   final _descriptionEventTextEditingController = TextEditingController();
+
+  DateTime startDate = DateTime.now();
+  DateTime endDate = DateTime.now().add(const Duration(days: 5));
 
   Event eventToAdd;
   int selectedRadio;
@@ -317,6 +321,32 @@ class _NewEventFormState extends State<NewEventForm> {
                 Text('Choose location')
               ],
             ),
+            Padding(padding: EdgeInsets.only(top: 30)),
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    showDemoDialog(context: context);
+                  },
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    child: Icon(
+                      Icons.date_range,
+                      size: 25,
+                    ),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.amber.shade300),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(left: 20)),
+                Text('Choose date range')
+              ],
+            ),
             Divider(height: 1),
             Padding(
               padding: const EdgeInsets.only(
@@ -354,6 +384,28 @@ class _NewEventFormState extends State<NewEventForm> {
               ),
             )
           ])),
+    );
+  }
+
+  void showDemoDialog({BuildContext context}) {
+    showDialog<dynamic>(
+      context: context,
+      builder: (BuildContext context) => CalendarPopupView(
+        barrierDismissible: true,
+        minimumDate: DateTime.now(),
+        //  maximumDate: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + 10),
+        initialEndDate: endDate,
+        initialStartDate: startDate,
+        onApplyClick: (DateTime startData, DateTime endData) {
+          setState(() {
+            if (startData != null && endData != null) {
+              startDate = startData;
+              endDate = endData;
+            }
+          });
+        },
+        onCancelClick: () {},
+      ),
     );
   }
 

@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
+import 'package:justmeet_frontend/redux/auth/auth_actions.dart';
 import 'package:justmeet_frontend/redux/user/user_action.dart';
 import 'package:redux/redux.dart';
 
 class MenuScreen extends StatelessWidget {
   final List<MenuItem> options = [
-    MenuItem(Icons.search, 'Search'),
-    MenuItem(Icons.shopping_basket, 'Basket'),
-    MenuItem(Icons.favorite, 'Discounts'),
-    MenuItem(Icons.code, 'Prom-codes'),
-    MenuItem(Icons.format_list_bulleted, 'Orders'),
+    MenuItem(
+      title: 'Log out',
+      icon: Icons.cancel,
+    )
   ];
 
   @override
   Widget build(BuildContext context) {
     return StoreBuilder(
-      onInit: (store) => store.dispatch(OnLocalUserUpdate(userId: store.state.authState.uid)),
+      onInit: (store) =>
+          store.dispatch(OnLocalUserUpdate(userId: store.state.authState.uid)),
       builder: (context, Store<AppState> store) {
         return GestureDetector(
           onPanUpdate: (details) {
@@ -49,7 +50,9 @@ class MenuScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      store.state.userState.currentUser.userEmail,
+                      store.state.userState.currentUser.userDisplayName != null
+                          ? store.state.userState.currentUser.userDisplayName
+                          : store.state.userState.currentUser.userEmail,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 10,
@@ -59,22 +62,59 @@ class MenuScreen extends StatelessWidget {
                 ),
                 Spacer(),
                 Column(
-                  children: options.map((item) {
-                    return ListTile(
+                  children: [
+                    ListTile(
+                      onTap: () {
+                        // TODO: edit profile
+                      },
                       leading: Icon(
-                        item.icon,
+                        Icons.edit,
                         color: Colors.white,
                         size: 20,
                       ),
                       title: Text(
-                        item.title,
+                        'Edit profile',
                         style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                             color: Colors.white),
                       ),
-                    );
-                  }).toList(),
+                    ),
+                    ListTile(
+                      onTap: () {
+                        // TODO: dysplay my events
+                      },
+                      leading: Icon(
+                        Icons.event,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                      title: Text(
+                        'My events',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                    ),
+                    ListTile(
+                      onTap: () {
+                        store.dispatch(LogOut());
+                      },
+                      leading: Icon(
+                        Icons.cancel,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                      title: Text(
+                        'Log out',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                    )
+                  ],
                 ),
                 Spacer(),
                 ListTile(
@@ -109,6 +149,7 @@ class MenuScreen extends StatelessWidget {
 class MenuItem {
   String title;
   IconData icon;
+  Function tapFunction;
 
-  MenuItem(this.icon, this.title);
+  MenuItem({this.icon, this.title, this.tapFunction});
 }

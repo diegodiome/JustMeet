@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:justmeet_frontend/redux/app/app_state.dart';
+import 'package:redux/redux.dart';
 import 'package:theme_provider/theme_provider.dart';
 
 class HomeAppBar extends StatelessWidget {
-
   final Function function;
 
   HomeAppBar({this.function});
@@ -24,24 +26,32 @@ class HomeAppBar extends StatelessWidget {
             top: MediaQuery.of(context).padding.top, left: 8, right: 8),
         child: Row(
           children: <Widget>[
-            Container(
-              alignment: Alignment.centerLeft,
-              width: AppBar().preferredSize.height + 40,
-              height: AppBar().preferredSize.height,
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(32.0),
-                  ),
-                  onTap: function,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(Icons.menu, color: Colors.white,),
-                  ),
-                ),
-              ),
-            ),
+            Padding(
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: StoreBuilder(
+                  builder: (context, Store<AppState> store) {
+                    return GestureDetector(
+                      onTap: function,
+                      child: Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                            image: store.state.userState.currentUser
+                                        .userPhotoUrl !=
+                                    null
+                                ? DecorationImage(
+                                    image: NetworkImage(store.state.userState
+                                        .currentUser.userPhotoUrl),
+                                    fit: BoxFit.cover)
+                                : AssetImage('assets/images/hotel_3.png'),
+                            shape: BoxShape.rectangle,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10.0)),
+                            color: Colors.amber.shade300),
+                      ),
+                    );
+                  },
+                )),
             Expanded(
               child: Padding(
                 padding: EdgeInsets.only(left: 10.0),

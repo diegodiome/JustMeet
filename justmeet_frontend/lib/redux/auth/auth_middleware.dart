@@ -55,6 +55,7 @@ void Function(
     try {
       final user = await userRepository.signInWithGoogle();
       store.dispatch(OnAuthenticated(user: user));
+      await store.dispatch(OnLocalUserUpdate(userId: user.userUid));
       await navigatorKey.currentState.pushReplacementNamed(Routes.home);
     }
     on PlatformException catch(e) {
@@ -76,6 +77,7 @@ void Function(
     try{
       final user = await userRepository.signInWithEmailAndPassword(action.email, action.password);
       store.dispatch(OnAuthenticated(user: user));
+      await store.dispatch(OnLocalUserUpdate(userId: user.userUid));
       await navigatorKey.currentState.pushReplacementNamed(Routes.home);
       action.completer.complete();
     }
