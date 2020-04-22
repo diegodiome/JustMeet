@@ -6,6 +6,12 @@ class OnDistanceFilterUpdate {
   OnDistanceFilterUpdate({this.newDistanceFilterData});
 }
 
+class OnDateFilterUpdate {
+  DateFilterData newDateFilterData;
+
+  OnDateFilterUpdate({this.newDateFilterData});
+}
+
 class OnCategoriesFilterUpdate {
   final bool value;
   final int index;

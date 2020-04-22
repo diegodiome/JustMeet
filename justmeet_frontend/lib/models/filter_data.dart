@@ -1,4 +1,3 @@
-
 class CategoryFilterData {
   CategoryFilterData({
     this.titleTxt = '',
@@ -26,6 +25,13 @@ class CategoryFilterData {
       isSelected: true,
     ),
   ];
+}
+
+class DateFilterData {
+  DateTime startDate;
+  DateTime endDate;
+
+  DateFilterData({this.startDate, this.endDate});
 }
 
 class DistanceFilterData {

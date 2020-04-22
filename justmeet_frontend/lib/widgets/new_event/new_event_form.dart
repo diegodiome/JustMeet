@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:justmeet_frontend/utils/map_helper.dart';
@@ -7,8 +8,8 @@ import 'package:justmeet_frontend/models/event.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/event/event_action.dart';
 import 'package:justmeet_frontend/repositories/attachment_repository.dart';
-import 'package:justmeet_frontend/widgets/calendar/calendar_popup_view.dart';
 import 'package:justmeet_frontend/widgets/map/map_page.dart';
+import 'package:theme_provider/theme_provider.dart';
 
 class NewEventForm extends StatefulWidget {
   NewEventForm({@required this.attachmentRepository});
@@ -24,9 +25,6 @@ class _NewEventFormState extends State<NewEventForm> {
   final _nameEventTextEditingController = TextEditingController();
   final _descriptionEventTextEditingController = TextEditingController();
 
-  DateTime startDate = DateTime.now();
-  DateTime endDate = DateTime.now().add(const Duration(days: 5));
-
   Event eventToAdd;
   int selectedRadio;
 
@@ -35,6 +33,8 @@ class _NewEventFormState extends State<NewEventForm> {
   File _image;
   String _imageUrl;
   double locationLat, locationLong;
+  DateTime eventDate;
+  bool isSwitched = false;
 
   @override
   void initState() {
@@ -76,11 +76,11 @@ class _NewEventFormState extends State<NewEventForm> {
           eventName: _nameEventTextEditingController.text,
           eventDescription: _descriptionEventTextEditingController.text,
           eventCategory: eventToAdd.eventCategory,
-          eventDate: DateTime.parse('2020-02-26 11:00'),
+          eventDate: eventDate != null ? eventDate : DateTime.now(),
           eventLat: locationLat == null ? 0.0 : locationLat,
           eventLong: locationLong == null ? 0.0 : locationLong,
           eventImageUrl: _imageUrl,
-          eventPrivate: false);
+          eventPrivate: isSwitched);
       if (_formKey.currentState.validate()) {
         final createEventAction = OnCreateEvent(newEvent: newEvent);
 
@@ -100,7 +100,7 @@ class _NewEventFormState extends State<NewEventForm> {
       decoration: const InputDecoration(
           border: InputBorder.none,
           hintText: 'Event name',
-          icon: Icon(Icons.email)),
+          icon: Icon(Icons.label,)),
       controller: _nameEventTextEditingController,
       validator: (value) {
         if (value.isEmpty) {
@@ -112,10 +112,12 @@ class _NewEventFormState extends State<NewEventForm> {
 
     final _descriptionEventTextField = TextFormField(
       keyboardType: TextInputType.text,
+      maxLines: 3,
+      minLines: 3,
       decoration: const InputDecoration(
           border: InputBorder.none,
           hintText: 'Event description',
-          icon: Icon(Icons.email)),
+          icon: Icon(Icons.edit_attributes)),
       controller: _descriptionEventTextEditingController,
       validator: (value) {
         if (value.isEmpty) {
@@ -198,7 +200,7 @@ class _NewEventFormState extends State<NewEventForm> {
                         Radio(
                           value: 1,
                           groupValue: selectedRadio,
-                          activeColor: Colors.amber,
+                          activeColor: ThemeProvider.themeOf(context).data.primaryColor,
                           onChanged: (val) {
                             setSelectedRadio(val);
                           },
@@ -211,7 +213,7 @@ class _NewEventFormState extends State<NewEventForm> {
                         Radio(
                           value: 2,
                           groupValue: selectedRadio,
-                          activeColor: Colors.amber,
+                          activeColor: ThemeProvider.themeOf(context).data.primaryColor,
                           onChanged: (val) {
                             setSelectedRadio(val);
                           },
@@ -230,7 +232,7 @@ class _NewEventFormState extends State<NewEventForm> {
                         Radio(
                           value: 3,
                           groupValue: selectedRadio,
-                          activeColor: Colors.amber,
+                          activeColor: ThemeProvider.themeOf(context).data.primaryColor,
                           onChanged: (val) {
                             setSelectedRadio(val);
                           },
@@ -243,7 +245,7 @@ class _NewEventFormState extends State<NewEventForm> {
                         Radio(
                           value: 4,
                           groupValue: selectedRadio,
-                          activeColor: Colors.amber,
+                          activeColor: ThemeProvider.themeOf(context).data.primaryColor,
                           onChanged: (val) {
                             setSelectedRadio(val);
                           },
@@ -299,7 +301,7 @@ class _NewEventFormState extends State<NewEventForm> {
                                 mapStyle: MAP_STYLE.DARK,
                               )),
                     );
-                    if(locationResult != null) {
+                    if (locationResult != null) {
                       setState(() {
                         locationLat = locationResult.latLng.latitude;
                         locationLong = locationResult.latLng.longitude;
@@ -329,8 +331,15 @@ class _NewEventFormState extends State<NewEventForm> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                    showDemoDialog(context: context);
+                    DatePicker.showDateTimePicker(context,
+                        showTitleActions: true,
+                        minTime: DateTime.now(),
+                        maxTime: DateTime(2100, 6, 7), onChanged: (date) {
+                    }, onConfirm: (date) {
+                      setState(() {
+
+                      });
+                    }, currentTime: DateTime.now(), locale: LocaleType.it);
                   },
                   child: Container(
                     width: 60,
@@ -344,9 +353,31 @@ class _NewEventFormState extends State<NewEventForm> {
                   ),
                 ),
                 Padding(padding: EdgeInsets.only(left: 20)),
-                Text('Choose date range')
+                Text('Choose date')
               ],
             ),
+            Padding(padding: EdgeInsets.only(top: 10)),
+            Row(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                Switch(
+                  value: isSwitched,
+                  onChanged: (value) {
+                    setState(() {
+                      isSwitched = value;
+                    });
+                  },
+                  activeTrackColor: Colors.deepPurple,
+                  activeColor: ThemeProvider.themeOf(context).data.primaryColor,
+                ),
+                Text(
+                  'Private'
+                )
+              ],
+            ),
+            Padding(padding: EdgeInsets.only(top: 10)),
             Divider(height: 1),
             Padding(
               padding: const EdgeInsets.only(
@@ -354,7 +385,7 @@ class _NewEventFormState extends State<NewEventForm> {
               child: Container(
                 height: 48,
                 decoration: BoxDecoration(
-                  color: Colors.amber,
+                  color: ThemeProvider.themeOf(context).data.primaryColor,
                   borderRadius: const BorderRadius.all(Radius.circular(24.0)),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
@@ -384,28 +415,6 @@ class _NewEventFormState extends State<NewEventForm> {
               ),
             )
           ])),
-    );
-  }
-
-  void showDemoDialog({BuildContext context}) {
-    showDialog<dynamic>(
-      context: context,
-      builder: (BuildContext context) => CalendarPopupView(
-        barrierDismissible: true,
-        minimumDate: DateTime.now(),
-        //  maximumDate: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day + 10),
-        initialEndDate: endDate,
-        initialStartDate: startDate,
-        onApplyClick: (DateTime startData, DateTime endData) {
-          setState(() {
-            if (startData != null && endData != null) {
-              startDate = startData;
-              endDate = endData;
-            }
-          });
-        },
-        onCancelClick: () {},
-      ),
     );
   }
 
