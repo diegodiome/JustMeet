@@ -3,11 +3,14 @@ package com.diegodiome.justmeet_backend.controller
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.ADD_USER_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.DEL_USER_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.GET_USER_API
+import com.diegodiome.justmeet_backend.config.constants.ApiConstants.GET_USR_EV_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.S_UPD_USER_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.T_UPD_USER_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.UPD_USER_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.USER_API
+import com.diegodiome.justmeet_backend.model.Event
 import com.diegodiome.justmeet_backend.model.User
+import com.diegodiome.justmeet_backend.repository.EventRepository
 import com.diegodiome.justmeet_backend.repository.UserRepository
 import com.diegodiome.justmeet_backend.util.SecurityUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,6 +22,8 @@ class UserController {
 
     @Autowired
     lateinit var userRepository: UserRepository
+    @Autowired
+    lateinit var eventRepository: EventRepository
 
     @PostMapping(value = [ADD_USER_API])
     fun createUser(@RequestBody newUser: User) {
@@ -60,6 +65,11 @@ class UserController {
             return
         }
         userRepository.updateToken(userId, token)
+    }
+
+    @GetMapping(value = [GET_USR_EV_API])
+    fun getUserEvents(@PathVariable(value = "userId") userId: String) : List<Event> {
+        return eventRepository.getUserEvents(userId)
     }
 
 }

@@ -8,6 +8,7 @@ import 'package:justmeet_frontend/models/event.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/comment/comment_action.dart';
 import 'package:justmeet_frontend/redux/event/event_action.dart';
+import 'package:justmeet_frontend/widgets/event_info/time_box.dart';
 import 'package:justmeet_frontend/widgets/map/map_page.dart';
 import 'package:justmeet_frontend/widgets/event_info/event_info_comment_list_view.dart';
 import 'package:redux/redux.dart';
@@ -50,24 +51,22 @@ class _EventInfoContentState extends State<EventInfoContent> {
               joinButtonUi(),
               Container(
                   constraints: BoxConstraints(
-                  minHeight: infoHeight,
-                  maxHeight: tempHeight > infoHeight ? tempHeight : infoHeight),
+                      minHeight: infoHeight,
+                      maxHeight: tempHeight > infoHeight ? tempHeight : infoHeight),
                   child: StoreBuilder(
                       onInit: (store) => store.dispatch(OnCommentListUpdate(eventId: widget.event.eventId)),
                       builder: (context, Store<AppState> store) {
                         return RefreshIndicator(
                           onRefresh: () {
-                            return store.dispatch(
-                                OnCommentListUpdate(eventId: widget.event
-                                    .eventId));
-                            },
+                            return store.dispatch(OnCommentListUpdate(eventId: widget.event.eventId));
+                          },
                           child: Container(
                               child: commentSectionUi(
                                   store.state.commentState.commentsList,
                                   store.state.commentState.commentsCount)),
                         );
                       })),
-        ])));
+            ])));
   }
 
   Widget mapView() {
@@ -86,7 +85,10 @@ class _EventInfoContentState extends State<EventInfoContent> {
           child: MapPage(
             gestureEnabled: true,
             searchInput: false,
-            locationMarker: new Marker(markerId: MarkerId('locationMarker'), position: new LatLng(widget.event.eventLat, widget.event.eventLong)),
+            locationMarker: new Marker(
+                markerId: MarkerId('locationMarker'),
+                position:
+                    new LatLng(widget.event.eventLat, widget.event.eventLong)),
             mapStyle: MAP_STYLE.GREEN,
           ),
         ),
@@ -160,54 +162,44 @@ class _EventInfoContentState extends State<EventInfoContent> {
 
   Widget infoWidgetUi() {
     return Padding(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          children: <Widget>[
-            Text(
-              widget.event.eventName,
-              style: TextStyle(fontSize: 30),
-            ),
-            SizedBox(height: 20),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      padding: EdgeInsets.all(10),
+      child: Column(
+        children: <Widget>[
+          Text(
+            widget.event.eventName,
+            style: TextStyle(fontSize: 30),
+          ),
+          SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Row(
               children: <Widget>[
-                Row(children: <Widget>[
-                  Icon(Icons.date_range),
-                  Padding(
-                    padding: EdgeInsets.only(left: 10.0),
-                    child: Text(DateFormat('dd - MM - yyyy')
-                        .format(widget.event.eventDate)),
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Icon(Icons.watch_later),
-                  Padding(
-                    padding: EdgeInsets.only(left: 10.0),
-                    child: Text(
-                      DateFormat('HH:mm').format(widget.event.eventDate),
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                ]),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: <Widget>[
-                    Icon(Icons.map),
-                    Padding(
-                        padding: EdgeInsets.only(left: 10, bottom: 10),
-                        child: Text(
-                          'Location',
-                          style: TextStyle(fontSize: 18),
-                        ))
-                  ],
-                ),
-                mapView()
+                TimeBox(
+                    text1: DateFormat("dd, MMM").format(widget.event.eventDate),
+                    text2: 'Date'),
+                TimeBox(
+                    text1: DateFormat('HH:MM').format(widget.event.eventDate),
+                    text2: 'Time'),
               ],
             ),
-          ],
-        ));
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Row(
+            children: <Widget>[
+              Icon(Icons.map),
+              Padding(
+                  padding: EdgeInsets.only(left: 10, bottom: 10),
+                  child: Text(
+                    'Location',
+                    style: TextStyle(fontSize: 18),
+                  ))
+            ],
+          ),
+          mapView()
+        ],
+      ),
+    );
   }
 }

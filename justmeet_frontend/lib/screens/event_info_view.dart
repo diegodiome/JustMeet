@@ -48,23 +48,25 @@ class _EventInfoViewState extends State<EventInfoView> {
                 bottom: 0,
                 left: 0,
                 right: 0,
-                child: Container(
-                    decoration: BoxDecoration(
-                      color:
-                          ThemeProvider.themeOf(context).data.backgroundColor,
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(32.0),
-                          topRight: Radius.circular(32.0)),
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            offset: const Offset(1.1, 1.1),
-                            blurRadius: 10.0),
-                      ],
-                    ),
-                    child: EventInfoContent(
-                      event: widget.event,
-                    ))),
+                child: SingleChildScrollView(
+                    child: Container(
+                        decoration: BoxDecoration(
+                          color: ThemeProvider.themeOf(context)
+                              .data
+                              .backgroundColor,
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(32.0),
+                              topRight: Radius.circular(32.0)),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color: Colors.grey.withOpacity(0.2),
+                                offset: const Offset(1.1, 1.1),
+                                blurRadius: 10.0),
+                          ],
+                        ),
+                        child: EventInfoContent(
+                          event: widget.event,
+                        )))),
             EventInfoAppBar()
           ],
         ),

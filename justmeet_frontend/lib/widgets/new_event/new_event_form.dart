@@ -72,7 +72,7 @@ class _NewEventFormState extends State<NewEventForm> {
         });
       }
       Event newEvent = new Event(
-          eventCreator: 'diomedi79@gmail.com',
+          eventCreator: StoreProvider.of<AppState>(context).state.userState.currentUser.userUid,
           eventName: _nameEventTextEditingController.text,
           eventDescription: _descriptionEventTextEditingController.text,
           eventCategory: eventToAdd.eventCategory,

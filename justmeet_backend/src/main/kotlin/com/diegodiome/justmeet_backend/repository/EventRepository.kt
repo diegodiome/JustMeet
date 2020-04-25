@@ -103,6 +103,17 @@ class EventRepository : FirestoreRepository<Event, String> {
         eventRepositoryLogger.info("[+] Request to event with id : $elementId added")
     }
 
+    fun getUserEvents(elementId: String) : List<Event> {
+        val colRef = db.collection(EVENTS_COLLECTION)
+        val docsSnap = colRef.whereEqualTo(FirestoreConstants.EVENT_CREATOR_FIELD, elementId).get().get().documents
+        val events = ArrayList<Event>()
+        for(doc in docsSnap) {
+            events.add((doc.toObject(Event::class.java)))
+        }
+        eventRepositoryLogger.info("[~] Events of $elementId recovered")
+        return events
+    }
+
     fun getSearchPredictions(text: String) : AutoCompleteItems {
         val colRef = db.collection(EVENTS_COLLECTION)
         val docsSnap = colRef.get().get().documents

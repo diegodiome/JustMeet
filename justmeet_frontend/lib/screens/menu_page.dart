@@ -3,15 +3,10 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/auth/auth_actions.dart';
 import 'package:justmeet_frontend/redux/user/user_action.dart';
+import 'package:justmeet_frontend/screens/profile_page.dart';
 import 'package:redux/redux.dart';
 
 class MenuScreen extends StatelessWidget {
-  final List<MenuItem> options = [
-    MenuItem(
-      title: 'Log out',
-      icon: Icons.cancel,
-    )
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +61,14 @@ class MenuScreen extends StatelessWidget {
                     ListTile(
                       onTap: () {
                         // TODO: edit profile
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        Navigator.push<dynamic>(
+                          context,
+                          MaterialPageRoute<dynamic>(
+                              builder: (BuildContext context) => ProfilePage(
+                                user: store.state.userState.currentUser,
+                              ),),
+                        );
                       },
                       leading: Icon(
                         Icons.edit,

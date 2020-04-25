@@ -42,6 +42,21 @@ class EventRepository {
     }
   }
 
+  Future<List<Event>> getUserEvents(String userId) async {
+    Response response;
+    response = await get(
+        getUserEventsUrl(userId),
+        headers: await RequestHeader().getBasicHeader()
+    );
+    int statusCode = response.statusCode;
+    if(statusCode == 200) {
+      Iterable<dynamic> l = json.decode(response.body);
+      return l.map((model) => Event.fromJson(model)).toList();
+    }
+    print('Connection error: $statusCode');
+    return Future.value(null);
+  }
+
   Future<List<dynamic>> getEventPredictions(String eventName) async {
     Response response;
     response = await get(getEventNamePredictionsUrl(eventName),

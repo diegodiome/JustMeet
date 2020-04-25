@@ -9,6 +9,7 @@ object ApiConstants {
     const val T_UPD_USER_API = "/{userId}&{token}/tupdate"
     const val S_UPD_USER_API = "/{userId}&{status}/supdate"
     const val GET_USER_API = "/{userId}"
+    const val GET_USR_EV_API = "/{userId}/events"
 
     /* Event API */
     const val EVENT_API = "/event"

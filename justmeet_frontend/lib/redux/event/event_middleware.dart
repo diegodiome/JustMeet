@@ -37,13 +37,18 @@ void Function(Store<AppState> store, dynamic action, NextDispatcher next)
             .toList()
             .forEach((filter) => {
               if(filter.titleTxt.compareTo(event.eventCategory) == 0) {
-                if(eventDistanceCalculator(
-                    store.state.locationState.currentLocation.latitude,
-                    store.state.locationState.currentLocation.longitude,
-                    event.eventLat,
-                    event.eventLong,
-                    'K') <= store.state.filtersState.distanceFilter.maxDistance / 10) {
-                  store.state.eventState.eventsFiltered.add(event)
+                if(event.eventDate.isAfter(store.state.filtersState.dateFilterData.startDate) && event.eventDate.isBefore(store.state.filtersState.dateFilterData.endDate.add(Duration(days: 1)))) {
+                  if(eventDistanceCalculator(
+                      store.state.locationState.currentLocation.latitude,
+                      store.state.locationState.currentLocation.longitude,
+                      event.eventLat,
+                      event.eventLong,
+                      'K') <= store.state.filtersState.distanceFilter.maxDistance / 10) {
+                    store.state.eventState.eventsFiltered.add(event)
+                  }
+                  else if(store.state.locationState.currentLocation.latitude == 0 && store.state.locationState.currentLocation.longitude == 0) {
+                    store.state.eventState.eventsFiltered.add(event)
+                  }
                 }
               }
         })

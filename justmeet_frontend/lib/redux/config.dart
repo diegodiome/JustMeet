@@ -45,6 +45,11 @@ String getUserUrl(String userId) {
   return '$userApiUrl/$userId';
 }
 
+String getUserEventsUrl(String userId) {
+  return '$userApiUrl/$userId/events';
+}
+
+
 /* GOOGLE MAP API*/
 const String mapApiUrl = 'https://maps.googleapis.com/maps/api';
 

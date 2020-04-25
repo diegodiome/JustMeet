@@ -13,7 +13,9 @@ class Event {
         this.eventLat,
         this.eventLong,
         this.eventDate,
-        this.eventPrivate
+        this.eventPrivate,
+        this.eventMaxParticipants,
+        this.eventParticipants
       });
 
   String eventId;
@@ -22,6 +24,8 @@ class Event {
   String eventDescription;
   String eventCreator;
   List<double> eventRates;
+  List<String> eventParticipants;
+  int eventMaxParticipants;
   double eventLat;
   double eventLong;
   String eventCategory;
@@ -29,31 +33,20 @@ class Event {
   bool eventPrivate;
 
   factory Event.fromJson(Map<String, dynamic> json) {
-    if (json['eventRates'] != null) {
       return Event(
           eventId: json['eventId'] as String,
           eventName: json['eventName'] as String,
           eventDescription: json['eventDescription'] as String,
           eventImageUrl: json['eventImageUrl'] as String,
-          eventRates: List<double>.from(json['eventRates']),
+          eventRates: json['eventRates'] != null ? List<double>.from(json['eventRates']) : null,
           eventCreator: json['eventCreator'] as String,
           eventCategory: json['eventCategory'] as String,
           eventLat: json['eventLat'] as double,
           eventLong: json['eventLong'] as double,
           eventPrivate: json['eventPrivate'] as bool,
-          eventDate: DateTime.tryParse(json['eventDate']));
-    }
-    return Event(
-        eventId: json['eventId'] as String,
-        eventName: json['eventName'] as String,
-        eventDescription: json['eventDescription'] as String,
-        eventImageUrl: json['eventImageUrl'] as String,
-        eventCreator: json['eventCreator'] as String,
-        eventCategory: json['eventCategory'] as String,
-        eventLat: json['eventLat'] as double,
-        eventLong: json['eventLong'] as double,
-        eventPrivate: json['eventPrivate'] as bool,
-        eventDate: DateTime.tryParse(json['eventDate']));
+          eventDate: DateTime.tryParse(json['eventDate']),
+          eventMaxParticipants: json['eventMaxParticipants'] as int,
+          eventParticipants: List<String>.from(json['eventParticipants']));
   }
 
   String toJson() {
@@ -67,6 +60,8 @@ class Event {
       "eventPrivate": eventPrivate,
       "eventImageUrl": eventImageUrl,
       "eventDate": eventDate.toString(),
+      "eventMaxParticipants": eventMaxParticipants,
+      "eventParticipants": eventParticipants
     });
   }
 }
