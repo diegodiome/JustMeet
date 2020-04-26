@@ -61,13 +61,11 @@ class MenuScreen extends StatelessWidget {
                     ListTile(
                       onTap: () {
                         // TODO: edit profile
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        Navigator.push<dynamic>(
+                        Navigator.push(
                           context,
-                          MaterialPageRoute<dynamic>(
-                              builder: (BuildContext context) => ProfilePage(
-                                user: store.state.userState.currentUser,
-                              ),),
+                          MaterialPageRoute(builder: (context) => ProfilePage(
+                            user: store.state.userState.currentUser,
+                          )),
                         );
                       },
                       leading: Icon(

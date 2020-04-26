@@ -3,6 +3,7 @@
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:justmeet_frontend/models/event.dart';
+import 'package:justmeet_frontend/utils/event_helper.dart';
 import 'package:justmeet_frontend/widgets/event/info_box.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:theme_provider/theme_provider.dart';
@@ -141,16 +142,5 @@ class EventCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  double averageRating(List<double> rates) {
-    if (rates != null) {
-      double sum = 0;
-      for (double num in rates) {
-        sum += num;
-      }
-      return sum / rates.length;
-    }
-    return 0.0;
   }
 }

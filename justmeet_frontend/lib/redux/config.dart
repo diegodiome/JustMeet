@@ -28,6 +28,10 @@ String getAllCommentByUrl(String eventId) {
   return '$eventApiUrl/$eventId/comments';
 }
 
+String postCreateCommentUrl(String eventId) {
+  return '$eventApiUrl/$eventId/comment';
+}
+
 /* USER API */
 const String userApiUrl = '$apiUrl/user';
 const String postCreateUserApiUrl = '$userApiUrl/signUp';

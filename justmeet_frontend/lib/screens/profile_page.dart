@@ -1,9 +1,12 @@
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:justmeet_frontend/models/event.dart';
 import 'package:justmeet_frontend/models/user.dart';
 import 'package:justmeet_frontend/repositories/event_repository.dart';
-import 'package:justmeet_frontend/widgets/event/event_card.dart';
+import 'package:justmeet_frontend/utils/event_helper.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
+import 'package:theme_provider/theme_provider.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;
@@ -35,6 +38,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+      statusBarColor: Color(0xFFFA624F),
+    ));
     return Scaffold(
         body: ListView(
       scrollDirection: Axis.vertical,
@@ -54,7 +60,12 @@ class _ProfilePageState extends State<ProfilePage> {
               alignment: Alignment.topLeft,
               child: IconButton(
                 icon: Icon(Icons.arrow_back_ios),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+                    statusBarColor: Colors.transparent,
+                  ));
+                },
                 color: Colors.white,
               ),
             ),
@@ -190,15 +201,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         shrinkWrap: true,
                         itemCount: snapshot.data.length,
                         itemBuilder: (BuildContext context, index) {
-                          return menuCard(snapshot.data[index].eventName, snapshot.data[index].eventImageUrl, snapshot.data[index].eventCategory, 4);
+                          return menuCard(snapshot.data[index].eventName, snapshot.data[index].eventImageUrl, snapshot.data[index].eventCategory, snapshot.data[index].eventRates);
                         });
                   } else {
                     return Container();
                   }
                 }),
-            //EventCard(eventData: ,)
-            //menuCard('Berry banana milkshake', 'assets/images/hotel_3.png',
-            //  'Breakfast', 4, 2.8, 1.2),
             SizedBox(height: 12.0),
           ],
         ),
@@ -206,7 +214,7 @@ class _ProfilePageState extends State<ProfilePage> {
     ));
   }
 
-  Widget menuCard(String title, String imgPath, String type, int rating) {
+  Widget menuCard(String title, String imgPath, String type, List<double> rates) {
     return Padding(
       padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
       child: Material(
@@ -250,14 +258,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         fontWeight: FontWeight.w400),
                   ),
                   SizedBox(height: 7.0),
-                  Row(
-                    children: <Widget>[
-                      getStar(rating, 1),
-                      getStar(rating, 2),
-                      getStar(rating, 3),
-                      getStar(rating, 4),
-                      getStar(rating, 5)
-                    ],
+                  SmoothStarRating(
+                    allowHalfRating: true,
+                    starCount: 5,
+                    rating: averageRating(rates),
+                    size: 20,
+                    color: ThemeProvider.themeOf(context).data.primaryColor,
+                    borderColor: ThemeProvider.themeOf(context).data.primaryColor,
                   ),
                   SizedBox(height: 4.0),
                 ],
@@ -267,13 +274,5 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
     );
-  }
-
-  Widget getStar(rating, index) {
-    if (rating >= index) {
-      return Icon(Icons.star, color: Colors.yellow);
-    } else {
-      return Icon(Icons.star, color: Colors.grey.withOpacity(0.5));
-    }
   }
 }

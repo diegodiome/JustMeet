@@ -59,6 +59,7 @@ class EventController  {
                    @RequestBody newComment: Comment) {
         if(SecurityUtils().checkToken(token, newComment.commentCreator)) {
             eventRepository.addComment(eventId, newComment)
+            return
         }
         eventControllerLogger.warn("[+] User with id : " + newComment.commentCreator + " try to add comment without permission")
     }

@@ -18,4 +18,16 @@ class CommentRepository {
     print('Connection error: $statusCode');
     return Future.value(null);
   }
+
+  Future<void> createComment(String eventId, Comment comment) async {
+    Response response;
+    response = await post(
+        postCreateCommentUrl(eventId),
+        body: comment.toJson(),
+        headers: await RequestHeader().getBasicHeader());
+    int statusCode = response.statusCode;
+    if(statusCode != 200) {
+      print('Connection error: $statusCode');
+    }
+  }
 }

@@ -12,6 +12,13 @@ class OnCommentListUpdate {
   }) : completer = completer ?? Completer(); 
 }
 
+class OnCommentCreation {
+  Comment newComment;
+  String eventId;
+
+  OnCommentCreation({this.eventId, this.newComment});
+}
+
 class OnCommentListUpdateSuccess {
   final List<Comment> commentsList;
   final int commentsCount;

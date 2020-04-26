@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -24,18 +25,11 @@ class EventInfoContent extends StatefulWidget {
 
 class _EventInfoContentState extends State<EventInfoContent> {
   final double infoHeight = 364.0;
+  final _commentTextEditingController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-  }
-
-  Future<void> getCommentsList() async {
-    OnCommentListUpdate _onCommentListUpdate =
-        OnCommentListUpdate(eventId: widget.event.eventId);
-    StoreProvider.of<AppState>(context).dispatch(_onCommentListUpdate);
-    Scaffold.of(context)
-        .showSnackBar(SnackBar(content: Text("Get comments...")));
   }
 
   @override
@@ -47,26 +41,28 @@ class _EventInfoContentState extends State<EventInfoContent> {
         padding: const EdgeInsets.only(left: 8, right: 8),
         child: SingleChildScrollView(
             child: Column(children: <Widget>[
-              infoWidgetUi(),
-              joinButtonUi(),
-              Container(
-                  constraints: BoxConstraints(
-                      minHeight: infoHeight,
-                      maxHeight: tempHeight > infoHeight ? tempHeight : infoHeight),
-                  child: StoreBuilder(
-                      onInit: (store) => store.dispatch(OnCommentListUpdate(eventId: widget.event.eventId)),
-                      builder: (context, Store<AppState> store) {
-                        return RefreshIndicator(
-                          onRefresh: () {
-                            return store.dispatch(OnCommentListUpdate(eventId: widget.event.eventId));
-                          },
-                          child: Container(
-                              child: commentSectionUi(
-                                  store.state.commentState.commentsList,
-                                  store.state.commentState.commentsCount)),
-                        );
-                      })),
-            ])));
+          infoWidgetUi(),
+          joinButtonUi(),
+          Container(
+              constraints: BoxConstraints(
+                  minHeight: infoHeight,
+                  maxHeight: tempHeight > infoHeight ? tempHeight : infoHeight),
+              child: StoreBuilder(
+                  onInit: (store) => store.dispatch(
+                      OnCommentListUpdate(eventId: widget.event.eventId)),
+                  builder: (context, Store<AppState> store) {
+                    return RefreshIndicator(
+                      onRefresh: () {
+                        return store.dispatch(
+                            OnCommentListUpdate(eventId: widget.event.eventId));
+                      },
+                      child: Container(
+                          child: commentSectionUi(
+                              store.state.commentState.commentsList,
+                              store.state.commentState.commentsCount)),
+                    );
+                  })),
+        ])));
   }
 
   Widget mapView() {
@@ -97,26 +93,99 @@ class _EventInfoContentState extends State<EventInfoContent> {
   }
 
   Widget commentSectionUi(List<Comment> commentsList, int commentsCount) {
-    return ListView.separated(
-      padding: EdgeInsets.all(10),
-      separatorBuilder: (BuildContext context, int index) {
-        return Align(
-          alignment: Alignment.centerRight,
-          child: Container(
-            height: 0.5,
-            width: MediaQuery.of(context).size.width / 1.3,
-            child: Divider(),
-          ),
-        );
-      },
-      itemCount: commentsCount,
-      itemBuilder: (BuildContext context, int index) {
-        return EventInfoCommentListView(
-          callback: () {},
-          commentData: commentsList[index],
-        );
-      },
-    );
+    return Container(
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          children: <Widget>[
+            ListView.separated(
+              shrinkWrap: true,
+              padding: EdgeInsets.all(10),
+              separatorBuilder: (BuildContext context, int index) {
+                return Align(
+                  alignment: Alignment.centerRight,
+                  child: Container(
+                    height: 0.5,
+                    width: MediaQuery.of(context).size.width / 1.3,
+                    child: Divider(),
+                  ),
+                );
+              },
+              itemCount: commentsCount,
+              itemBuilder: (BuildContext context, int index) {
+                return EventInfoCommentListView(
+                  callback: () {},
+                  commentData: commentsList[index],
+                );
+              },
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                ),
+                constraints: BoxConstraints(
+                  maxHeight: 190,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Flexible(
+                      child: ListTile(
+                        leading: IconButton(
+                          icon: Icon(
+                            Icons.add,
+                            color: ThemeProvider.themeOf(context).data.primaryColor,
+                          ),
+                          onPressed: () {
+                            StoreProvider.of<AppState>(context).dispatch(OnCommentCreation(
+                              eventId: widget.event.eventId,
+                              newComment: new Comment(
+                                commentCreator: StoreProvider.of<AppState>(context).state.userState.currentUser.userUid,
+                                commentBody: _commentTextEditingController.text,
+                                commentDate: DateTime.now(),
+                                eventId: widget.event.eventId
+                              )
+                            ));
+                          },
+                        ),
+                        contentPadding: EdgeInsets.all(0),
+                        title: TextField(
+                          controller: _commentTextEditingController,
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: Colors.black,
+                          ),
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(10.0),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                              borderSide: BorderSide(
+                                color: ThemeProvider.themeOf(context).data.primaryColor,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                              ),
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            hintText: "Write your comment...",
+                            hintStyle: TextStyle(
+                              fontSize: 15.0,
+                              color: ThemeProvider.themeOf(context).data.primaryColor,
+                            ),
+                          ),
+                          maxLines: null,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ));
   }
 
   Widget joinButtonUi() {
@@ -164,12 +233,30 @@ class _EventInfoContentState extends State<EventInfoContent> {
     return Padding(
       padding: EdgeInsets.all(10),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            widget.event.eventName,
-            style: TextStyle(fontSize: 30),
-          ),
-          SizedBox(height: 20),
+          Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Text(
+                widget.event.eventName,
+                style: TextStyle(fontSize: 30),
+              )),
+          SizedBox(height: 10),
+          Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Text(
+                'Description',
+                style: TextStyle(
+                  fontSize: 15,
+                ),
+              )),
+          Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Text(
+                widget.event.eventDescription,
+                style: TextStyle(fontSize: 15, color: Colors.grey),
+              )),
+          SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.all(8),
             child: Row(
