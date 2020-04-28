@@ -5,6 +5,7 @@ import 'package:justmeet_frontend/models/event.dart';
 import 'package:justmeet_frontend/models/user.dart';
 import 'package:justmeet_frontend/repositories/event_repository.dart';
 import 'package:justmeet_frontend/utils/event_helper.dart';
+import 'package:justmeet_frontend/widgets/profile/profile_edit_dialog.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:theme_provider/theme_provider.dart';
 
@@ -94,7 +95,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     borderRadius: BorderRadius.circular(50.0),
                     image: DecorationImage(
                         image: widget.user.userPhotoUrl != null
-                            ? NetworkImage(widget.user.userPhotoUrl)
+                            ? FirebaseImage(widget.user.userPhotoUrl)
                             : AssetImage('assets/images/hotel_3.png'),
                         fit: BoxFit.cover)),
               ),
@@ -147,7 +148,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           borderRadius: BorderRadius.circular(7.0),
                         ),
                         color: Colors.grey,
-                        onPressed: () {},
+                        onPressed: () {
+                          showDialog<dynamic>(
+                            barrierDismissible: true,
+                            context: context,
+                            builder: (BuildContext context) => ProfileEditDialog(),
+                          );
+                        },
                         child: Text(
                           'Edit',
                           style: TextStyle(
@@ -177,14 +184,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     fontSize: 17.0,
                     fontWeight: FontWeight.bold),
               ),
-              Text(
-                'see all',
-                style: TextStyle(
-                    fontFamily: 'Comfortaa',
-                    fontSize: 15.0,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.w300),
-              )
             ],
           ),
         ),

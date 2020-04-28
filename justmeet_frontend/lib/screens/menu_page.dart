@@ -1,3 +1,4 @@
+import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
@@ -39,7 +40,7 @@ class MenuScreen extends StatelessWidget {
                         backgroundImage: store
                                     .state.userState.currentUser.userPhotoUrl !=
                                 null
-                            ? NetworkImage(
+                            ? FirebaseImage(
                                 store.state.userState.currentUser.userPhotoUrl)
                             : AssetImage('assets/images/hotel_3.png'),
                       ),
@@ -69,7 +70,7 @@ class MenuScreen extends StatelessWidget {
                         );
                       },
                       leading: Icon(
-                        Icons.edit,
+                        Icons.account_box,
                         color: Colors.white,
                         size: 20,
                       ),

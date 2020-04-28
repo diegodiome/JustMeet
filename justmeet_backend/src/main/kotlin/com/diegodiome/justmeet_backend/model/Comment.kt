@@ -5,10 +5,11 @@ import java.util.*
 
 data class Comment(
         val commentId: String? = UUID.randomUUID().toString(),
-        val commentCreator: String,
+        val commentCreatorId: String,
+        var commentCreator: User? = null,
         val commentBody: String,
         val eventId: String,
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm") val commentDate: Date
 ) {
-    constructor() : this("", "", "", "", Date())
+    constructor() : this("","", User(),"","",Date())
 }

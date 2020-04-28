@@ -141,7 +141,7 @@ class _EventInfoContentState extends State<EventInfoContent> {
                             StoreProvider.of<AppState>(context).dispatch(OnCommentCreation(
                               eventId: widget.event.eventId,
                               newComment: new Comment(
-                                commentCreator: StoreProvider.of<AppState>(context).state.userState.currentUser.userUid,
+                                commentCreatorId: StoreProvider.of<AppState>(context).state.userState.currentUser.userUid,
                                 commentBody: _commentTextEditingController.text,
                                 commentDate: DateTime.now(),
                                 eventId: widget.event.eventId
@@ -191,8 +191,17 @@ class _EventInfoContentState extends State<EventInfoContent> {
   Widget joinButtonUi() {
     return GestureDetector(
         onTap: () {
+          if(StoreProvider.of<AppState>(context).state.userState.currentUser.userUid.compareTo(widget.event.eventCreator) == 0) {
+            Scaffold.of(context).showSnackBar(SnackBar(content: Text("Own event...")));
+            return;
+          }
+          else if(widget.event.eventParticipants.contains(StoreProvider.of<AppState>(context).state.userState.currentUser.userUid)) {
+            Scaffold.of(context).showSnackBar(SnackBar(content: Text("Already joined...")));
+            return;
+          }
           StoreProvider.of<AppState>(context).dispatch(OnJoinEvent(
-              eventId: widget.event.eventId, email: 'diomedi33@gmail.com'));
+              eventId: widget.event.eventId, userId: StoreProvider.of<AppState>(context).state.userState.currentUser.userUid));
+          return;
         },
         child: Padding(
           padding: EdgeInsets.all(10),
@@ -215,7 +224,7 @@ class _EventInfoContentState extends State<EventInfoContent> {
             ),
             child: Center(
               child: Text(
-                'Join Event',
+                widget.event.eventPrivate != true ? 'Join Event' : 'Send Request',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,

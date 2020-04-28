@@ -37,11 +37,11 @@ class OnFilterEventUpdate {
 
 class OnJoinEvent {
   Completer completer;
-  String email;
+  String userId;
   String eventId;
 
   OnJoinEvent({
-    this.email,
+    this.userId,
     this.eventId,
     Completer completer
   }) : completer = completer ?? Completer();

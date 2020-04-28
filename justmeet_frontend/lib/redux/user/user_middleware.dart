@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:justmeet_frontend/models/user.dart';
@@ -13,7 +14,24 @@ List<Middleware<AppState>> createUserMiddleware(
         _onUserStatusUpdate(userRepository)),
     TypedMiddleware<AppState, OnLocalUserUpdate>(
         _onLocalUserUpdate(userRepository)),
+    TypedMiddleware<AppState, OnUpdateUser>(
+        _onUserUpdate(userRepository)),
   ];
+}
+
+void Function(Store<AppState> store, dynamic action, NextDispatcher next)
+_onUserUpdate(
+    UserRepository userRepository,
+    ) {
+  return (store, action, next) async {
+    next(action);
+    try {
+      await userRepository.updateUser(action.userUpdated);
+      await store.dispatch(OnLocalUserUpdate(userId: store.state.userState.currentUser.userUid));
+    } on PlatformException catch (e) {
+      print('Error: $e');
+    }
+  };
 }
 
 void Function(Store<AppState> store, dynamic action, NextDispatcher next)

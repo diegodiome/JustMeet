@@ -42,7 +42,7 @@ class User {
     userUid = json['userUid'];
     userPhotoUrl = json['userPhotoUrl'];
     userToken = json['userToken'];
-    userStatus = json['userStatus'].toString().compareTo(UserStatus.offline.toString()) == 0 ? UserStatus.offline : UserStatus.online;
+    userStatus = json['userStatus'].toString().compareTo(UserStatus.online.string) == 0 ? UserStatus.online : UserStatus.offline;
   }
 
   String toJson() {

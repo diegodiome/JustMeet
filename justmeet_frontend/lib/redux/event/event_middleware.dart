@@ -69,7 +69,7 @@ void Function(Store<AppState> store, dynamic action, NextDispatcher next)
   return (store, action, next) async {
     next(action);
     try {
-      await eventRepository.joinEvent(action.eventId, action.email);
+      await eventRepository.joinEvent(action.eventId, action.userId);
       await navigatorKey.currentState.pushReplacementNamed(Routes.home);
       action.completer.complete();
     } on PlatformException catch (e) {

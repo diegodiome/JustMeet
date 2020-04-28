@@ -9,5 +9,5 @@ data class User (
         val userStatus: String? = "",
         val userBanned: Boolean? = false
 ) {
-    constructor() : this("", "", "")
+    constructor() : this("", "", "","","")
 }

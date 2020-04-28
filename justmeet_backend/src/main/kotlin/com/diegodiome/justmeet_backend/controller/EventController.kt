@@ -2,6 +2,7 @@ package com.diegodiome.justmeet_backend.controller
 
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.ADD_COM_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.ADD_EVENT_API
+import com.diegodiome.justmeet_backend.config.constants.ApiConstants.ADD_PART_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.ADD_REP_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.ADD_REQ_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.DEL_EVENT_API
@@ -57,7 +58,7 @@ class EventController  {
     fun addComment(@RequestHeader("Authorization") token: String,
                    @PathVariable("eventId") eventId: String,
                    @RequestBody newComment: Comment) {
-        if(SecurityUtils().checkToken(token, newComment.commentCreator)) {
+        if(SecurityUtils().checkToken(token, newComment.commentCreatorId)) {
             eventRepository.addComment(eventId, newComment)
             return
         }
@@ -67,6 +68,12 @@ class EventController  {
     @GetMapping(value = [GET_COMS_API])
     fun getComments(@PathVariable("eventId") eventId: String) : List<Comment> {
         return eventRepository.getComments(eventId)
+    }
+
+    @PutMapping(value = [ADD_PART_API])
+    fun addParticipant(@PathVariable("eventId") eventId: String,
+                       @PathVariable("userId") userId: String) {
+        eventRepository.addParticipant(eventId, userId)
     }
 
     @PostMapping(value = [ADD_REP_API])

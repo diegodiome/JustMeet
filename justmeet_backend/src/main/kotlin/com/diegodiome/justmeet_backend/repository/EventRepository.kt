@@ -9,6 +9,7 @@ import com.diegodiome.justmeet_backend.util.PredictionsUtils
 import com.google.cloud.firestore.FieldValue
 import com.google.firebase.cloud.FirestoreClient
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
 import java.util.*
 import kotlin.collections.ArrayList
@@ -19,6 +20,9 @@ class EventRepository : FirestoreRepository<Event, String> {
     private val eventRepositoryLogger = LoggerFactory.getLogger(EventRepository::class.java)
 
     private var db = FirestoreClient.getFirestore()
+
+    @Autowired
+    lateinit var userRepository: UserRepository
 
     override fun addElement(element: Event) {
         db.collection(EVENTS_COLLECTION).document(element.eventId!!).create(element)
@@ -72,7 +76,9 @@ class EventRepository : FirestoreRepository<Event, String> {
         val docsSnap = colRef.get().get().documents
         val comments = ArrayList<Comment>()
         for(doc in docsSnap) {
-            comments.add(doc.toObject(Comment::class.java))
+            val comment = doc.toObject(Comment::class.java)
+            comment.commentCreator = userRepository.getElement(comment.commentCreatorId)
+            comments.add(comment)
         }
         eventRepositoryLogger.info("[~] Comments recovered")
         return comments
@@ -101,6 +107,12 @@ class EventRepository : FirestoreRepository<Event, String> {
         val docRef = db.collection(EVENTS_COLLECTION).document(elementId)
         docRef.update(FirestoreConstants.EVENT_REQUEST_FIELD, FieldValue.arrayUnion(userId))
         eventRepositoryLogger.info("[+] Request to event with id : $elementId added")
+    }
+
+    fun addParticipant(elementId: String, userId: String) {
+        val docRef = db.collection(EVENTS_COLLECTION).document(elementId)
+        docRef.update(FirestoreConstants.EVENT_PARTICIPANTS_FIELD, FieldValue.arrayUnion(userId))
+        eventRepositoryLogger.info("[+] Participant to event with id : $elementId added")
     }
 
     fun getUserEvents(elementId: String) : List<Event> {

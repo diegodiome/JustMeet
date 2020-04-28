@@ -30,10 +30,10 @@ class EventRepository {
     }
   }
 
-  Future<void> joinEvent(String eventId, String email) async {
+  Future<void> joinEvent(String eventId, String userId) async {
     Response response;
-    response = await post(
-      getPostJoinEventUrl(eventId, email),
+    response = await put(
+      postJoinEventUrl(eventId, userId),
       headers: await RequestHeader().getBasicHeader(),
     );
     int statusCode = response.statusCode;

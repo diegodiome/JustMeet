@@ -1,3 +1,4 @@
+import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
@@ -40,7 +41,7 @@ class HomeAppBar extends StatelessWidget {
                                         .userPhotoUrl !=
                                     null
                                 ? DecorationImage(
-                                    image: NetworkImage(store.state.userState
+                                    image: FirebaseImage(store.state.userState
                                         .currentUser.userPhotoUrl),
                                     fit: BoxFit.cover)
                                 : AssetImage('assets/images/hotel_3.png'),

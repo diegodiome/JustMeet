@@ -13,8 +13,8 @@ const String eventApiUrl = '$apiUrl/event';
 const String getAllEventsUrl = '$eventApiUrl/all';
 const String postCreateEventUrl = '$eventApiUrl/create';
 
-String getPostJoinEventUrl(String eventId, String email) {
-  return '$eventApiUrl/join/id=$eventId&displayName=$email';
+String postJoinEventUrl(String eventId, String userId) {
+  return '$eventApiUrl/$eventId/$userId/join';
 }
 
 String getEventNamePredictionsUrl(String text) {

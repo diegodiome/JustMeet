@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:justmeet_frontend/models/comment.dart';
+import 'package:justmeet_frontend/models/user.dart';
 
 class EventInfoCommentListView extends StatefulWidget {
   EventInfoCommentListView({this.callback, this.commentData});
@@ -13,7 +14,6 @@ class EventInfoCommentListView extends StatefulWidget {
 }
 
 class _EventInfoCommentListViewState extends State<EventInfoCommentListView> {
-  final bool isOnline = true;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -41,9 +41,9 @@ class _EventInfoCommentListViewState extends State<EventInfoCommentListView> {
                 child: Center(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: isOnline
-                          ?Colors.greenAccent
-                          :Colors.grey,
+                      color: widget.commentData.commentCreator.userStatus == UserStatus.online
+                          ? Colors.greenAccent
+                          : Colors.grey,
                       borderRadius: BorderRadius.circular(6),
                     ),
                     height: 7,
@@ -56,7 +56,7 @@ class _EventInfoCommentListViewState extends State<EventInfoCommentListView> {
           ],
         ),
         contentPadding: EdgeInsets.all(0),
-        title: Text(widget.commentData.commentCreator),
+        title: Text(widget.commentData.commentCreator.userDisplayName),
         subtitle: Text(widget.commentData.commentBody),
         trailing: Text(
           getTimeDifference(widget.commentData.commentDate),

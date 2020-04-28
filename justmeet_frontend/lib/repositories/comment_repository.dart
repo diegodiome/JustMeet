@@ -13,7 +13,7 @@ class CommentRepository {
     int statusCode = response.statusCode;
     if(statusCode == 200) {
       Iterable<dynamic> l = json.decode(response.body);
-      return l.map((model) => Comment.fromJson(model)).toList();
+      return l.map((model) => Comment.fromListCommentsJson(model)).toList();
     }
     print('Connection error: $statusCode');
     return Future.value(null);

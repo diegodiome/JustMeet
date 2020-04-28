@@ -77,10 +77,10 @@ class UserRepository {
     if(firebaseUser != null) {
       return new User(
         userEmail: firebaseUser.email,
-        userDisplayName: firebaseUser.displayName,
+        userDisplayName: firebaseUser.displayName != null ? firebaseUser.displayName : 'Guest',
         userToken: await getUserToken(firebaseUser),
         userUid: firebaseUser.uid,
-        userPhotoUrl: firebaseUser.photoUrl,
+        userPhotoUrl: firebaseUser.photoUrl != null ? firebaseUser.photoUrl : 'gs://justmeet-538b1.appspot.com/default_avatar.png',
         userStatus: UserStatus.online
       );
     }
