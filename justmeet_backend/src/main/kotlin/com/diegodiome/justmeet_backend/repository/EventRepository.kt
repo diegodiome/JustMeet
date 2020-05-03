@@ -135,11 +135,12 @@ class EventRepository : FirestoreRepository<Event, String> {
             if(match.length >= 2) {
                 eventsName.add(AutoCompleteItem(
                         text = doc.get(FirestoreConstants.EVENT_NAME_FIELD).toString(),
-                        detail = match
+                        detail = match,
+                        type = AutoCompleteItemType.Event,
+                        id = doc.id
                 ))
             }
         }
-        eventRepositoryLogger.info("[~] Search predictions recovered")
         return AutoCompleteItems(
                 predictions = eventsName
         )

@@ -56,7 +56,7 @@ void Function(
       final user = await userRepository.signInWithGoogle();
       store.dispatch(OnAuthenticated(user: user));
       await store.dispatch(OnLocalUserUpdate(userId: user.userUid));
-      await navigatorKey.currentState.pushReplacementNamed(Routes.home);
+      await store.dispatch(OnUpdateUser(userUpdated: user));
     }
     on PlatformException catch(e) {
       print('Login failed: $e');

@@ -13,3 +13,11 @@ EventState _onEventListUpdateSuccess(EventState state, OnEventListUpdateSuccess 
   );
 }
 
+EventState _onEventRequestListUpdateSuccess(EventState state, OnEventListUpdateSuccess action) {
+  return state.copyWith(
+    eventsList: action.eventsList,
+    eventsCount: action.eventCount,
+  );
+}
+
+

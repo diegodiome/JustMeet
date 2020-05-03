@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart';
+import 'package:justmeet_frontend/models/event_reporting.dart';
 import 'package:justmeet_frontend/utils/request_header.dart';
 import 'package:justmeet_frontend/models/event.dart';
 import 'package:justmeet_frontend/redux/config.dart';
@@ -18,8 +19,20 @@ class EventRepository {
     return Future.value(null);
   }
 
+  Future<Event> getEvent(String eventId) async {
+    Response response;
+    response = await get(
+        getEventUrl(eventId),
+        headers: await RequestHeader().getBasicHeader());
+    int statusCode = response.statusCode;
+    if (statusCode == 200) {
+      return Event.fromJson(jsonDecode(response.body));
+    }
+    print('Connection error: $statusCode');
+    return Future.value(null);
+  }
+
   Future<void> createNewEvent(Event newEvent) async {
-    print(newEvent.toJson().toString());
     Response response;
     response = await post(postCreateEventUrl,
         headers: await RequestHeader().getBasicHeader(),
@@ -27,6 +40,29 @@ class EventRepository {
     int statusCode = response.statusCode;
     if (statusCode != 200) {
       print('Connection error: $statusCode');
+    }
+  }
+
+  Future<void> addRequest(String userId, String eventId) async {
+    Response response;
+    response = await put(
+        putAddRequestUrl(eventId, userId),
+        headers: await RequestHeader().getBasicHeader());
+    int statusCode = response.statusCode;
+    if (statusCode != 200) {
+      print('Connection error: $statusCode');
+    }
+  }
+
+  Future<void> addReporting(EventReporting reporting) async {
+    Response response;
+    response = await post(
+        postCreateEventReportingUrl,
+        headers: await RequestHeader().getBasicHeader(),
+        body: reporting.toJson());
+    int statusCode = response.statusCode;
+    if (statusCode != 200) {
+    print('Connection error: $statusCode');
     }
   }
 
@@ -57,9 +93,9 @@ class EventRepository {
     return Future.value(null);
   }
 
-  Future<List<dynamic>> getEventPredictions(String eventName) async {
+  Future<List<dynamic>> getEventPredictions(String text) async {
     Response response;
-    response = await get(getEventNamePredictionsUrl(eventName),
+    response = await get(getPredictionsUrl(text),
         headers: await RequestHeader().getBasicHeader());
     int statusCode = response.statusCode;
     if (statusCode == 200) {

@@ -6,6 +6,8 @@ object FirestoreConstants {
     const val USERS_COLLECTION = "users"
     const val USER_STATUS_FIELD = "userStatus"
     const val USER_TOKEN_FIELD = "userToken"
+    const val USER_NAME_FIELD = "userDisplayName"
+    const val USER_REPORTS_COLLECTION = "reports"
 
     /* Events collection */
     const val EVENTS_COLLECTION = "events"

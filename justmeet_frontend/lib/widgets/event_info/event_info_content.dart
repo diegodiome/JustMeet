@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:justmeet_frontend/redux/user/user_action.dart';
 import 'package:justmeet_frontend/utils/map_helper.dart';
 import 'package:justmeet_frontend/models/comment.dart';
 import 'package:justmeet_frontend/models/event.dart';
@@ -190,13 +191,26 @@ class _EventInfoContentState extends State<EventInfoContent> {
 
   Widget joinButtonUi() {
     return GestureDetector(
-        onTap: () {
+        onTap: () async {
           if(StoreProvider.of<AppState>(context).state.userState.currentUser.userUid.compareTo(widget.event.eventCreator) == 0) {
             Scaffold.of(context).showSnackBar(SnackBar(content: Text("Own event...")));
             return;
           }
           else if(widget.event.eventParticipants.contains(StoreProvider.of<AppState>(context).state.userState.currentUser.userUid)) {
             Scaffold.of(context).showSnackBar(SnackBar(content: Text("Already joined...")));
+            return;
+          }
+          if(widget.event.eventPrivate) {
+            await StoreProvider.of<AppState>(context).dispatch(OnUserRequestsListUpdate(userId: widget.event.eventCreator));
+            if(StoreProvider.of<AppState>(context).state.userState.requests
+                .where((request) => request.eventId == widget.event.eventId && request.userId == StoreProvider.of<AppState>(context).state.userState.currentUser.userUid)
+                .toList()
+                .length > 0) {
+              Scaffold.of(context).showSnackBar(SnackBar(content: Text("Request already sended...")));
+              return;
+            }
+            StoreProvider.of<AppState>(context).dispatch(OnAddRequest(
+                eventId: widget.event.eventId, userId: StoreProvider.of<AppState>(context).state.userState.currentUser.userUid));
             return;
           }
           StoreProvider.of<AppState>(context).dispatch(OnJoinEvent(
@@ -224,7 +238,7 @@ class _EventInfoContentState extends State<EventInfoContent> {
             ),
             child: Center(
               child: Text(
-                widget.event.eventPrivate != true ? 'Join Event' : 'Send Request',
+                widget.event.eventPrivate ? 'Send Request' : 'Join Event',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,

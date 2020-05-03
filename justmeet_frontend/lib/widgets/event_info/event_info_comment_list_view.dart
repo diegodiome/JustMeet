@@ -1,3 +1,4 @@
+import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:justmeet_frontend/models/comment.dart';
 import 'package:justmeet_frontend/models/user.dart';
@@ -22,12 +23,11 @@ class _EventInfoCommentListViewState extends State<EventInfoCommentListView> {
         leading: Stack(
           children: <Widget>[
             CircleAvatar(
-              backgroundImage: AssetImage(
-                'assets/images/hotel_3.png',
-              ),
+              backgroundImage: widget.commentData.commentCreator.userPhotoUrl != null
+                  ? FirebaseImage(widget.commentData.commentCreator.userPhotoUrl)
+                  : AssetImage('assets/images/hotel_3.png',),
               radius: 25,
             ),
-
             Positioned(
               bottom: 0.0,
               left: 6.0,

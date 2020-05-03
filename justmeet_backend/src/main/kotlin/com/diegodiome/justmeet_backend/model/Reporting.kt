@@ -8,5 +8,5 @@ open class Reporting(
         val reportingCreator: String,
         val reportingType: REPORTING_TYPE
 ) {
-    constructor() : this("", "", REPORTING_TYPE.SPAM)
+    constructor() : this( UUID.randomUUID().toString(),"", REPORTING_TYPE.Spam)
 }

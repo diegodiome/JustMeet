@@ -10,7 +10,6 @@ import com.diegodiome.justmeet_backend.config.constants.ApiConstants.EVENT_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.GET_COMS_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.GET_EVENTS_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.GET_EVENT_API
-import com.diegodiome.justmeet_backend.config.constants.ApiConstants.GET_PRD_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.GET_REPS_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.UPD_EVENT_API
 import com.diegodiome.justmeet_backend.model.*
@@ -77,9 +76,8 @@ class EventController  {
     }
 
     @PostMapping(value = [ADD_REP_API])
-    fun addReporting(@PathVariable("eventId") eventId: String,
-                     @RequestBody newReporting: EventReporting) {
-        eventRepository.addReporting(eventId, newReporting)
+    fun addReporting(@RequestBody newReporting: EventReporting) {
+        eventRepository.addReporting(newReporting.eventId, newReporting)
     }
 
     @GetMapping(value = [GET_REPS_API])
@@ -92,10 +90,4 @@ class EventController  {
                    , @PathVariable("userId") userId: String) {
         eventRepository.addRequest(eventId, userId)
     }
-
-    @GetMapping(value = [GET_PRD_API])
-    fun getPredictions(@PathVariable(value = "text") text: String) : AutoCompleteItems {
-        return eventRepository.getSearchPredictions(text)
-    }
-
 }

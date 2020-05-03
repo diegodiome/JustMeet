@@ -2,7 +2,12 @@
 
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:justmeet_frontend/models/event.dart';
+import 'package:justmeet_frontend/models/event_reporting.dart';
+import 'package:justmeet_frontend/models/reporting.dart';
+import 'package:justmeet_frontend/redux/app/app_state.dart';
+import 'package:justmeet_frontend/redux/event/event_action.dart';
 import 'package:justmeet_frontend/utils/event_helper.dart';
 import 'package:justmeet_frontend/widgets/event/info_box.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
@@ -99,6 +104,31 @@ class EventCard extends StatelessWidget {
                                                       color: Colors.grey.withOpacity(0.8)),
                                                 ),
                                               )),
+                                          PopupMenuButton<ReportingType>(
+                                            onSelected: (ReportingType result) {
+                                              StoreProvider.of<AppState>(context).dispatch(OnEventReporting(
+                                                  reporting: EventReporting(
+                                                    eventId: eventData.eventId,
+                                                    reportingCreator: StoreProvider.of<AppState>(context).state.userState.currentUser.userUid,
+                                                    reportingType: result
+                                                  )
+                                              ));
+                                            },
+                                            itemBuilder: (BuildContext context) => <PopupMenuEntry<ReportingType>>[
+                                              const PopupMenuItem<ReportingType>(
+                                                value: ReportingType.Spam,
+                                                child: Text('Spam'),
+                                              ),
+                                              const PopupMenuItem<ReportingType>(
+                                                value: ReportingType.Content,
+                                                child: Text('Proibited content'),
+                                              ),
+                                              const PopupMenuItem<ReportingType>(
+                                                value: ReportingType.Language,
+                                                child: Text('Offensive language'),
+                                              ),
+                                            ],
+                                          ),
                                         ],
                                       ),
                                       Padding(

@@ -9,8 +9,9 @@ class PredictionsUtils {
     }
 
     fun getStringMatchDetail(text1: String, text2: String) : AutoCompleteItemMatchDetail {
-        val count = text1.count {
-            text2.contains(it)
+        var count: Int = 0
+        if(text2.contains(text1, ignoreCase = true)) {
+            count = text1.length
         }
         return AutoCompleteItemMatchDetail(
                 offset = 0,

@@ -1,14 +1,20 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:justmeet_frontend/models/autocomplete_item.dart';
 import 'package:justmeet_frontend/models/rich_suggestion.dart';
 import 'package:justmeet_frontend/repositories/event_repository.dart';
+import 'package:justmeet_frontend/repositories/user_repository.dart';
+import 'package:justmeet_frontend/screens/event_info_view.dart';
+import 'package:justmeet_frontend/screens/profile_page.dart';
 
 class HomeSearchInput extends StatefulWidget {
   final GlobalKey<HomeSearchInputState> key;
+  final UserRepository userRepository;
 
-  const HomeSearchInput({this.key}) : super(key: key);
+  const HomeSearchInput({this.key, this.userRepository}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -19,6 +25,7 @@ class HomeSearchInput extends StatefulWidget {
 class HomeSearchInputState extends State<HomeSearchInput> {
   final LayerLink _layerLink = LayerLink();
   TextEditingController editController = TextEditingController();
+  FocusNode textEditingFocus = FocusNode();
 
   Timer debouncer;
 
@@ -32,6 +39,7 @@ class HomeSearchInputState extends State<HomeSearchInput> {
   String previousSearchTerm = '';
 
   EventRepository eventRepository;
+  UserRepository userRepository;
 
   HomeSearchInputState();
 
@@ -39,6 +47,7 @@ class HomeSearchInputState extends State<HomeSearchInput> {
   void initState() {
     super.initState();
     eventRepository = EventRepository();
+    userRepository = UserRepository(FirebaseAuth.instance, new GoogleSignIn());
     this.editController.addListener(this.onSearchInputChange);
   }
 
@@ -86,6 +95,7 @@ class HomeSearchInputState extends State<HomeSearchInput> {
             child: CompositedTransformTarget(
                 link: _layerLink,
                 child: TextField(
+                  focusNode: textEditingFocus,
                   decoration: InputDecoration(
                     hintText: "Search event",
                     border: InputBorder.none,
@@ -241,16 +251,44 @@ class HomeSearchInputState extends State<HomeSearchInput> {
       } else {
         for (dynamic t in predictions) {
           AutoCompleteItem aci = AutoCompleteItem();
+          aci.id = t['id'];
           aci.text = t['text'];
+          aci.autoCompleteItemType = t['type'].toString().compareTo('Event') == 0 ? AutoCompleteItemType.Event : AutoCompleteItemType.User;
           aci.offset = t['detail']['offset'];
           aci.length = t['detail']['length'];
 
           suggestions.add(RichSuggestion(aci, () {
-            //azione da fare cliccato il testo
+            editController.clear();
+            textEditingFocus.unfocus();
+            switch(aci.autoCompleteItemType) {
+              case AutoCompleteItemType.Event:
+                eventRepository.getEvent(aci.id).then((event) {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  Navigator.push<dynamic>(
+                    context,
+                    MaterialPageRoute<dynamic>(
+                        builder: (BuildContext context) => EventInfoView(
+                          event: event,
+                        ),
+                        fullscreenDialog: true),
+                  );
+                });
+                break;
+              case AutoCompleteItemType.User:
+                userRepository.getUser(aci.id).then((user) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ProfilePage(
+                      isDisabled: true,
+                      user: user,
+                    )),
+                  );
+                });
+                break;
+            }
           }));
         }
       }
-
       displayAutoCompleteSuggestions(suggestions);
     }).catchError((error) {
       print(error);

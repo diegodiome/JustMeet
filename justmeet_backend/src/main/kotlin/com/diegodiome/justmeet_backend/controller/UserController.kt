@@ -1,15 +1,21 @@
 package com.diegodiome.justmeet_backend.controller
 
+import com.diegodiome.justmeet_backend.config.constants.ApiConstants.ACC_REQ_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.ADD_USER_API
+import com.diegodiome.justmeet_backend.config.constants.ApiConstants.ADD_USR_REP_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.DEL_USER_API
+import com.diegodiome.justmeet_backend.config.constants.ApiConstants.GET_REQ_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.GET_USER_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.GET_USR_EV_API
+import com.diegodiome.justmeet_backend.config.constants.ApiConstants.GET_USR_REPS_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.S_UPD_USER_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.T_UPD_USER_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.UPD_USER_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.USER_API
 import com.diegodiome.justmeet_backend.model.Event
+import com.diegodiome.justmeet_backend.model.Request
 import com.diegodiome.justmeet_backend.model.User
+import com.diegodiome.justmeet_backend.model.UserReporting
 import com.diegodiome.justmeet_backend.repository.EventRepository
 import com.diegodiome.justmeet_backend.repository.UserRepository
 import com.diegodiome.justmeet_backend.util.SecurityUtils
@@ -72,4 +78,24 @@ class UserController {
         return eventRepository.getUserEvents(userId)
     }
 
+    @PostMapping(value = [ADD_USR_REP_API])
+    fun addReporting(@RequestBody userReporting: UserReporting) {
+        userRepository.addReporting(userReporting.userId, userReporting)
+    }
+
+    @PostMapping(value = [GET_USR_REPS_API])
+    fun getReports(@PathVariable(value = "userId") userId: String) : List<UserReporting> {
+        return userRepository.getReports(userId)
+    }
+
+    @GetMapping(value = [GET_REQ_API])
+    fun getRequests(@PathVariable(value = "userId") userId: String) : List<Request> {
+        return userRepository.getRequests(userId)
+    }
+
+    @PutMapping(value = [ACC_REQ_API])
+    fun acceptRequest(@PathVariable(value = "userId") userId: String,
+                      @PathVariable(value = "eventId") eventId: String) {
+        userRepository.acceptRequest(userId, eventId)
+    }
 }

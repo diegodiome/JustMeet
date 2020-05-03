@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:justmeet_frontend/models/event.dart';
+import 'package:justmeet_frontend/models/event_reporting.dart';
 
 class AddNewEvent {
   final Event event;
@@ -35,6 +36,16 @@ class OnFilterEventUpdate {
   }) : completer = completer ?? Completer();
 }
 
+class OnAddRequest {
+  String userId;
+  String eventId;
+
+  OnAddRequest({
+    this.userId,
+    this.eventId,
+  });
+}
+
 class OnJoinEvent {
   Completer completer;
   String userId;
@@ -45,6 +56,12 @@ class OnJoinEvent {
     this.eventId,
     Completer completer
   }) : completer = completer ?? Completer();
+}
+
+class OnEventReporting {
+  EventReporting reporting;
+
+  OnEventReporting({this.reporting});
 }
 
 class OnCreateEvent {

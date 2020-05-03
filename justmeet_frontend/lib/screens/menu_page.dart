@@ -5,6 +5,7 @@ import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/auth/auth_actions.dart';
 import 'package:justmeet_frontend/redux/user/user_action.dart';
 import 'package:justmeet_frontend/screens/profile_page.dart';
+import 'package:justmeet_frontend/screens/request_page.dart';
 import 'package:redux/redux.dart';
 
 class MenuScreen extends StatelessWidget {
@@ -61,10 +62,10 @@ class MenuScreen extends StatelessWidget {
                   children: [
                     ListTile(
                       onTap: () {
-                        // TODO: edit profile
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => ProfilePage(
+                            isDisabled: false,
                             user: store.state.userState.currentUser,
                           )),
                         );
@@ -84,7 +85,12 @@ class MenuScreen extends StatelessWidget {
                     ),
                     ListTile(
                       onTap: () {
-                        // TODO: dysplay my events
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => RequestPage(
+                            user: store.state.userState.currentUser,
+                          )),
+                        );
                       },
                       leading: Icon(
                         Icons.event,
@@ -92,7 +98,7 @@ class MenuScreen extends StatelessWidget {
                         size: 20,
                       ),
                       title: Text(
-                        'My events',
+                        'Requests',
                         style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,

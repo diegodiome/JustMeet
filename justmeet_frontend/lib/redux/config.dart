@@ -12,13 +12,22 @@ const String apiUrl = '$baseUrl';
 const String eventApiUrl = '$apiUrl/event';
 const String getAllEventsUrl = '$eventApiUrl/all';
 const String postCreateEventUrl = '$eventApiUrl/create';
+const String postCreateEventReportingUrl = '$eventApiUrl/reporting';
+
+String putAddRequestUrl(String userId, String eventId) {
+  return '$eventApiUrl/$eventId/$userId/request';
+}
 
 String postJoinEventUrl(String eventId, String userId) {
   return '$eventApiUrl/$eventId/$userId/join';
 }
 
-String getEventNamePredictionsUrl(String text) {
-  return '$eventApiUrl/$text/predictions';
+String getEventUrl(String eventId) {
+  return '$eventApiUrl/$eventId';
+}
+
+String getPredictionsUrl(String text) {
+  return '$apiUrl/app/$text/predictions';
 }
 
 /* COMMENT API */
@@ -36,6 +45,11 @@ String postCreateCommentUrl(String eventId) {
 const String userApiUrl = '$apiUrl/user';
 const String postCreateUserApiUrl = '$userApiUrl/signUp';
 const String putUpdateUserApiUrl = '$userApiUrl/update';
+const String postAddUserReportingUrl = '$userApiUrl/reporting';
+
+String getRequestsUrl(String userId) {
+  return '$userApiUrl/$userId/requests';
+}
 
 String putUpdateUserStatusUrl(String userUid, String status) {
   return '$userApiUrl/$userUid&$status/supdate';
@@ -51,6 +65,10 @@ String getUserUrl(String userId) {
 
 String getUserEventsUrl(String userId) {
   return '$userApiUrl/$userId/events';
+}
+
+String putAcceptRequestUrl(String userId, String eventId) {
+  return '$userApiUrl/$eventId/$userId/accept';
 }
 
 

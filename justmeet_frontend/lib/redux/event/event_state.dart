@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:justmeet_frontend/models/event.dart';
+import 'package:justmeet_frontend/models/event_reporting.dart';
+import 'package:justmeet_frontend/models/event_request.dart';
 
 @immutable
 class EventState {
@@ -12,28 +14,26 @@ class EventState {
   EventState({
     this.eventsList,
     this.eventsCount,
-    this.eventsFiltered,
+    this.eventsFiltered
   });
 
   factory EventState.initial() {
     return new EventState(
       eventsList: new List<Event>(),
       eventsCount: 0,
-      eventsFiltered: new List<Event>(),
+      eventsFiltered: new List<Event>()
     );
   }
 
   EventState copyWith({
-
     int eventsCount,
     List<Event> eventsList,
-    List<Event> eventsFiltered,
-
+    List<Event> eventsFiltered
   }) {
     return new EventState(
       eventsList: eventsList ?? this.eventsList,
       eventsCount: eventsCount ?? this.eventsCount,
-      eventsFiltered: eventsFiltered ?? this.eventsFiltered,
+      eventsFiltered: eventsFiltered ?? this.eventsFiltered
     );
   }
 }

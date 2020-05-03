@@ -1,9 +1,16 @@
 import 'package:firebase_image/firebase_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:justmeet_frontend/models/event.dart';
+import 'package:justmeet_frontend/models/reporting.dart';
 import 'package:justmeet_frontend/models/user.dart';
+import 'package:justmeet_frontend/models/user_reporting.dart';
+import 'package:justmeet_frontend/redux/app/app_state.dart';
+import 'package:justmeet_frontend/redux/user/user_action.dart';
 import 'package:justmeet_frontend/repositories/event_repository.dart';
+import 'package:justmeet_frontend/screens/event_info_view.dart';
+import 'package:justmeet_frontend/screens/request_page.dart';
 import 'package:justmeet_frontend/utils/event_helper.dart';
 import 'package:justmeet_frontend/widgets/profile/profile_edit_dialog.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
@@ -11,8 +18,9 @@ import 'package:theme_provider/theme_provider.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;
+  final bool isDisabled;
 
-  ProfilePage({@required this.user});
+  ProfilePage({@required this.user, @required this.isDisabled});
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -62,10 +70,10 @@ class _ProfilePageState extends State<ProfilePage> {
               child: IconButton(
                 icon: Icon(Icons.arrow_back_ios),
                 onPressed: () {
-                  Navigator.of(context).pop();
                   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
-                    statusBarColor: Colors.transparent,
+                  statusBarColor: Colors.transparent,
                   ));
+                  Navigator.of(context).pop();
                 },
                 color: Colors.white,
               ),
@@ -131,10 +139,18 @@ class _ProfilePageState extends State<ProfilePage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(7.0),
                         ),
-                        color: Color(0xFFFA624F),
-                        onPressed: () {},
+                        color: widget.isDisabled ?  Colors.grey : ThemeProvider.themeOf(context).data.primaryColor,
+                        onPressed: () {
+                          if(!widget.isDisabled) {
+                            showDialog<dynamic>(
+                              barrierDismissible: true,
+                              context: context,
+                              builder: (BuildContext context) => ProfileEditDialog(),
+                            );
+                          }
+                        },
                         child: Text(
-                          'Report',
+                          'Edit',
                           style: TextStyle(
                               fontFamily: 'Comfortaa',
                               fontWeight: FontWeight.bold,
@@ -147,23 +163,51 @@ class _ProfilePageState extends State<ProfilePage> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(7.0),
                         ),
-                        color: Colors.grey,
+                        color: widget.isDisabled ?  Colors.grey : ThemeProvider.themeOf(context).data.primaryColor,
                         onPressed: () {
-                          showDialog<dynamic>(
-                            barrierDismissible: true,
-                            context: context,
-                            builder: (BuildContext context) => ProfileEditDialog(),
-                          );
+                          if(!widget.isDisabled) {
+                            showDialog<dynamic>(
+                              barrierDismissible: true,
+                              context: context,
+                              builder: (BuildContext context) => RequestPage(user: StoreProvider.of<AppState>(context).state.userState.currentUser,),
+                            );
+                          }
                         },
                         child: Text(
-                          'Edit',
+                          'Requests',
                           style: TextStyle(
                               fontFamily: 'Comfortaa',
                               fontWeight: FontWeight.bold,
                               fontSize: 15.0,
                               color: Colors.white),
                         ),
-                      )
+                      ),
+                      SizedBox(width: 5.0),
+                      PopupMenuButton<ReportingType>(
+                        onSelected: (ReportingType result) {
+                          StoreProvider.of<AppState>(context).dispatch(OnUserReporting(
+                              userReporting: UserReporting(
+                                  userId: widget.user.userUid,
+                                  reportingCreator: StoreProvider.of<AppState>(context).state.userState.currentUser.userUid,
+                                  reportingType: result
+                              )
+                          ));
+                        },
+                        itemBuilder: (BuildContext context) => <PopupMenuEntry<ReportingType>>[
+                          const PopupMenuItem<ReportingType>(
+                            value: ReportingType.Spam,
+                            child: Text('Spam'),
+                          ),
+                          const PopupMenuItem<ReportingType>(
+                            value: ReportingType.Content,
+                            child: Text('Proibited content'),
+                          ),
+                          const PopupMenuItem<ReportingType>(
+                            value: ReportingType.Language,
+                            child: Text('Offensive language'),
+                          ),
+                        ],
+                      ),
                     ],
                   )
                 ],
@@ -200,7 +244,21 @@ class _ProfilePageState extends State<ProfilePage> {
                         shrinkWrap: true,
                         itemCount: snapshot.data.length,
                         itemBuilder: (BuildContext context, index) {
-                          return menuCard(snapshot.data[index].eventName, snapshot.data[index].eventImageUrl, snapshot.data[index].eventCategory, snapshot.data[index].eventRates);
+                          return menuCard(
+                            snapshot.data[index].eventName,
+                            snapshot.data[index].eventImageUrl,
+                            snapshot.data[index].eventCategory,
+                            snapshot.data[index].eventRates, () {
+                            FocusScope.of(context).requestFocus(FocusNode());
+                            Navigator.push<dynamic>(
+                              context,
+                              MaterialPageRoute<dynamic>(
+                                  builder: (BuildContext context) => EventInfoView(
+                                    event: snapshot.data[index],
+                                  ),
+                                  fullscreenDialog: true),
+                            );
+                            });
                         });
                   } else {
                     return Container();
@@ -213,9 +271,11 @@ class _ProfilePageState extends State<ProfilePage> {
     ));
   }
 
-  Widget menuCard(String title, String imgPath, String type, List<double> rates) {
+  Widget menuCard(String title, String imgPath, String type, List<double> rates, VoidCallback function) {
     return Padding(
       padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+      child: GestureDetector(
+      onTap: function,
       child: Material(
         borderRadius: BorderRadius.circular(7.0),
         elevation: 4.0,
@@ -271,7 +331,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ],
           ),
         ),
-      ),
+      ),)
     );
   }
 }

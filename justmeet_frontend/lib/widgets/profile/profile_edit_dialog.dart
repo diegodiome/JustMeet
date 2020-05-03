@@ -122,7 +122,7 @@ class _ProfileEditDialogState extends State<ProfileEditDialog> with TickerProvid
                                         Radius.circular(24.0)),
                                     highlightColor: Colors.transparent,
                                     onTap: () async {
-                                      if(_displayNameEditingController.text == '' && _image == null) {
+                                      if(_displayNameEditingController.text.isEmpty && _image == null) {
                                         Navigator.pop(context);
                                         return;
                                       } else {
@@ -130,8 +130,8 @@ class _ProfileEditDialogState extends State<ProfileEditDialog> with TickerProvid
                                         if(_displayNameEditingController.text.compareTo(StoreProvider.of<AppState>(context).state.userState.currentUser.userDisplayName) != 0) {
                                           userUpdated.userDisplayName = _displayNameEditingController.text;
                                         }
-                                        else if(_image != null) {
-                                          await attachmentRepository.uploadImage(_image).then((imageUrl) {
+                                        if(_image != null) {
+                                          await attachmentRepository.uploadUserImage(_image).then((imageUrl) {
                                             userUpdated.userPhotoUrl = imageUrl;
                                           });
                                         }

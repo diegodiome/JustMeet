@@ -18,9 +18,28 @@ List<Middleware<AppState>> createEventMiddleware(
     TypedMiddleware<AppState, OnJoinEvent>(
         _onJoinEvent(navigatorKey, eventRepository)),
     TypedMiddleware<AppState, OnFilterEventUpdate>(
-        _onFilterEventUpdate(navigatorKey)
+        _onFilterEventUpdate(navigatorKey)),
+    TypedMiddleware<AppState, OnEventReporting>(
+        _onReportingEvent(navigatorKey, eventRepository)
+    ),
+    TypedMiddleware<AppState, OnAddRequest>(
+        _onAddRequest(eventRepository)
     ),
   ];
+}
+
+void Function(Store<AppState> store, dynamic action, NextDispatcher next)
+_onAddRequest(
+    EventRepository eventRepository,
+    ) {
+  return (store, action, next) async {
+    next(action);
+    try {
+      await eventRepository.addRequest(action.eventId, action.userId);
+    } on PlatformException catch (e) {
+      print('Error: $e');
+    }
+  };
 }
 
 void Function(Store<AppState> store, dynamic action, NextDispatcher next)
@@ -57,6 +76,21 @@ void Function(Store<AppState> store, dynamic action, NextDispatcher next)
     } on PlatformException catch (e) {
       print('Error: $e');
       action.completer.completeError(e);
+    }
+  };
+}
+
+void Function(Store<AppState> store, dynamic action, NextDispatcher next)
+_onReportingEvent(
+    GlobalKey<NavigatorState> navigatorKey,
+    EventRepository eventRepository,
+    ) {
+  return (store, action, next) async {
+    next(action);
+    try {
+      await eventRepository.addReporting(action.reporting);
+    } on PlatformException catch (e) {
+      print('Error: $e');
     }
   };
 }

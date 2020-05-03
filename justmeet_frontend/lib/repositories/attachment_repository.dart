@@ -23,4 +23,20 @@ class AttachmentRepository {
       return '';
     }
   }
+
+  Future<String> uploadUserImage(File file) async {
+    try {
+      StorageReference storageReference = firebaseStorage.ref();
+      String storagePath = '/user_images/' +
+          Random().nextInt(10000).toString() +
+          '.' +
+          file.path.split('.').last;
+      storageReference.child(storagePath).putFile(file);
+      return 'gs://justmeet-538b1.appspot.com/' + storagePath;
+    } on Exception catch (e) {
+      print('Saving file error : $e');
+      return '';
+    }
+  }
+
 }
