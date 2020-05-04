@@ -124,6 +124,7 @@ void Function(
       } else {
         store.dispatch(OnAuthenticated(user: user));
         await userRepository.updateUser(user);
+        await userRepository.updateFcmToken(user.userUid);
         await store.dispatch(OnLocalUserUpdate(userId: user.userUid));
         await navigatorKey.currentState.pushReplacementNamed(Routes.home);
       }

@@ -13,6 +13,7 @@ object ApiConstants {
     const val ADD_USR_REP_API = "/reporting"
     const val GET_USR_REPS_API = "/{userId}/reports"
     const val ACC_REQ_API = "/{eventId}/{userId}/accept"
+    const val PUT_UPD_FCM_API = "/{userId}/{fcmToken}"
 
     /* Event API */
     const val EVENT_API = "/event"

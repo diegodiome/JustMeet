@@ -7,6 +7,7 @@ import com.diegodiome.justmeet_backend.config.constants.FirestoreConstants.USER_
 import com.diegodiome.justmeet_backend.config.constants.FirestoreConstants.USER_STATUS_FIELD
 import com.diegodiome.justmeet_backend.config.constants.FirestoreConstants.USER_TOKEN_FIELD
 import com.diegodiome.justmeet_backend.model.*
+import com.diegodiome.justmeet_backend.service.FirebaseCloudMessagingService
 import com.diegodiome.justmeet_backend.util.PredictionsUtils
 import com.google.cloud.firestore.FieldValue
 import com.google.cloud.firestore.Firestore
@@ -19,6 +20,9 @@ import org.springframework.stereotype.Repository
 class UserRepository : FirestoreRepository<User, String> {
 
     private val userRepositoryLogger = LoggerFactory.getLogger(UserRepository::class.java)
+
+    @Autowired
+    private lateinit var fcm :FirebaseCloudMessagingService
 
     private var db: Firestore = FirestoreClient.getFirestore()
 
@@ -107,6 +111,22 @@ class UserRepository : FirestoreRepository<User, String> {
         docRef.update(FirestoreConstants.EVENT_REQUEST_FIELD, FieldValue.arrayRemove(userId))
         docRef.update(FirestoreConstants.EVENT_PARTICIPANTS_FIELD, FieldValue.arrayUnion(userId))
         userRepositoryLogger.info("[+] Participant to event with id : $eventId added")
+        val context = HashMap<String, String>()
+        context["accept"] = userId
+        fcm.sendMessage(
+                data =  context,
+                request = NotificationRequest("Richiesta accettata", "Utente accettato", "Eventi", getUserFcmToken(userId))
+        )
+        userRepositoryLogger.info("[+] Notification to user with id : $userId sended")
+    }
+
+    fun getUserFcmToken(userId: String) : String {
+        return getElement(userId)!!.userFcmToken!!
+    }
+
+    fun updateFcmToken(elementId: String, fcmToken: String) {
+        db.collection(USERS_COLLECTION).document(elementId).update(FirestoreConstants.USER_FCM_TOKEN_FIELD, fcmToken)
+        userRepositoryLogger.info("[~] User with id : $elementId fcm token updated")
     }
 
     fun getSearchPredictions(text: String) : AutoCompleteItems {

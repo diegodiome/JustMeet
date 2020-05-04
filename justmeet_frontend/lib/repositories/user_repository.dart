@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 import 'package:justmeet_frontend/models/event_request.dart';
@@ -27,8 +28,24 @@ class UserRepository {
 
   Future<void> signOut() async {
     await updateUserStatus(UserStatus.offline);
-    await updateUserToken("");
     await _firebaseAuth.signOut();
+  }
+
+  Future<void> updateFcmToken(String userId) async {
+    Response response;
+    response = await put(
+        putUpdateFcmToken(userId, await getFcmToken()),
+        headers: await RequestHeader().getBasicHeader(),
+    );
+    int statusCode = response.statusCode;
+    if(statusCode != 200) {
+      print('Connection error: $statusCode');
+    }
+  }
+
+  Future<String> getFcmToken() async {
+    final FirebaseMessaging _fcm = FirebaseMessaging();
+    return await _fcm.getToken();
   }
 
   Future<User> signInWithGoogle() async {
@@ -120,7 +137,7 @@ class UserRepository {
     body: userReporting.toJson());
     int statusCode = response.statusCode;
     if (statusCode != 200) {
-    print('Connection error: $statusCode');
+      print('Connection error: $statusCode');
     }
   }
 

@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:justmeet_frontend/models/user.dart';
@@ -32,6 +34,7 @@ class JustMeetApp extends StatefulWidget {
 class _JustMeetAppState extends State<JustMeetApp> with WidgetsBindingObserver {
   Store<AppState> store;
   static final _navigatorKey = GlobalKey<NavigatorState>();
+  final FirebaseMessaging _fcm = FirebaseMessaging();
   final userRepo = UserRepository(FirebaseAuth.instance, new GoogleSignIn());
   final eventRepo = EventRepository();
   final commentRepo = CommentRepository();
@@ -40,6 +43,20 @@ class _JustMeetAppState extends State<JustMeetApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    _fcm.configure(
+      // ignore: missing_return
+      onMessage: (Map<String, dynamic> message) {
+        print('on message $message');
+      },
+      // ignore: missing_return
+      onResume: (Map<String, dynamic> message) {
+        print('on resume $message');
+      },
+      // ignore: missing_return
+      onLaunch: (Map<String, dynamic> message) {
+        print('on launch $message');
+      },
+    );
     store = createStore(userRepo, eventRepo, commentRepo, mapRepo, _navigatorKey);
     store.dispatch(VerifyCurrentLocationState());
     store.dispatch(VerifyAuthenticationState());

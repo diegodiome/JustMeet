@@ -71,6 +71,9 @@ String putAcceptRequestUrl(String userId, String eventId) {
   return '$userApiUrl/$eventId/$userId/accept';
 }
 
+String putUpdateFcmToken(String userId, String fcmToken) {
+  return '$userApiUrl/$userId/$fcmToken';
+}
 
 /* GOOGLE MAP API*/
 const String mapApiUrl = 'https://maps.googleapis.com/maps/api';

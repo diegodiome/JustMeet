@@ -31,6 +31,7 @@ dependencies:
   theme_provider: ^0.3.2
   location: ^2.3.5
   permission_handler: ^5.0.0+hotfix.3
+  flutter_local_notifications: ^0.7.1+1
 
   # Redux dependencies
   redux: ^4.0.0
@@ -39,6 +40,7 @@ dependencies:
   # Firebase dependencies
   firebase_auth: ^0.15.4
   firebase_storage: ^3.1.1
+  firebase_messaging: ^6.0.13
   google_sign_in: ^4.1.1
   firebase_image: ^0.1.5
   google_maps_flutter: ^0.5.25+3

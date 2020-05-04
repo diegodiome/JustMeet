@@ -8,6 +8,7 @@ import com.diegodiome.justmeet_backend.config.constants.ApiConstants.GET_REQ_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.GET_USER_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.GET_USR_EV_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.GET_USR_REPS_API
+import com.diegodiome.justmeet_backend.config.constants.ApiConstants.PUT_UPD_FCM_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.S_UPD_USER_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.T_UPD_USER_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.UPD_USER_API
@@ -97,5 +98,11 @@ class UserController {
     fun acceptRequest(@PathVariable(value = "userId") userId: String,
                       @PathVariable(value = "eventId") eventId: String) {
         userRepository.acceptRequest(userId, eventId)
+    }
+
+    @PutMapping(value = [PUT_UPD_FCM_API])
+    fun updateFcmToken(@PathVariable(value = "userId") userId: String,
+                      @PathVariable(value = "fcmToken") fcmToken: String) {
+        userRepository.updateFcmToken(userId, fcmToken)
     }
 }
