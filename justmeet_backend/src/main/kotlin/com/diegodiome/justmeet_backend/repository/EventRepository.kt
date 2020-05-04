@@ -109,6 +109,12 @@ class EventRepository : FirestoreRepository<Event, String> {
         eventRepositoryLogger.info("[+] Request to event with id : $elementId added")
     }
 
+    fun addRate(elementId: String, rate: Double) {
+        val docRef = db.collection(EVENTS_COLLECTION).document(elementId)
+        docRef.update(FirestoreConstants.EVENT_RATES_FIELD, FieldValue.arrayUnion(rate))
+        eventRepositoryLogger.info("[+] Rate to event with id : $elementId added")
+    }
+
     fun addParticipant(elementId: String, userId: String) {
         val docRef = db.collection(EVENTS_COLLECTION).document(elementId)
         docRef.update(FirestoreConstants.EVENT_PARTICIPANTS_FIELD, FieldValue.arrayUnion(userId))

@@ -14,6 +14,10 @@ const String getAllEventsUrl = '$eventApiUrl/all';
 const String postCreateEventUrl = '$eventApiUrl/create';
 const String postCreateEventReportingUrl = '$eventApiUrl/reporting';
 
+String putAddRateUrl(String eventId, double rate) {
+  return '$eventApiUrl/$eventId/$rate/rate';
+}
+
 String putAddRequestUrl(String userId, String eventId) {
   return '$eventApiUrl/$eventId/$userId/request';
 }

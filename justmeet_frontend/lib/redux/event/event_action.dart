@@ -28,6 +28,13 @@ class OnEventListUpdateSuccess {
   });
 }
 
+class OnAddRate {
+  final String eventId;
+  final double rate;
+
+  OnAddRate({this.rate, this.eventId});
+}
+
 class OnFilterEventUpdate {
   Completer completer;
 

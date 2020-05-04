@@ -25,7 +25,24 @@ List<Middleware<AppState>> createEventMiddleware(
     TypedMiddleware<AppState, OnAddRequest>(
         _onAddRequest(eventRepository)
     ),
+    TypedMiddleware<AppState, OnAddRate>(
+        _onAddRate(eventRepository)
+    ),
   ];
+}
+
+void Function(Store<AppState> store, dynamic action, NextDispatcher next)
+_onAddRate(
+    EventRepository eventRepository,
+    ) {
+  return (store, action, next) async {
+    next(action);
+    try {
+      await eventRepository.addRate(action.eventId, action.rate);
+    } on PlatformException catch (e) {
+      print('Error: $e');
+    }
+  };
 }
 
 void Function(Store<AppState> store, dynamic action, NextDispatcher next)

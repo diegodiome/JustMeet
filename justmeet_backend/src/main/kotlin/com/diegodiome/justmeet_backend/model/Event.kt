@@ -17,6 +17,7 @@ data class Event(
         val eventMaxParticipants : Int? = 0,
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm") val eventDate: Date,
         val eventDescription: String? = "",
+        val eventRates: List<Double>? = ArrayList(),
         val eventParticipants: List<String>? = ArrayList(),
         val eventRequest: List<String>? = ArrayList()
 ) {

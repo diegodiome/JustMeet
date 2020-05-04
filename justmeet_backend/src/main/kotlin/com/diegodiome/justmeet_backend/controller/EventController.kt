@@ -3,6 +3,7 @@ package com.diegodiome.justmeet_backend.controller
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.ADD_COM_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.ADD_EVENT_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.ADD_PART_API
+import com.diegodiome.justmeet_backend.config.constants.ApiConstants.ADD_RATE_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.ADD_REP_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.ADD_REQ_API
 import com.diegodiome.justmeet_backend.config.constants.ApiConstants.DEL_EVENT_API
@@ -78,6 +79,12 @@ class EventController  {
     @PostMapping(value = [ADD_REP_API])
     fun addReporting(@RequestBody newReporting: EventReporting) {
         eventRepository.addReporting(newReporting.eventId, newReporting)
+    }
+
+    @PutMapping(value = [ADD_RATE_API])
+    fun addRate(@PathVariable("eventId") eventId: String,
+                @PathVariable("rate") rate: Double) {
+        eventRepository.addRate(eventId, rate)
     }
 
     @GetMapping(value = [GET_REPS_API])

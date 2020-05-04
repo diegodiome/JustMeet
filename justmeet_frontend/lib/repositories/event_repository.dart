@@ -54,6 +54,17 @@ class EventRepository {
     }
   }
 
+  Future<void> addRate(String eventId, double rate) async {
+    Response response;
+    response = await put(
+        putAddRateUrl(eventId, rate),
+        headers: await RequestHeader().getBasicHeader());
+    int statusCode = response.statusCode;
+    if (statusCode != 200) {
+      print('Connection error: $statusCode');
+    }
+  }
+
   Future<void> addReporting(EventReporting reporting) async {
     Response response;
     response = await post(

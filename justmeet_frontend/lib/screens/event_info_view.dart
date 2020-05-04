@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:justmeet_frontend/models/event.dart';
 import 'package:justmeet_frontend/widgets/event_info/event_info_app_bar.dart';
 import 'package:justmeet_frontend/widgets/event_info/event_info_content.dart';
+import 'package:justmeet_frontend/widgets/event_info/event_rating_dialog.dart';
 import 'package:theme_provider/theme_provider.dart';
 
 class EventInfoView extends StatefulWidget {
@@ -69,6 +70,19 @@ class _EventInfoViewState extends State<EventInfoView> {
                         )))),
             EventInfoAppBar()
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            showDialog<dynamic>(
+              barrierDismissible: true,
+              context: context,
+              builder: (BuildContext context) => EventRatingDialog(),
+            );
+          },
+          backgroundColor: ThemeProvider.themeOf(context).data.primaryColor,
+          child: Icon(
+            Icons.star,
+          ),
         ),
       ),
     );
