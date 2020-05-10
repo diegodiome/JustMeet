@@ -31,12 +31,12 @@ l'organizzatore.
   - Aggiungere un commento all'evento
 
 <p>
-  <img src="./wallpaper/homepage.png" width="300" height="900" />
-  <img src="./wallpaper/filter.png" width="300" height="900"/>
+  <img src="./wallpaper/homepage.png" width="300" height="700" />
+  <img src="./wallpaper/filter.png" width="300" height="700"/>
 </p>
 <p>
-  <img src="./wallpaper/navigation_drawer.png" width="300" height="900"/>
-  <img src="./wallpaper/event_info.png" width="300" height="900"/>
+  <img src="./wallpaper/navigation_drawer.png" width="300" height="700"/>
+  <img src="./wallpaper/event_info.png" width="300" height="700"/>
 </p>
 
 # Tecnologie usate
