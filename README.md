@@ -31,12 +31,12 @@ l'organizzatore.
   - Aggiungere un commento all'evento
 
 <p>
-  <img src="./wallpaper/homepage.png" width="300" height="900" />
-  <img src="./wallpaper/filter.png" width="300" height="900"/>
+  <img src="./wallpaper/homepage.png" width="300" height="400" />
+  <img src="./wallpaper/filter.png" width="300" height="400"/>
 </p>
 <p>
-  <img src="./wallpaper/navigation_drawer.png" width="300" height="900"/>
-  <img src="./wallpaper/event_info.png" width="300" height="900"/>
+  <img src="./wallpaper/navigation_drawer.png" width="300" height="400"/>
+  <img src="./wallpaper/event_info.png" width="300" height="400"/>
 </p>
 
 # Tecnologie usate
@@ -52,20 +52,19 @@ l'organizzatore.
 
 ### In particolare : 
 
+#### Front-end
 Per il lato front-end è stato utilizzato Flutter in quanto capace di sviluppare degli applicativi cross 
-platform (sia Android che IOS) molto ottimizzati. La logica front-end si occupa di definire un'esperienza
+platform (compatibili sia con Android che con IOS) molto performanti. La logica front-end si occupa di definire un'esperienza
 utente semplice e veloce per sfruttare tutte le funzionalità definite nel back-end. Sono presenti diverse
 schermate in cui l'utente può registrarsi, autenticarsi, visualizzare eventi, ricercare eventi e commentare.
 L'applicazione mobile di base effettua delle chiamate http al back-end e mostra i risultati ottenuti modellandoli
 in base ai widget offerti da Flutter. L'autenticazione tramite providers di terze parti come Google è gestita
-lato front-end. 
+lato front-end attraverso Firebase. 
+
+#### Back-end
 Per quanto riguarda il back-end Spring Boot definisce i servizi REST API offerti dalla piattaforma. Si appoggia a Firebase per il salvataggio dei dati nei database e per le query da effettuare. La sicurezza viene in primo luogo
 gestita attraverso un controllo nell'header di ogni richiesta(deve essere presente un token che verrà poi comparato
 a quelli salvati da Firebase), e poi filtrando le richieste piu' invasive con l'utilizzo delle "Authority".
 Per semplificare la gestione degli stati si è optato per l'utilizzo di Redux, un framework architetturale in grado
 di gestire gli stati dell'applicativo con una visione ad "albero" molto piu' organizzata e pulita rendendo il codice
-piu' semplice da leggere e da modificare.
-
-
-
-
+piu' semplice da leggere e da riutilizzare.
