@@ -30,11 +30,13 @@ l'organizzatore.
   - Visualizzare un altro utente registrato nella piattaforma
   - Aggiungere un commento all'evento
 
-<p float="left">
-  <img src="./wallpaper/homepage.png" width="100" />
-  <img src="./wallpaper/filter.png" width="100" />
-  <img src="./wallpaper/navigation_drawer.png" width="100" />
-  <img src="./wallpaper/event_info.png" width="100" />
+<p>
+  <img src="./wallpaper/homepage.png" width="300" />
+  <img src="./wallpaper/filter.png" width="300" />
+</p>
+<p>
+  <img src="./wallpaper/navigation_drawer.png" width="300" />
+  <img src="./wallpaper/event_info.png" width="300" />
 </p>
 
 # Tecnologie usate
