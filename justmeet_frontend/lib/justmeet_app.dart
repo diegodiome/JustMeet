@@ -103,8 +103,8 @@ class _JustMeetAppState extends State<JustMeetApp> with WidgetsBindingObserver {
                 id: "light",
                 description: "Default",
                 data: ThemeData(
-                  primaryColor: Colors.purple,
-                  accentColor: Colors.purple,
+                  primaryColor: Color(0xFF594FD4),
+                  accentColor: Color(0xFF594FD4),
                   backgroundColor: Colors.white,
                 ),
               ),
@@ -119,6 +119,7 @@ class _JustMeetAppState extends State<JustMeetApp> with WidgetsBindingObserver {
             ],
             child: ThemeConsumer(
               child: MaterialApp(
+                debugShowCheckedModeBanner: false,
                 title: 'Flutter Demo',
                 navigatorKey: _navigatorKey,
                 routes: {

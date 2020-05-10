@@ -76,7 +76,9 @@ class _EventInfoViewState extends State<EventInfoView> {
             showDialog<dynamic>(
               barrierDismissible: true,
               context: context,
-              builder: (BuildContext context) => EventRatingDialog(),
+              builder: (BuildContext context) => EventRatingDialog(
+                eventId: widget.event.eventId,
+              ),
             );
           },
           backgroundColor: ThemeProvider.themeOf(context).data.primaryColor,

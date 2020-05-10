@@ -1,12 +1,10 @@
 # Just Meet
 
-
 [![Codemagic build status](https://api.codemagic.io/apps/5e65fef49399a26267397a0a/5e65fef49399a26267397a09/status_badge.svg)](https://codemagic.io/apps/5e65fef49399a26267397a0a/5e65fef49399a26267397a09/latest_build)
 
 Just Meet è un progetto realizzato in Flutter e Spring Boot per l'esame "Programmazione Web App e Mobile". L'applicativo è stato realizzato da :
 
-  > Diego Diomedi e 
-  > Alessandro Berdozzi
+  > Diego Diomedi
 
 # Branches
   - master
@@ -20,7 +18,7 @@ Just Meet è un progetto realizzato in Flutter e Spring Boot per l'esame "Progra
 Just Meet nasce con l'idea di semplificare l'organizzazione, la partecipazione e la ricerca di eventi.
 E' possibile visualizzare gli eventi disponibili e parteciparne se si è registrati alla piattaforma. 
 Per quanto riguarda la pubblicazione di un evento basterà inserire gli opportuni dati richiesti, è 
-possibile poi gestire le richieste degli utenti che vogliono partecipare(se l'evento è privato) e 
+possibile poi gestire le richieste degli utenti che vogliono partecipare (se l'evento è privato) e
 poterne modficare i dettagli o addirittura rimuoverlo. E' presente la funzionalità di filtrare la 
 ricerca degli eventi in base alla categoria o alla distanza calcolata in base alla posizione in cui
 ci troviamo. La ricerca di un evento può avvenire tramite ricerca del nome oppure ricercando 
@@ -30,6 +28,9 @@ l'organizzatore.
   - Aggiornamento profilo utente nella piattaforma
   - Segnalazione evento/utente
   - Visualizzare un altro utente registrato nella piattaforma
+  - Aggiungere un commento all'evento
+
+![Homepage screenshot](./wallpaper/homepage.jpg)
 
 # Tecnologie usate
 
@@ -38,7 +39,7 @@ l'organizzatore.
 | Flutter  | Framework utilizzato per lo sviluppo front-end  |
 | Dart  | Linguaggio di programmazione open-source utilizzato da Flutter  |
 | Spring Boot  | Framework per lo sviluppo lato back-end  |
-| Java  | Linguaggio di programmazione utilizzato da Spring Boot  |
+| Kotlin  | Linguaggio di programmazione utilizzato da Spring Boot  |
 | Firebase  | Piattaforma back-end per i database e per il cloud |
 | Google  | Provider per l'autenticazione |
 

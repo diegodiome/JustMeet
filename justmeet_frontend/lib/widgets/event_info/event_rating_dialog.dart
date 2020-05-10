@@ -1,10 +1,17 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:justmeet_frontend/redux/app/app_state.dart';
+import 'package:justmeet_frontend/redux/event/event_action.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:theme_provider/theme_provider.dart';
 
 class EventRatingDialog extends StatefulWidget {
+  final String eventId;
+
+  const EventRatingDialog({Key key, this.eventId}) : super(key: key);
+
   @override
   _EventRatingDialogState createState() => _EventRatingDialogState();
 }
@@ -129,7 +136,10 @@ class _EventRatingDialogState extends State<EventRatingDialog> with TickerProvid
                                         Radius.circular(24.0)),
                                     highlightColor: Colors.transparent,
                                     onTap: () {
-                                      // TODO: add rate
+                                      StoreProvider.of<AppState>(context).dispatch(OnAddRate(
+                                        eventId: widget.eventId,
+                                        rate: rating
+                                      ));
                                     },
                                     child: Center(
                                       child: Text(

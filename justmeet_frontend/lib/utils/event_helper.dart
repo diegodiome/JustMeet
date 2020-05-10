@@ -1,6 +1,6 @@
 
 double averageRating(List<double> rates) {
-  if (rates != null) {
+  if (rates != null && rates.isNotEmpty) {
     double sum = 0;
     for (double num in rates) {
       sum += num;

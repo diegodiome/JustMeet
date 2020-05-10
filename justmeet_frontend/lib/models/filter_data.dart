@@ -24,6 +24,10 @@ class CategoryFilterData {
       titleTxt: 'Intrattenimento',
       isSelected: true,
     ),
+    CategoryFilterData(
+      titleTxt: 'Concerto',
+      isSelected: true,
+    ),
   ];
 }
 
