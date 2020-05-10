@@ -30,10 +30,12 @@ l'organizzatore.
   - Visualizzare un altro utente registrato nella piattaforma
   - Aggiungere un commento all'evento
 
-![Homepage screenshot](./wallpaper/homepage.png)
-![Homepage screenshot](./wallpaper/filter.png)
-![Homepage screenshot](./wallpaper/navigation_drawer.png)
-![Homepage screenshot](./wallpaper/event_info.png)
+<p float="left">
+  <img src="./wallpaper/homepage.png" width="100" />
+  <img src="./wallpaper/filter.png" width="100" />
+  <img src="./wallpaper/navigation_drawer.png" width="100" />
+  <img src="./wallpaper/event_info.png" width="100" />
+</p>
 
 # Tecnologie usate
 
