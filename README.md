@@ -31,6 +31,9 @@ l'organizzatore.
   - Aggiungere un commento all'evento
 
 ![Homepage screenshot](./wallpaper/homepage.png)
+![Homepage screenshot](./wallpaper/filter.png)
+![Homepage screenshot](./wallpaper/navigation_drawer.png)
+![Homepage screenshot](./wallpaper/event_info.png)
 
 # Tecnologie usate
 
