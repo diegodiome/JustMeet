@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -24,10 +24,14 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   smooth_star_rating: ^1.0.3
+  flutter_datetime_picker: ^1.3.5
   http: ^0.12.0+4
   image_picker: 
   intl:
   theme_provider: ^0.3.2
+  location: ^2.3.5
+  permission_handler: ^5.0.0+hotfix.3
+  flutter_local_notifications: ^0.7.1+1
 
   # Redux dependencies
   redux: ^4.0.0
@@ -36,7 +40,10 @@ dependencies:
   # Firebase dependencies
   firebase_auth: ^0.15.4
   firebase_storage: ^3.1.1
+  firebase_messaging: ^6.0.13
   google_sign_in: ^4.1.1
+  firebase_image: ^0.1.5
+  google_maps_flutter: ^0.5.25+3
   
 dev_dependencies:
   flutter_test:
@@ -60,7 +67,10 @@ flutter:
    - assets/images/justmeet_logo.png
    - assets/images/hotel_3.png
    - assets/images/back_info.png
-  #  - images/a_dot_ham.jpeg
+   - assets/json_assets/dark_map.txt
+   - assets/json_assets/silver_map.txt
+   - assets/json_assets/purple_map.txt
+   - assets/images/marker.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

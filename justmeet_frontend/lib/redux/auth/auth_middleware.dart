@@ -1,8 +1,8 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/auth/auth_actions.dart';
-import 'package:justmeet_frontend/repository/user_repository.dart';
+import 'package:justmeet_frontend/redux/user/user_action.dart';
+import 'package:justmeet_frontend/repositories/user_repository.dart';
 import 'package:redux/redux.dart';
 import "package:flutter/services.dart";
 import '../../routes.dart';
@@ -12,10 +12,8 @@ List<Middleware<AppState>> createAuthenticationMiddleware(
   GlobalKey<NavigatorState> navigatorKey
 ) {
   return [
-    TypedMiddleware<AppState, VerifyAuthenticationState>(
-      _verifyAuthState(userRepository, navigatorKey)),
-    TypedMiddleware<AppState, OnLogOutSuccess>(
-      _authLogOut(userRepository, navigatorKey)),
+    TypedMiddleware<AppState, VerifyAuthenticationState>(_verifyAuthState(userRepository, navigatorKey)),
+    TypedMiddleware<AppState, LogOut>(_authLogOut(userRepository, navigatorKey)),
     TypedMiddleware<AppState, LogIn>(_authLogIn(userRepository, navigatorKey)),
     TypedMiddleware<AppState, LogInWithGoogle>(_authLogInWithGoogle(userRepository, navigatorKey)),
     TypedMiddleware<AppState, SignIn>(_signInWithEmailAndPassword(userRepository, navigatorKey))
@@ -57,7 +55,8 @@ void Function(
     try {
       final user = await userRepository.signInWithGoogle();
       store.dispatch(OnAuthenticated(user: user));
-      await navigatorKey.currentState.pushReplacementNamed(Routes.home);
+      await store.dispatch(OnLocalUserUpdate(userId: user.userUid));
+      await store.dispatch(OnUpdateUser(userUpdated: user));
     }
     on PlatformException catch(e) {
       print('Login failed: $e');
@@ -78,6 +77,7 @@ void Function(
     try{
       final user = await userRepository.signInWithEmailAndPassword(action.email, action.password);
       store.dispatch(OnAuthenticated(user: user));
+      await store.dispatch(OnLocalUserUpdate(userId: user.userUid));
       await navigatorKey.currentState.pushReplacementNamed(Routes.home);
       action.completer.complete();
     }
@@ -118,12 +118,15 @@ void Function(
 ) {
   return (store, action, next) {
     next(action);
-
-    userRepository.getAuthenticationStateChange().listen((user) {
+    userRepository.getAuthenticationStateChange().listen((user) async{
       if(user == null) {
-        navigatorKey.currentState.pushReplacementNamed(Routes.login);
-      }else {
+        await navigatorKey.currentState.pushReplacementNamed(Routes.login);
+      } else {
         store.dispatch(OnAuthenticated(user: user));
+        await userRepository.updateUser(user);
+        await userRepository.updateFcmToken(user.userUid);
+        await store.dispatch(OnLocalUserUpdate(userId: user.userUid));
+        await navigatorKey.currentState.pushReplacementNamed(Routes.home);
       }
     });
   };

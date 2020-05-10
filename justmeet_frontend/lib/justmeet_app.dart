@@ -1,20 +1,26 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:justmeet_frontend/cloud_storage.dart';
-import 'package:justmeet_frontend/home_page.dart';
+import 'package:justmeet_frontend/models/user.dart';
 import 'package:justmeet_frontend/redux/app/app_state.dart';
 import 'package:justmeet_frontend/redux/auth/auth_actions.dart';
+import 'package:justmeet_frontend/redux/location/location_action.dart';
 import 'package:justmeet_frontend/redux/store.dart';
-import 'package:justmeet_frontend/repository/attachment_repository.dart';
-import 'package:justmeet_frontend/repository/event_repository.dart';
-import 'package:justmeet_frontend/repository/user_repository.dart';
+import 'package:justmeet_frontend/redux/user/user_action.dart';
+import 'package:justmeet_frontend/repositories/comment_repository.dart';
+import 'package:justmeet_frontend/repositories/event_repository.dart';
+import 'package:justmeet_frontend/repositories/map_repository.dart';
+import 'package:justmeet_frontend/repositories/user_repository.dart';
 import 'package:justmeet_frontend/routes.dart';
-import 'package:justmeet_frontend/view/login_page.dart';
-import 'package:justmeet_frontend/view/registration_page.dart';
+import 'package:justmeet_frontend/screens/home_page.dart';
+import 'package:justmeet_frontend/screens/login_page.dart';
+import 'package:justmeet_frontend/screens/registration_page.dart';
+import 'package:justmeet_frontend/screens/splash_page.dart';
 import 'package:redux/redux.dart';
 import 'package:theme_provider/theme_provider.dart';
 
@@ -25,23 +31,60 @@ class JustMeetApp extends StatefulWidget {
   _JustMeetAppState createState() => _JustMeetAppState();
 }
 
-class _JustMeetAppState extends State<JustMeetApp> {
+class _JustMeetAppState extends State<JustMeetApp> with WidgetsBindingObserver {
   Store<AppState> store;
   static final _navigatorKey = GlobalKey<NavigatorState>();
+  final FirebaseMessaging _fcm = FirebaseMessaging();
   final userRepo = UserRepository(FirebaseAuth.instance, new GoogleSignIn());
   final eventRepo = EventRepository();
-  final attachmentRepo = AttachmentRepository(new CloudStorage());
+  final commentRepo = CommentRepository();
+  final mapRepo = MapRepository();
 
   @override
   void initState() {
     super.initState();
-    store = createStore(userRepo, eventRepo, attachmentRepo, _navigatorKey);
+    _fcm.configure(
+      // ignore: missing_return
+      onMessage: (Map<String, dynamic> message) {
+        print('on message $message');
+      },
+      // ignore: missing_return
+      onResume: (Map<String, dynamic> message) {
+        print('on resume $message');
+      },
+      // ignore: missing_return
+      onLaunch: (Map<String, dynamic> message) {
+        print('on launch $message');
+      },
+    );
+    store = createStore(userRepo, eventRepo, commentRepo, mapRepo, _navigatorKey);
+    store.dispatch(VerifyCurrentLocationState());
     store.dispatch(VerifyAuthenticationState());
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      if(store.state.authState.isAuthenticated) {
+        store.dispatch(OnUserStatusUpdate(
+          status: UserStatus.online
+        ));
+      }
+    }
+    else if(state == AppLifecycleState.inactive) {
+      if(store.state.authState.isAuthenticated) {
+        store.dispatch(OnUserStatusUpdate(
+          status: UserStatus.offline
+        ));
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
       statusBarBrightness:
@@ -60,8 +103,8 @@ class _JustMeetAppState extends State<JustMeetApp> {
                 id: "light",
                 description: "Default",
                 data: ThemeData(
-                  primaryColor: Colors.purple,
-                  accentColor: Colors.purple,
+                  primaryColor: Color(0xFF594FD4),
+                  accentColor: Color(0xFF594FD4),
                   backgroundColor: Colors.white,
                 ),
               ),
@@ -76,9 +119,13 @@ class _JustMeetAppState extends State<JustMeetApp> {
             ],
             child: ThemeConsumer(
               child: MaterialApp(
+                debugShowCheckedModeBanner: false,
                 title: 'Flutter Demo',
                 navigatorKey: _navigatorKey,
                 routes: {
+                  Routes.splash: (context) {
+                    return SplashPage();
+                  },
                   Routes.login: (context) {
                     return LoginPage(
                       navigatorKey: _navigatorKey,
@@ -90,7 +137,9 @@ class _JustMeetAppState extends State<JustMeetApp> {
                     );
                   },
                   Routes.registration: (context) {
-                    return RegistrationPage();
+                    return RegistrationPage(
+                      navigatorKey: _navigatorKey
+                    );
                   }
                 },
               ),
