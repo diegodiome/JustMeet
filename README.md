@@ -68,7 +68,3 @@ a quelli salvati da Firebase), e poi filtrando le richieste piu' invasive con l'
 Per semplificare la gestione degli stati si è optato per l'utilizzo di Redux, un framework architetturale in grado
 di gestire gli stati dell'applicativo con una visione ad "albero" molto piu' organizzata e pulita rendendo il codice
 piu' semplice da leggere e da riutilizzare.
-
-
-
-
