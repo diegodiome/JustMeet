@@ -30,7 +30,7 @@ l'organizzatore.
   - Visualizzare un altro utente registrato nella piattaforma
   - Aggiungere un commento all'evento
 
-![Homepage screenshot](./wallpaper/homepage.jpg)
+![Homepage screenshot](./wallpaper/homepage.png)
 
 # Tecnologie usate
 
