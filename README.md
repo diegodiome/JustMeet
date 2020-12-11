@@ -1,6 +1,4 @@
 # Just Meet
-
-[![Codemagic build status](https://api.codemagic.io/apps/5e65fef49399a26267397a0a/5e65fef49399a26267397a09/status_badge.svg)](https://codemagic.io/apps/5e65fef49399a26267397a0a/5e65fef49399a26267397a09/latest_build)
 <img src="https://img.shields.io/badge/made%20with-Flutter-blue.svg?style=for-the-badge" alt="made with flutter">
 
 Just Meet è un progetto realizzato in Flutter e Spring Boot per l'esame "Programmazione Web App e Mobile". L'applicativo è stato realizzato da :
